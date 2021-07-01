@@ -1,4 +1,4 @@
-import logging.config
+import logging
 import os
 
 from loguru import logger
