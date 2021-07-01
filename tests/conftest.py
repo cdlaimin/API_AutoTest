@@ -58,18 +58,6 @@ def pytest_generate_tests(metafunc):
             metafunc.parametrize(fixture, ids, indirect=True)
 
 
-def pytest_report_collectionfinish(config, startdir, items):
-    """
-    用例收集完成后调用
-    此处实现统计用例总数
-    :param config: config对象
-    :param startdir: 其实目录py.path对象
-    :param items: 收集到的用例列表
-    :return:
-    """
-    config.option.count_items = len(items)
-
-
 # xdist分布式执行时调用，xdist内部钩子，不是pytest钩子
 def pytest_xdist_make_scheduler(config):
     """
