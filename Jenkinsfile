@@ -33,8 +33,9 @@ pipeline {
         }
         stage("初始化环境") {
             steps {
-                sh label: "指定启动时的镜像", script: "sed -i 's/demo/${JOB_NAME}_${params.git_branch}/g' docker-compose.yaml"
-                sh label: "动态指定挂载", script: "sed -i 's/job_name/${JOB_NAME}/g' docker-compose.yaml"
+                // 当前测试在mac上进行，unix和linux sed 命令有些区别，使用 -i 时，要在后面加上一个空字符。linux不能加
+                sh label: "指定启动时的镜像", script: "sed -i '' 's/demo/${JOB_NAME}_${params.git_branch}/g' docker-compose.yaml"
+                sh label: "动态指定挂载", script: "sed -i '' 's/job_name/${JOB_NAME}/g' docker-compose.yaml"
                 sh label: "启动容器", script: "docker-compose up -d"
                 sh label: "修改文件sh文件权限", script: "chmod 777 run.sh"
             }
