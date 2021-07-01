@@ -1,7 +1,7 @@
 version: "2.0"
 services:
   pytest_master:
-    image: autotest_demo:latest
+    image: demo:latest
     restart: always
     volumes:
       - /var/lib/jenkins/workspace/job_name/logs:/logs
@@ -14,7 +14,7 @@ services:
 
 
   pytest_slave_001:
-    image: autotest_demo:latest
+    image: demo:latest
     restart: always
     volumes:
       - /var/lib/jenkins/workspace/job_name/logs/slave_01:/logs
@@ -34,7 +34,7 @@ services:
 
 
   pytest_slave_002:
-    image: autotest_demo:latest
+    image: demo:latest
     restart: always
     volumes:
       - /var/lib/jenkins/workspace/job_name/logs/slave_02:/logs

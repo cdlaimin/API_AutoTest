@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage("构建docker镜像") {
             steps {
-                sh label: "构建镜像", script: "docker build -t autotest_${JOB_NAME}_${params.git_branch}:latest ."
+                sh label: "构建镜像", script: "docker build -t ${JOB_NAME}_${params.git_branch}:latest ."
             }
         }
         stage("环境清理") {
