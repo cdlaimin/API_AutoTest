@@ -28,3 +28,4 @@ toml==0.10.2
 urllib3==1.26.6
 
 loguru~=0.5.3
+pytest-rerunfailures=10.0
