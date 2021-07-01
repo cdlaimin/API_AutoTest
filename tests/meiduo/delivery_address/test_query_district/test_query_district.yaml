@@ -1,0 +1,17 @@
+case_info:
+  - id: test_query_district_001
+    path: test_query_district
+    model: 收货地址
+    func: 省市区
+    case_name: 查询区县信息
+    description: 查询石家庄市的区县信息
+    level: M
+
+  - id: test_query_district_002
+    path: test_query_district
+    model: 收货地址
+    func: 省市区
+    case_name: 查询区县信息
+    description: 查询北京市的区县信息
+    level: M
+

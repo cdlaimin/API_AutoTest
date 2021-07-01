@@ -46,7 +46,7 @@ def categories_to_allure():
     :return:
     """
     category_file_path = os.path.join(settings.BASE_URL, 'conf', 'categories.json')
-    allure_report_path = os.path.join(settings.BASE_URL, 'allure_results')
+    allure_report_path = os.path.join(settings.BASE_URL, 'allure-results')
 
     if os.path.exists(allure_report_path):
         shutil.copyfile(category_file_path, allure_report_path)

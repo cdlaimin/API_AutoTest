@@ -1,0 +1,18 @@
+{
+  "test_query_address_001": {
+    "params": {
+    },
+    "url": "http://{ip}:{port}/address",
+    "headers": {
+      "Content-Type": "content-type: application/json"
+    },
+    "app": "meiduo",
+    "method": "get",
+    "expect": {
+      "address": {
+        "type": "list"
+      },
+      "limit": 20
+    }
+  }
+}

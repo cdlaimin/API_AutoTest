@@ -1,0 +1,9 @@
+case_info:
+  - id: test_query_address_001
+    path: test_query_address
+    model: 收货地址
+    func: 收货地址
+    case_name: 查询已添加的收货地址
+    description: 查询已添加的收货地址
+    level: M
+
