@@ -4,7 +4,7 @@ pipeline {
         disableConcurrentBuilds()
     }
     environment {
-        PATH = "$PATH:/var/local/jdk1.8.0_144"
+        PATH = "$PATH:/usr/local/bin/"
     }
     stages {
         stage("构建docker镜像") {
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 sh label: "指定启动时的镜像", script: "sed -i 's/demo/${JOB_NAME}_${params.git_branch}/g' docker-compose.yaml"
                 sh label: "动态指定挂载", script: "sed -i 's/job_name/${JOB_NAME}/g' docker-compose.yaml"
-                sh label: "启动容器", script: "/usr/local/bin/docker-compose up -d"
+                sh label: "启动容器", script: "docker-compose up -d"
                 sh label: "修改文件sh文件权限", script: "chmod 777 run.sh"
             }
         }
@@ -57,7 +57,7 @@ pipeline {
                     results: [[path: "allure-results"]]
                 ])
             }
-            sh label: '停止测试并删除容器', script: '/usr/local/bin/docker-compose down'
+            sh label: '停止测试并删除容器', script: 'docker-compose down'
         }
     }
 }
