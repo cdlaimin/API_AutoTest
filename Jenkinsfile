@@ -12,6 +12,14 @@ pipeline {
                 sh label: "构建镜像", script: "docker build -t ${JOB_NAME}_${params.git_branch}:latest ."
             }
         }
+        stage("清楚异常容器") {
+            steps {
+                // 当前stage报错时，设置构建结果为成功，保证后续stage继续执行
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
+                    sh label: '停止测试并删除容器', script: 'docker-compose down'
+                }
+            }
+        }
         stage("环境清理") {
             steps {
                 // 当前stage报错时，设置构建结果为成功，保证后续stage继续执行
