@@ -73,10 +73,7 @@ def pytest_xdist_make_scheduler(config):
             # 此处定义具体的分发规则，例如：
             # if 'Test_API/test_JieDianApp/test_customer_order' in nodeid:
             #     return 'Test_API/test_JieDianApp/test_customer_order'
-            # return nodeid
-
-            # 如果不自定义，则调用父类分发方法
-            super(MyScheduler, self)._split_scope(nodeid)
+            return nodeid
 
     return MyScheduler(config=config)
 
