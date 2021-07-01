@@ -3,6 +3,9 @@ pipeline {
     options {
         disableConcurrentBuilds()
     }
+    environment {
+        PATH = "$PATH:/var/local/jdk1.8.0_144"
+    }
     stages {
         stage("构建docker镜像") {
             steps {
