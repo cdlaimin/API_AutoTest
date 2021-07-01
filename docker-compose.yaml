@@ -30,7 +30,7 @@ services:
       - pytest_master
     links:
       - pytest_master
-    command: "python /pytest_workdir/socketserver.py"
+    command: "python /depends/socketserver.py"
 
 
   pytest_slave_002:
@@ -48,5 +48,5 @@ services:
       - pytest_master
     links:
       - pytest_master
-    command: "python /pytest_workdir/socketserver.py"
+    command: "python /depends/socketserver.py"
 
