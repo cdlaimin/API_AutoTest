@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.8.5-slim
 RUN mkdir /pytest_workdir
 COPY requirements.txt /pytest_workdir/
 # salve_server.py就是官网下载的socketserver.py文件
