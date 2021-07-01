@@ -5,7 +5,6 @@ pipeline {
     }
     environment {
         PATH = "$PATH:/usr/local/bin"
-        PATH = "$PATH:/var/local/jdk1.8.0_144/bin/"
     }
     stages {
         stage("构建docker镜像") {
