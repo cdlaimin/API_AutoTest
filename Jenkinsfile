@@ -3,6 +3,9 @@ pipeline {
     options {
         disableConcurrentBuilds()
     }
+    environment {
+        PATH = "$PATH:/usr/local/bin"
+    }
     stages {
         stage("构建docker镜像") {
             steps {
