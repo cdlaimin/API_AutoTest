@@ -73,7 +73,7 @@ config = {
     "handlers": [
         {"sink": logpath(), "format": "{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}", "level": "INFO",
          "retention": "1 days", "colorize": True, "enqueue": True},
-        {"sink": PropogateHandler(), "format": "{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}", "level": "INFO",
+        {"sink": PropogateHandler(), "format": "｜{time:YYYY-MM-DD HH:mm:ss}｜{message}", "level": "INFO",
          "colorize": False, "enqueue": True}
     ],
     "extra": {"user": "someone"},
