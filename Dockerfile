@@ -10,7 +10,7 @@ COPY socketserver.py /pytest_workdir/
 RUN BEBIAN_FRONTEND=noninteractive apt-get update && \
     apt-get upgrade -yq && \
     apt-get install --no-install-recommends -yq gcc python-dev && \
-    pip install -i https://pypi.doubanio.com/simple -r /pytest_workdir/requirements.txt
+    pip3 install -i https://pypi.doubanio.com/simple -r /pytest_workdir/requirements.txt
     # 修改allure报告用例标题样式，修改allure报告中用例标题后面的参数为空
     # sed -i 's/Parameter(name=name, value=represent(value)) for name, value in params.items()//' /usr/local/lib/python3.8/site-packages/allure_pytest/listener.py
 WORKDIR /pytest_workdir
