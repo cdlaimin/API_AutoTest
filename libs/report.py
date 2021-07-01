@@ -27,7 +27,7 @@ def collect_item_info(item):
         # 开始写入用例信息
         dynamic.feature(case_info.get('model'))
         dynamic.story(case_info.get('func'))
-        dynamic.title(case_info.get('name'))
+        dynamic.title(case_info.get('case_name'))
         dynamic.description(case_info.get('description'))
         level = case_info.get('level')
         if level == 'H':

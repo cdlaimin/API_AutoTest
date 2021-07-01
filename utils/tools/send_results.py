@@ -1,9 +1,13 @@
 import json
 
 import requests
+import urllib3
 
 from conf import settings
 from libs.logger import logger
+
+# 屏蔽发送消息时的告警
+urllib3.disable_warnings()
 
 
 def send_dingtalk(*args):
