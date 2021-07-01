@@ -4,8 +4,8 @@ services:
     image: demo:latest
     restart: always
     volumes:
-      - /var/lib/jenkins/workspace/job_name/logs:/logs
-      - /var/lib/jenkins/workspace/job_name:/pytest_workdir
+      - /Users/zhangjian/.jenkins/workspace/job_name/logs:/logs
+      - /Users/zhangjian/.jenkins/workspace/job_name:/pytest_workdir
     logging:
       driver: json-file
       options:
@@ -17,10 +17,12 @@ services:
     image: demo:latest
     restart: always
     volumes:
-      - /var/lib/jenkins/workspace/job_name/logs/slave_01:/logs
+#      - /var/lib/jenkins/workspace/job_name/logs/slave_01:/logs
+      - /Users/zhangjian/.jenkins/workspace/job_name/logs/slave_01:/logs
+
         # worker执行机需要将项目放到pyexecnetcache下，才能完成与master的通信
         # pytest-xdist是使用了python自带的execnet库，实例化了一个网关来实现主从之间的通信。默认顶级工作目录就是pyexecnetcache
-      - /var/lib/jenkins/workspace/job_name:/pytest_workdir/pyexecnetcache
+      - /Users/zhangjian/.jenkins/workspace/job_name:/pytest_workdir/pyexecnetcache
     logging:
       driver: json-file
       options:
@@ -37,8 +39,8 @@ services:
     image: demo:latest
     restart: always
     volumes:
-      - /var/lib/jenkins/workspace/job_name/logs/slave_02:/logs
-      - /var/lib/jenkins/workspace/job_name:/pytest_workdir/pyexecnetcache
+      - /Users/zhangjian/.jenkins/workspace/job_name/logs/slave_02:/logs
+      - /Users/zhangjian/.jenkins/workspace/job_name:/pytest_workdir/pyexecnetcache
     logging:
       driver: json-file
       options:
