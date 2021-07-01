@@ -1,0 +1,8 @@
+.idea
+.gitignore
+.pytest_cache
+.DS_Store
+
+
+venv/
+logs/

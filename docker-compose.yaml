@@ -1,0 +1,52 @@
+version: "2.0"
+services:
+  pytest_master:
+    image: autotest_demo:latest
+    restart: always
+    volumes:
+      - /var/lib/jenkins/workspace/job_name/logs:/logs
+      - /var/lib/jenkins/workspace/job_name:/pytest_workdir
+    logging:
+      driver: json-file
+      options:
+        max-size: "30m"
+        max-file: "5"
+
+
+  pytest_slave_001:
+    image: autotest_demo:latest
+    restart: always
+    volumes:
+      - /var/lib/jenkins/workspace/job_name/logs/slave_01:/logs
+        # worker执行机需要将项目放到pyexecnetcache下，才能完成与master的通信
+        # pytest-xdist是使用了python自带的execnet库，实例化了一个网关来实现主从之间的通信。默认顶级工作目录就是pyexecnetcache
+      - /var/lib/jenkins/workspace/job_name:/pytest_workdir/pyexecnetcache
+    logging:
+      driver: json-file
+      options:
+        max-size: "30m"
+        max-file: "5"
+    depends_on:
+      - pytest_master
+    links:
+      - pytest_master
+    command: "python /pytest_workdir/socketserver.py"
+
+
+  pytest_slave_002:
+    image: autotest_demo:latest
+    restart: always
+    volumes:
+      - /var/lib/jenkins/workspace/job_name/logs/slave_02:/logs
+      - /var/lib/jenkins/workspace/job_name:/pytest_workdir/pyexecnetcache
+    logging:
+      driver: json-file
+      options:
+        max-size: "30m"
+        max-file: "5"
+    depends_on:
+      - pytest_master
+    links:
+      - pytest_master
+    command: "python /pytest_workdir/socketserver.py"
+

@@ -1,0 +1,36 @@
+[
+  {
+    "name": "通过用例",
+    "matchedStatuses": [
+      "passed"
+    ]
+  },
+  {
+    "name": "跳过未执行用例",
+    "matchedStatuses": [
+      "skipped"
+    ]
+  },
+  {
+    "name": "失败用例",
+    "matchedStatuses": [
+      "failed"
+    ],
+    "traceRegex": ".*和实际结果得值:<500>不相等.*"
+  },
+  {
+    "name": "异常用例",
+    "matchedStatuses": [
+      "broken",
+      "failed"
+    ],
+    "traceRegex": ".*Exception.*"
+  },
+  {
+    "name": "请求失败或超时",
+    "matchedStatuses": [
+      "broken"
+    ],
+    "traceRegex": ".*RequestsError.*"
+  }
+]

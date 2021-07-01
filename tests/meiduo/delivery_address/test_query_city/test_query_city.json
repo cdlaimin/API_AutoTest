@@ -1,0 +1,36 @@
+{
+  "test_query_city_001": {
+    "params": {
+    },
+    "url": "http://{ip}:{port}/areas/130000",
+    "headers": {
+      "Content-Type": "content-type: application/json"
+    },
+    "app": "meiduo",
+    "method": "get",
+    "expect": {
+      "subs": {
+        "type": "list",
+        "length": 12,
+        "name": "河北省"
+      }
+    }
+  },
+  "test_query_city_002": {
+    "params": {
+    },
+    "url": "http://{ip}:{port}/areas/340000",
+    "headers": {
+      "Content-Type": "content-type: application/json"
+    },
+    "app": "meiduo",
+    "method": "get",
+    "expect": {
+      "subs": {
+        "type": "list",
+        "length": 16,
+        "name": "安徽省"
+      }
+    }
+  }
+}

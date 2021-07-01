@@ -1,0 +1,35 @@
+{
+  "test_query_province_001": {
+    "params": {
+    },
+    "url": "http://{ip}:{port}/areas/",
+    "headers": {
+      "Content-Type": "content-type: application/json"
+    },
+    "app": "meiduo",
+    "method": "get",
+    "expect": {
+        "type": "list",
+        "length": 34
+    }
+  },
+  "test_query_province_002": {
+    "params": {
+      "page": 1,
+      "page_size": 5
+    },
+    "url": "http://{ip}:{port}/areas/",
+    "headers": {
+      "Content-Type": "content-type: application/json"
+    },
+    "app": "meiduo",
+    "method": "get",
+    "expect": {
+      "results": {
+        "type": "list",
+        "length": 5,
+        "count": 34
+      }
+    }
+  }
+}
