@@ -9,7 +9,7 @@ def gather_results(session, exitstatus):
     :return:
     """
     # 用例总数
-    total = session.testscollected
+    total = session.testscollected if session.testscollected else 1
     # 测试耗时
     time = datetime.now() - session.config.getoption('start_time')
     # 获取统计报告
