@@ -8,12 +8,14 @@ def gather_results(session, exitstatus):
     :param exitstatus:  执行结束的状态码
     :return:
     """
+    # 获取统计报告
+    reporter = session.config.pluginmanager.get_plugin('terminalreporter')
+
     # 用例总数
     total = session.testscollected if session.testscollected else 1
     # 测试耗时
     time = datetime.now() - session.config.getoption('start_time')
-    # 获取统计报告
-    reporter = session.config.pluginmanager.get_plugin('terminalreporter')
+
     passed = len(reporter.stats.get('passed', []))
     failed = len(reporter.stats.get('failed', []))
     error = len(reporter.stats.get('error', []))
