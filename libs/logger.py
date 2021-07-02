@@ -30,16 +30,16 @@ config = {
         # 其他的 handler
     },
     'loggers': {
-        # 'StreamLogger': {
-        #     'handlers': ['console'],
-        #     'level': 'DEBUG',
-        # },
-        'FileLogger': {
-            # 既有 console Handler，还有 file Handler
-            'handlers': ['file'],
-            'propagate': True,  # 是否继续传递日志信息
+        'StreamLogger': {
+            'handlers': ['console'],
             'level': 'DEBUG',
         },
+        # 'FileLogger': {
+        #     # 既有 console Handler，还有 file Handler
+        #     'handlers': ['file'],
+        #     'propagate': True,  # 是否继续传递日志信息
+        #     'level': 'DEBUG',
+        # },
         # 其他的 Logger
     }
 }

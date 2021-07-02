@@ -1,13 +1,14 @@
 import json
 
 import requests
-import urllib3
+# import urllib3
+from urllib3.exceptions import InsecureRequestWarning
 
 from conf import settings
 from libs.logger import logger
 
 # 屏蔽发送消息时的告警
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+# urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def send_dingtalk(*args):
@@ -51,6 +52,7 @@ def send_dingtalk(*args):
         }
     }
     try:
+        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         response = requests.post(url=host, data=json.dumps(msg_body), headers=headers, verify=False)
     except Exception as e:
         logger.error(f'钉钉-测试结果发送失败：{e}')
@@ -94,6 +96,7 @@ def send_wechat(*args):
         },
     }
     try:
+        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         response = requests.post(url=host, data=json.dumps(msg_body), headers=headers, verify=False)
     except Exception as e:
         logger.error(f'企业微信-测试结果发送失败：{e}')
