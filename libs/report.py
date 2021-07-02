@@ -49,8 +49,11 @@ def categories_to_allure():
     allure_report_path = os.path.join(settings.BASE_URL, 'allure-results')
 
     if os.path.exists(allure_report_path):
-        shutil.copy(category_file_path, allure_report_path)
+        try:
+            shutil.copy(category_file_path, allure_report_path)
+        except Exception as e:
+            logger.warning(f'导入用例分类信息失败！error: {e}')
     else:
-        logger.warning(f'倒入用例分类信息失败！error: {DirectoryPathNotExist}')
+        logger.warning(f'导入用例分类信息失败！error: {DirectoryPathNotExist}')
 
 
