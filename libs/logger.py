@@ -36,7 +36,7 @@ config = {
         # },
         'FileLogger': {
             # 既有 console Handler，还有 file Handler
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'propagate': True,  # 是否继续传递日志信息
             'level': 'DEBUG',
         },

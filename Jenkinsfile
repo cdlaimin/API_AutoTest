@@ -9,11 +9,13 @@ pipeline {
     stages {
         stage("构建docker镜像") {
             steps {
+                echo "==================构建镜像=================="
                 sh label: "构建镜像", script: "docker build -t ${JOB_NAME}_${params.git_branch}:latest ."
             }
         }
         stage("停止异常容器") {
             steps {
+                echo "==================停止异常容器=================="
                 // 当前stage报错时，设置构建结果为成功，保证后续stage继续执行
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
                     sh label: '停止测试并删除容器', script: 'docker-compose down'
@@ -33,6 +35,7 @@ pipeline {
         }
         stage("初始化环境") {
             steps {
+                echo "==================初始化环境=================="
                 // 当前测试在mac上进行，unix和linux sed 命令有些区别，使用 -i 时，要在后面加上一个空字符。linux不能加
                 sh label: "指定启动时的镜像", script: "sed -i '' 's/demo/${JOB_NAME}_${params.git_branch}/g' docker-compose.yaml"
                 sh label: "动态指定挂载", script: "sed -i '' 's/job_name/${JOB_NAME}/g' docker-compose.yaml"
@@ -42,6 +45,7 @@ pipeline {
         }
         stage("执行测试") {
             steps {
+                echo "==================执行测试=================="
                 sh label: "执行测试", script: "./run.sh ${params.git_branch} $JOB_NAME $BUILD_NUMBER"
             }
         }
@@ -57,7 +61,7 @@ pipeline {
                     results: [[path: "allure-results"]]
                 ])
             }
-//             sh label: '停止测试并删除容器', script: 'docker-compose down'
+            sh label: '停止测试并删除容器', script: 'docker-compose down'
         }
     }
 }
