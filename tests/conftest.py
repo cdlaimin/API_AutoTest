@@ -78,7 +78,7 @@ def pytest_xdist_make_scheduler(config):
             # # 如果不自定义，则调用父类分发方法
             # super(MyScheduler, self)._split_scope(nodeid)
 
-    return MyScheduler(config=config)
+    return MyScheduler(config=config, log=logger)
 
 
 # 这里的装饰器和yield生成器，对钩子函数进行包装。在yield处，将将钩子函数的执行结果返回给yield
