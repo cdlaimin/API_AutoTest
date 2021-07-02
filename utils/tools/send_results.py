@@ -73,7 +73,7 @@ def send_wechat(*args):
     token = config.get('token')
     job_name, build_number, total, result, passrate, time, passed, failed, skiped, error = args
 
-    time = 100
+    time = time.seconds
     m, s = divmod(time, 60)
     h, m = divmod(m, 60)
 

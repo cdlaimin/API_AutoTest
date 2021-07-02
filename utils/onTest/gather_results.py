@@ -1,4 +1,4 @@
-import time
+from datetime import datetime
 
 
 def gather_results(session, exitstatus):
@@ -14,7 +14,7 @@ def gather_results(session, exitstatus):
     # 用例总数
     total = session.testscollected if session.testscollected else 1
     # 测试耗时
-    times = time.time() - session.config.getoption('start_time')
+    time = datetime.now() - session.config.getoption('start_time')
 
     passed = len(reporter.stats.get('passed', []))
     failed = len(reporter.stats.get('failed', []))
@@ -35,11 +35,4 @@ def gather_results(session, exitstatus):
         result = "无可用的用例"
     else:
         result = "未知"
-    return job_name, build_number, total, result, passrate, int(times), passed, failed, skipped, error
-
-
-if __name__ == '__main__':
-    t1 = time.time()
-    time.sleep(5)
-    t2 = time.time()
-    print(t2 - t1)
+    return job_name, build_number, total, result, passrate, time, passed, failed, skipped, error

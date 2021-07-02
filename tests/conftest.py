@@ -1,4 +1,4 @@
-import time
+from datetime import datetime
 
 import pytest
 import allure
@@ -38,7 +38,7 @@ def pytest_sessionstart(session):
     """
     # 分布式执行测试时，将测试开始时间记录到option
     if xdist.is_xdist_master(session):
-        session.config.option.start_time = time.time()
+        session.config.option.start_time = datetime.now()
 
 
 def pytest_generate_tests(metafunc):
