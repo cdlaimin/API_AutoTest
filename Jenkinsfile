@@ -57,7 +57,7 @@ pipeline {
                     results: [[path: "allure-results"]]
                 ])
             }
-            sh label: '停止测试并删除容器', script: 'docker-compose down'
+//             sh label: '停止测试并删除容器', script: 'docker-compose down'
         }
     }
 }
