@@ -57,7 +57,7 @@ def send_dingtalk(*args):
     except Exception as e:
         logger.error(f'钉钉-测试结果发送失败：{e}')
     else:
-        logger.info('测试结果发送成功：' + response.text)
+        logger.info('钉钉-测试结果已发送：' + response.text)
 
 
 def send_wechat(*args):
@@ -101,7 +101,7 @@ def send_wechat(*args):
     except Exception as e:
         logger.error(f'企业微信-测试结果发送失败：{e}')
     else:
-        logger.info('测试结果发送成功：' + response.text)
+        logger.info('企业微信-测试结果已发送：' + response.text)
 
 
 if __name__ == '__main__':
