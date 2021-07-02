@@ -7,7 +7,7 @@ from conf import settings
 from libs.logger import logger
 
 # 屏蔽发送消息时的告警
-urllib3.disable_warnings()
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def send_dingtalk(*args):
