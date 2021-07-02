@@ -5,7 +5,6 @@ import os
 
 from conf.settings import BASE_URL
 
-
 config = {
     'version': 1,
     'disable_existing_loggers': False,  # 是否禁用已经存在的日志器
@@ -33,6 +32,7 @@ config = {
         'StreamLogger': {
             'handlers': ['console'],
             'level': 'DEBUG',
+            'propagate': True,  # 是否继续传递日志信息
         },
         # 'FileLogger': {
         #     # 既有 console Handler，还有 file Handler
@@ -49,7 +49,6 @@ logging.config.dictConfig(config)
 # StreamLogger = logging.getLogger("StreamLogger")
 # 实例化日志对象
 logger = logging.getLogger("FileLogger")
-
 
 # def logpath():
 #     log_path = os.path.join(BASE_URL, 'logs')
@@ -80,5 +79,3 @@ logger = logging.getLogger("FileLogger")
 # }
 #
 # logger.configure(**config)
-
-
