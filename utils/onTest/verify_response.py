@@ -1,3 +1,6 @@
+from libs.logger import logger
+
+
 def verification(expect: dict, real: object):
     """
     验证用例正向执行结果
@@ -5,6 +8,8 @@ def verification(expect: dict, real: object):
     :param real: 实际结果，接口响应对象
     :return:
     """
+    logger.info('响应体:' + real.text)
+
     # 首先判断响应状态吗
     assert real.status_code == 200 or 201
 

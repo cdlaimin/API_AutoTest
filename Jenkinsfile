@@ -37,10 +37,10 @@ pipeline {
             steps {
                 echo "==================初始化环境=================="
                 // 当前测试在mac上进行，unix和linux sed 命令有些区别，使用 -i 时，要在后面加上一个空字符。linux不能加
-                sh label: "指定启动时的镜像", script: "sed -i '' 's/demo/${JOB_NAME}_${params.git_branch}/g' docker-compose.yaml"
-                sh label: "动态指定挂载", script: "sed -i '' 's/job_name/${JOB_NAME}/g' docker-compose.yaml"
+                sh label: "指定启动镜像", script: "sed -i '' 's/demo/${JOB_NAME}_${params.git_branch}/g' docker-compose.yaml"
+                sh label: "指定挂载目录", script: "sed -i '' 's/job_name/${JOB_NAME}/g' docker-compose.yaml"
                 sh label: "启动容器", script: "docker-compose up -d"
-                sh label: "修改文件sh文件权限", script: "chmod 777 run.sh"
+                sh label: "修改shell操作权限", script: "chmod 777 run.sh"
             }
         }
         stage("执行测试") {
@@ -52,7 +52,7 @@ pipeline {
     }
     post {
         always {
-            echo "======================正在收集并生成报告======================="
+            echo "==================正在收集并生成报告=================="
             script {
                 allure([
                     includeProperties: false,
@@ -61,7 +61,7 @@ pipeline {
                     results: [[path: "allure-results"]]
                 ])
             }
-            echo "======================停止测试并删除容器======================="
+            echo "==================停止测试并删除容器==================="
             sh label: '停止测试并删除容器', script: 'docker-compose down'
         }
     }
