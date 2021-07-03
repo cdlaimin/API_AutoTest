@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 import pytest
@@ -145,6 +146,6 @@ def pytest_unconfigure(config):
     :param config: pytest Config 对象
     :return:
     """
-    # 分布式执行时，归总worker日志。这里通过是否在jenkins执行来判断
-    if config.getoption('job_name'):
+    # 分布式执行时（xdist）判断当前执行节点，只在master节点执行
+    if os.environ.get("PYTEST_XDIST_WORKER", "master") == "master":
         gather_logs()
