@@ -1,7 +1,7 @@
 import os
 import sys
 
-from utils.common.file_action import read_ini_file
+from utils.action.file import read_ini_file
 
 # 项目根路径
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

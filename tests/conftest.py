@@ -7,8 +7,8 @@ import xdist
 
 from libs.logger import logger
 from libs.report import collect_item_info, categories_to_allure
-from utils.test.assemble_param import build_test_data
-from utils.common.file_action import get_case_id
+from utils.test.assemble import build_test_data
+from utils.action.file import get_case_id
 from utils.tools.gather import gather_logs, gather_results
 from utils.tools.notify import send_wechat, send_dingtalk
 

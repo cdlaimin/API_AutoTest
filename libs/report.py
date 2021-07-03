@@ -7,7 +7,7 @@ from allure import dynamic
 from conf import settings
 from libs.exception import DirectoryPathNotExist
 from libs.logger import logger
-from utils.common.file_action import get_case_info_by_id, get_case_info_by_path
+from utils.action.file import get_case_info_by_id, get_case_info_by_path
 
 
 def collect_item_info(item):

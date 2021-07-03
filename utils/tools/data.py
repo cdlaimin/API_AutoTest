@@ -1,6 +1,6 @@
 from faker import Faker
 
-from utils.common.db_action import Database
+from utils.action.database import Database
 
 
 class DynamicData:
