@@ -4,7 +4,7 @@ import sys
 from utils.common.file_action import read_ini_file
 
 # 项目根路径
-BASE_URL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 应用配置信息
 APP_CONFIG = read_ini_file('application.ini')
@@ -22,4 +22,4 @@ DISABLE_ITEMS = [
 
 
 if __name__ == '__main__':
-    print(BASE_URL)
+    print(BASE_DIR)

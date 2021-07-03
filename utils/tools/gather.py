@@ -1,4 +1,27 @@
+import os
+
 from datetime import datetime
+
+from conf.settings import BASE_DIR
+
+
+def gather_logs():
+    """
+    收集分布式执行时各个worker的日志到master
+    :return: None
+    """
+    # 日志根目录
+    log_path = os.path.join(BASE_DIR, 'logs')
+    all_logs = os.path.join(BASE_DIR, 'logs', 'all_logs.log')
+
+    for tup in os.walk(log_path, topdown=False):
+        for file_name in tup[2]:
+            file_path = os.path.join(tup[0], file_name)
+            with open(file_path, 'r', encoding='utf8') as fr:
+                content = fr.read()
+            with open(all_logs, 'a+', encoding='utf8') as fw:
+                fw.write(content)
+                fw.write('\n')
 
 
 def gather_results(session, exitstatus):
@@ -36,3 +59,7 @@ def gather_results(session, exitstatus):
     else:
         result = "未知"
     return job_name, build_number, total, result, passrate, time, passed, failed, skipped, error
+
+
+if __name__ == '__main__':
+    gather_logs()

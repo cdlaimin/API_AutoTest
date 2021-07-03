@@ -8,7 +8,7 @@ from libs.logger import logger
 from libs.report import collect_item_info, categories_to_allure
 from utils.onTest.assemble_param import build_test_data
 from utils.common.file_action import get_case_id
-from utils.onTest.gather_results import gather_results
+from utils.tools.gather import gather_logs, gather_results
 from utils.tools.send_results import send_wechat, send_dingtalk
 
 
@@ -134,9 +134,9 @@ def pytest_sessionfinish(session, exitstatus):
         categories_to_allure()
 
         # 发送测试结果到测试群。钉钉或者企业微信
-
-        send_wechat(*gather_results(session, exitstatus))
-        send_dingtalk(*gather_results(session, exitstatus))
+        results = gather_results(session, exitstatus)
+        send_wechat(*results)
+        send_dingtalk(*results)
 
 
 def pytest_unconfigure(config):
@@ -145,5 +145,6 @@ def pytest_unconfigure(config):
     :param config: pytest Config 对象
     :return:
     """
-    # 分布式执行时，归总worker日志
-    pass
+    # 分布式执行时，归总worker日志。这里通过是否在jenkins执行来判断
+    if config.getoption('job_name'):
+        gather_logs()

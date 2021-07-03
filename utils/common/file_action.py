@@ -53,7 +53,7 @@ def read_ini_file(filename):
     固定读取conf文件夹里面的配置文件，传入文件名即可
     :return: dict
     """
-    filepath = os.path.join(settings.BASE_URL, 'conf', filename)
+    filepath = os.path.join(settings.BASE_DIR, 'conf', filename)
     reader = configparser.ConfigParser()
     reader.read(filepath, encoding='utf8')
 

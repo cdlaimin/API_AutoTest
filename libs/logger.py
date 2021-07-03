@@ -3,7 +3,7 @@ import os
 
 from loguru import logger
 
-from conf.settings import BASE_URL
+from conf.settings import BASE_DIR
 
 # config = {
 #     'version': 1,
@@ -23,7 +23,7 @@ from conf.settings import BASE_URL
 #         'file': {  # 向文件中输出日志
 #             'level': 'INFO',
 #             'class': 'logging.FileHandler',
-#             'filename': os.path.join(BASE_URL, "logs", "test_log.log"),  # 日志文件的位置
+#             'filename': os.path.join(BASE_DIR, "logs", "test_log.log"),  # 日志文件的位置
 #             'formatter': 'simple'
 #         },
 #         # 其他的 handler
@@ -50,7 +50,7 @@ from conf.settings import BASE_URL
 # logger = logging.getLogger("FileLogger")
 
 def logpath():
-    log_path = os.path.join(BASE_URL, 'logs')
+    log_path = os.path.join(BASE_DIR, 'logs')
     logfile_path = os.path.join(log_path, '{}.log'.format('test_log'))
     if not os.path.exists(log_path):
         os.makedirs(log_path)

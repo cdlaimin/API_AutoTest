@@ -45,8 +45,8 @@ def categories_to_allure():
     把allure分类信息的json配置文件，放到allure测试结果文件所在目录
     :return:
     """
-    category_file_path = os.path.join(settings.BASE_URL, 'conf', 'categories.json')
-    allure_report_path = os.path.join(settings.BASE_URL, 'allure-results')
+    category_file_path = os.path.join(settings.BASE_DIR, 'conf', 'categories.json')
+    allure_report_path = os.path.join(settings.BASE_DIR, 'allure-results')
 
     if os.path.exists(allure_report_path):
         try:
