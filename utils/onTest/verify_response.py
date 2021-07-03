@@ -11,13 +11,13 @@ def verification(expect: dict, real: object):
     logger.info('响应体:' + real.text)
 
     # 首先判断响应状态吗
-    assert real.status_code == 200 or 201
+    assert real.status_code in (200, 201)
 
     # 其次验证实际结果是否与预期一致
     response = real.json()
     for key, value in expect.items():
         # 如果预期值是str或者int那么就直接对比
-        if type(value) == str or type(value) == int:
+        if type(value) in (str, int):
             # 直接对比之前先判断一下是否是
             if key == 'type':
                 assert type(response).__name__ == value

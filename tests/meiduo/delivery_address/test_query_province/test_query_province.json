@@ -4,7 +4,7 @@
     },
     "url": "http://{ip}:{port}/areas/",
     "headers": {
-      "Content-Type": "content-type: application/json"
+      "Content-Type": "application/json"
     },
     "app": "meiduo",
     "method": "get",
@@ -20,7 +20,7 @@
     },
     "url": "http://{ip}:{port}/areas/",
     "headers": {
-      "Content-Type": "content-type: application/json"
+      "Content-Type": "application/json"
     },
     "app": "meiduo",
     "method": "get",

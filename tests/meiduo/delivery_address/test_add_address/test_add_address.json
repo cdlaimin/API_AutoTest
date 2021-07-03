@@ -1,0 +1,23 @@
+{
+  "test_add_address_001": {
+    "data": {
+      "city_id": 110100,
+      "district_id": 110101,
+      "email": "$$email",
+      "mobile": "$$mobile",
+      "place": "$$address",
+      "province_id": 110000,
+      "receiver": "$$people_name",
+      "tel": "$$msisdn"
+    },
+    "url": "http://{ip}:{port}/address/",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "app": "meiduo",
+    "method": "post",
+    "expect": {
+      "msg": "新增地址成功"
+    }
+  }
+}

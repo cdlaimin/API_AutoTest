@@ -1,18 +1,16 @@
 {
-  "test_query_address_001": {
-    "params": {
+  "test_delete_address_001": {
+    "data": {
+      "id": "##delete_address_id"
     },
     "url": "http://{ip}:{port}/address/",
     "headers": {
       "Content-Type": "application/json"
     },
     "app": "meiduo",
-    "method": "get",
+    "method": "delete",
     "expect": {
-      "address": {
-        "type": "list"
-      },
-      "limit": 20
+      "msg": "删除地址成功"
     }
   }
 }

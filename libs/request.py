@@ -1,3 +1,5 @@
+import json
+
 import requests
 
 from conf import settings
@@ -16,6 +18,9 @@ class Requests:
 
     def requests(self):
         try:
+            if self.kwargs.get('data'):
+                self.kwargs['data'] = json.dumps(self.kwargs['data'])
+
             response = self.session.request(**self.kwargs)
 
             logger.info(f'请求地址:{response.request.url}')

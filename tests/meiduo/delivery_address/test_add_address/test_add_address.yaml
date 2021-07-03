@@ -1,0 +1,9 @@
+case_info:
+  - id: test_add_address_001
+    path: test_add_address
+    model: 收货地址
+    func: 收货地址
+    case_name: 新增收货地址
+    description: 为当前登陆用户新增一个收货地址
+    level: H
+

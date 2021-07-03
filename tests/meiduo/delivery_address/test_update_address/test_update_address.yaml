@@ -1,0 +1,9 @@
+case_info:
+  - id: test_update_address_001
+    path: test_update_address
+    model: 收货地址
+    func: 收货地址
+    case_name: 修改收货地址
+    description: 修改收货地址，随机修改任意信息
+    level: H
+

@@ -2,9 +2,9 @@
   "test_query_district_001": {
     "params": {
     },
-    "url": "http://{ip}:{port}/areas/130100",
+    "url": "http://{ip}:{port}/areas/130100/",
     "headers": {
-      "Content-Type": "content-type: application/json"
+      "Content-Type": "application/json"
     },
     "app": "meiduo",
     "method": "get",
@@ -19,9 +19,9 @@
   "test_query_district_002": {
     "params": {
     },
-    "url": "http://{ip}:{port}/areas/110000",
+    "url": "http://{ip}:{port}/areas/110000/",
     "headers": {
-      "Content-Type": "content-type: application/json"
+      "Content-Type": "application/json"
     },
     "app": "meiduo",
     "method": "get",

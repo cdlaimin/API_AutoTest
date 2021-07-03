@@ -2,9 +2,9 @@
   "test_query_city_001": {
     "params": {
     },
-    "url": "http://{ip}:{port}/areas/130000",
+    "url": "http://{ip}:{port}/areas/130000/",
     "headers": {
-      "Content-Type": "content-type: application/json"
+      "Content-Type": "application/json"
     },
     "app": "meiduo",
     "method": "get",
@@ -19,9 +19,9 @@
   "test_query_city_002": {
     "params": {
     },
-    "url": "http://{ip}:{port}/areas/340000",
+    "url": "http://{ip}:{port}/areas/340000/",
     "headers": {
-      "Content-Type": "content-type: application/json"
+      "Content-Type": "application/json"
     },
     "app": "meiduo",
     "method": "get",
