@@ -1,7 +1,7 @@
 import pytest
 
 from libs.request import Requests
-from utils.onTest.verify_response import verification
+from utils.test.verify_response import verification
 
 
 def test_add_address(params):

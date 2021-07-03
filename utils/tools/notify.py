@@ -1,14 +1,11 @@
 import json
 
 import requests
-# import urllib3
 from urllib3.exceptions import InsecureRequestWarning
 
 from conf import settings
 from libs.logger import logger
 
-# 屏蔽发送消息时的告警
-# urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def send_dingtalk(*args):
@@ -52,6 +49,7 @@ def send_dingtalk(*args):
         }
     }
     try:
+        # 屏蔽发送消息时的告警
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         response = requests.post(url=host, data=json.dumps(msg_body), headers=headers, verify=False)
     except Exception as e:

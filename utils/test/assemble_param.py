@@ -6,7 +6,7 @@ import pytest
 from conf import settings
 from libs.logger import logger
 from utils.common.file_action import get_case_data
-from utils.tools.init_data import DynamicData, StaticData
+from utils.tools.data import DynamicData, StaticData
 
 
 def assemble_url(data):
