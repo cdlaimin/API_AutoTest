@@ -138,6 +138,9 @@ def pytest_sessionfinish(session, exitstatus):
         send_wechat(*results)
         send_dingtalk(*results)
 
+        # 收集从机上的日志到master上
+        gather_logs()
+
 
 def pytest_unconfigure(config):
     """
@@ -145,6 +148,4 @@ def pytest_unconfigure(config):
     :param config: pytest Config 对象
     :return:
     """
-    # 分布式执行时（xdist）判断当前执行节点，只在master节点执行
-    if os.environ.get("PYTEST_XDIST_WORKER") == "master":
-        gather_logs()
+    pass
