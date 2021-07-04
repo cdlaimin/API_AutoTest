@@ -3,7 +3,7 @@ case_info:
     path: test_query_city
     model: 收货地址
     func: 省市区
-    case_name: 查询城市信息
+    case_name: 查询河北省城市信息
     description: 查询河北省的城市信息
     level: M
 
@@ -11,7 +11,7 @@ case_info:
     path: test_query_city
     model: 收货地址
     func: 省市区
-    case_name: 查询城市信息
+    case_name: 查询安徽省城市信息
     description: 查询安徽省的城市信息
     level: M
 
