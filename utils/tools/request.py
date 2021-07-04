@@ -59,7 +59,7 @@ def init_meiduo():
         # 添加身份认证信息
         session.headers['Authorization'] = 'JWT ' + response.json().get('token')
         return session
-    logger.info('美多商城初始化登陆失败')
+    logger.warning('美多商城初始化登陆失败')
     raise LoginFailException
 
 

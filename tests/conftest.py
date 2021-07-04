@@ -26,7 +26,6 @@ def pytest_addoption(parser):
     :param parser:
     :return:
     """
-    parser.addoption('--app', action='store', type=str, default='meiduo', help='当前测试app')
     parser.addoption('--job_name', action='store', type=str, default=None, help='jenkins执行时，job任务名称')
     parser.addoption('--build_number', action='store', type=int, default=None, help='当前job的构建number')
 
