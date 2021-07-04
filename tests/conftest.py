@@ -36,9 +36,12 @@ def pytest_sessionstart(session):
     :param session: pytest Session 对象
     :return:
     """
-    # 分布式执行测试时，将测试开始时间记录到option
+    # 分布式执行测试时
     if xdist.is_xdist_master(session):
+        # 将测试开始时间记录到option
         session.config.option.start_time = datetime.now()
+        # 设置环境变量
+        os.environ.setdefault('PYTEST_XDIST_WORKER', 'master')
 
 
 def pytest_generate_tests(metafunc):
@@ -138,9 +141,6 @@ def pytest_sessionfinish(session, exitstatus):
         send_wechat(*results)
         send_dingtalk(*results)
 
-        # 收集从机上的日志到master上
-        gather_logs()
-
 
 def pytest_unconfigure(config):
     """
@@ -148,4 +148,6 @@ def pytest_unconfigure(config):
     :param config: pytest Config 对象
     :return:
     """
-    pass
+    if os.environ.get('PYTEST_XDIST_WORKER') == 'master':
+        # 收集从机上的日志到master上
+        gather_logs()
