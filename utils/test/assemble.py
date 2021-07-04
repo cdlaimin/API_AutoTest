@@ -83,7 +83,7 @@ def build_test_data(request):
     json_path = request.module.__file__.replace('.py', '.json')
 
     # 构造测试数据，返回给用例开始执行
-    logger.info(f'=====执行用例：{case_id}=====')
+    logger.info(f'执行用例：{case_id}')
 
     # 判断用例是否已经弃用
     if case_id in settings.DISABLE_ITEMS:

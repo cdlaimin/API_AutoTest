@@ -7,7 +7,6 @@ from conf import settings
 from libs.logger import logger
 
 
-
 def send_dingtalk(*args):
     """
     发送结果到钉钉群

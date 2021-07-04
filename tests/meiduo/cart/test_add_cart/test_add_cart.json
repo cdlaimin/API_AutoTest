@@ -1,0 +1,75 @@
+{
+  "test_add_cart_001": {
+    "data": {
+      "count": 1,
+      "sku_id": 16,
+      "spec": "钻雕金_128GB"
+    },
+    "url": "http://{ip}:{port}/cart/",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "app": "meiduo",
+    "method": "post",
+    "expect": {
+      "count": 1,
+      "sku_id": 16,
+      "spec": "钻雕金_128GB"
+    }
+  },
+    "test_add_cart_002": {
+    "data": {
+      "count": "$$count",
+      "sku_id": 16,
+      "spec": "钻雕金_128GB"
+    },
+    "url": "http://{ip}:{port}/cart/",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "app": "meiduo",
+    "method": "post",
+    "expect": {
+      "count": "$$count",
+      "sku_id": 16,
+      "spec": "钻雕金_128GB"
+    }
+  },
+  "test_add_cart_003": {
+    "data": {
+      "count": 1,
+      "sku_id": 16,
+      "spec": ""
+    },
+    "url": "http://{ip}:{port}/cart/",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "app": "meiduo",
+    "method": "post",
+    "expect": {
+      "status_code": 400,
+      "spec": [
+        "该字段不能为空。"
+      ]
+    }
+  },
+    "test_add_cart_004": {
+    "data": {
+      "count": "$$count",
+      "sku_id": 16
+    },
+    "url": "http://{ip}:{port}/cart/",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "app": "meiduo",
+    "method": "post",
+    "expect": {
+      "status_code": 400,
+      "spec": [
+        "该字段是必填项。"
+      ]
+    }
+  }
+}

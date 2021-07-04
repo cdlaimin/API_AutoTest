@@ -1,3 +1,5 @@
+import random
+
 from faker import Faker
 
 from utils.action.database import Database
@@ -33,6 +35,11 @@ class DynamicData:
     def people_name(cls):
         """随机人名"""
         return cls.faker.name()
+
+    @classmethod
+    def count(cls):
+        """生成一个1～10之间的随机数"""
+        return random.randint(1, 10)
 
 
 class StaticData:

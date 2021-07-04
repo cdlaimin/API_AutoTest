@@ -9,12 +9,15 @@ def verification(expect: dict, real: object):
     :return:
     """
     logger.info('响应体:' + real.text)
+    response = real.json()
 
     # 首先判断响应状态吗
-    assert real.status_code in (200, 201)
+    if expect.get('status_code'):
+        assert expect.pop('status_code') == real.status_code
+    else:
+        assert real.status_code in (200, 201)
 
     # 其次验证实际结果是否与预期一致
-    response = real.json()
     for key, value in expect.items():
         # 如果预期值是str或者int那么就直接对比
         if type(value) in (str, int):
@@ -38,3 +41,9 @@ def verification(expect: dict, real: object):
                 # 如果不属于以上两种，则把sub_value当作子串到响应文本中进行对比。存在则校验通过
                 else:
                     assert str(sub_value) in str(response)
+
+        # 如果预期值是list则进入下一级校验
+        if type(value) == list:
+            real_value = response.get(key)
+            for sub_value in value:
+                assert sub_value in real_value

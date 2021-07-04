@@ -105,7 +105,7 @@ def pytest_runtest_makereport(item, call):
         # outcome取值：failed、passed
         # nodeid(测试用例的名字)
         result = out.get_result()
-        logger.info(f'============测试结果：{result.outcome}============')
+        logger.info(f'测试结果：{result.outcome}')
 
 
 @pytest.fixture()
