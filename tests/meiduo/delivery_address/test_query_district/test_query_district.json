@@ -9,10 +9,10 @@
     "app": "meiduo",
     "method": "get",
     "expect": {
+      "name": "石家庄市",
       "subs": {
         "type": "list",
-        "length": 21,
-        "name": "石家庄市"
+        "length": 21
       }
     }
   },
@@ -26,10 +26,10 @@
     "app": "meiduo",
     "method": "get",
     "expect": {
+      "name": "北京市",
       "subs": {
         "type": "list",
-        "length": 1,
-        "name": "北京市"
+        "length": 1
       }
     }
   }

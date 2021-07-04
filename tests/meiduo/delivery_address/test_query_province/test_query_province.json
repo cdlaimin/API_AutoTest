@@ -9,8 +9,8 @@
     "app": "meiduo",
     "method": "get",
     "expect": {
-        "type": "list",
-        "length": 34
+      "type": "list",
+      "length": 34
     }
   },
   "test_query_province_002": {
@@ -25,10 +25,10 @@
     "app": "meiduo",
     "method": "get",
     "expect": {
+      "count": 34,
       "results": {
         "type": "list",
-        "length": 5,
-        "count": 34
+        "length": 5
       }
     }
   }

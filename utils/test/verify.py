@@ -1,9 +1,9 @@
 from libs.logger import logger
 
 
-def verification(expect: dict, real: object):
+def verification(expect, real: object):
     """
-    验证用例正向执行结果
+    验证用例执行结果
     :param expect: 预期结果
     :param real: 实际结果，接口响应对象
     :return:
@@ -18,6 +18,21 @@ def verification(expect: dict, real: object):
         assert real.status_code in (200, 201)
 
     # 其次验证实际结果是否与预期一致
+    if type(expect) == list:
+        for sub_expect in expect:
+            assert sub_expect in response
+    else:
+        dict_verify(expect, response)
+
+
+def dict_verify(expect, response):
+    """
+    相应结果为字典时的通用校验方法
+    :param expect: 预期结果的字典
+    :param response: 实际相应结果字典
+    :return:
+    """
+    # 其次验证实际结果是否与预期一致
     for key, value in expect.items():
         # 如果预期值是str或者int那么就直接对比
         if type(value) in (str, int):
@@ -29,21 +44,13 @@ def verification(expect: dict, real: object):
             else:
                 # 在不是类型和长度校验时，则默认实际结果是字典
                 assert value == response.get(key)
-        # 如果预期值是dict则进入下一级校验
-        if type(value) == dict:
-            real_value = response.get(key)
-            for sub_key, sub_value in value.items():
-                # 根据预期字典中的校验类型进行校验
-                if sub_key == 'type':
-                    assert type(real_value).__name__ == sub_value
-                elif sub_key == 'length':
-                    assert len(real_value) == sub_value
-                # 如果不属于以上两种，则把sub_value当作子串到响应文本中进行对比。存在则校验通过
-                else:
-                    assert str(sub_value) in str(response)
 
-        # 如果预期值是list则进入下一级校验
+        # 如果预期值是list则便利预期列表中的item是否都在实际结果中能找到
         if type(value) == list:
             real_value = response.get(key)
             for sub_value in value:
                 assert sub_value in real_value
+
+        # 如果预期值是dict则再次调用本方法进行递归验证
+        if type(value) == dict:
+            dict_verify(value, response.get(key))

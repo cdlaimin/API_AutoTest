@@ -147,5 +147,5 @@ def pytest_unconfigure(config):
     :return:
     """
     # 分布式执行时（xdist）判断当前执行节点，只在master节点执行
-    if os.environ.get("PYTEST_XDIST_WORKER", "master") == "master":
+    if os.environ.get("PYTEST_XDIST_WORKER") == "master":
         gather_logs()

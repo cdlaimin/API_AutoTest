@@ -9,10 +9,10 @@
     "app": "meiduo",
     "method": "get",
     "expect": {
+      "name": "河北省",
       "subs": {
         "type": "list",
-        "length": 12,
-        "name": "河北省"
+        "length": 12
       }
     }
   },
@@ -26,10 +26,10 @@
     "app": "meiduo",
     "method": "get",
     "expect": {
+      "name": "安徽省",
       "subs": {
         "type": "list",
-        "length": 16,
-        "name": "安徽省"
+        "length": 16
       }
     }
   }
