@@ -1,0 +1,15 @@
+{
+  "test_query_cart_001": {
+    "params": {
+    },
+    "url": "http://{ip}:{port}/cart/",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "app": "meiduo",
+    "method": "get",
+    "expect": {
+      "type": "list"
+    }
+  }
+}
