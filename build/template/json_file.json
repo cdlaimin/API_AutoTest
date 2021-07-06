@@ -1,0 +1,13 @@
+{
+  "test_case_number": {
+    "params": {},
+    "data": {},
+    "url": "http://{ip}:{port}/{api}",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "app": "",
+    "method": "",
+    "expect": {}
+  }
+}

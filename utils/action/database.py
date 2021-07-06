@@ -1,7 +1,7 @@
 import pymysql
 
 from conf import settings
-from libs.exception import DbConfigNotExist
+from utils.libs.exception import DbConfigNotExist
 from utils.tools.singleton import Singleton
 
 

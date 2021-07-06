@@ -5,8 +5,8 @@ import shutil
 from allure import dynamic
 
 from conf import settings
-from libs.exception import DirectoryPathNotExist
-from libs.logger import logger
+from utils.libs.exception import DirectoryPathNotExist
+from utils.libs.logger import logger
 from utils.action.file import get_case_info_by_id, get_case_info_by_path
 
 

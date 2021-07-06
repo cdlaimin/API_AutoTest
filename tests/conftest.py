@@ -5,8 +5,8 @@ import pytest
 import allure
 import xdist
 
-from libs.logger import logger
-from libs.report import collect_item_info, categories_to_allure
+from utils.libs.logger import logger
+from utils.libs.report import collect_item_info, categories_to_allure
 from utils.test.assemble import build_test_data
 from utils.action.file import get_case_id
 from utils.tools.gather import gather_logs, gather_results

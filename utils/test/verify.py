@@ -1,4 +1,4 @@
-from libs.logger import logger
+from utils.libs.logger import logger
 
 
 def verification(expect, real: object):
@@ -18,7 +18,7 @@ def verification(expect, real: object):
         assert real.status_code in (200, 201)
 
     # 其次验证实际结果是否与预期一致
-    if type(expect) == list:
+    if isinstance(expect, list):
         for sub_expect in expect:
             assert sub_expect in response
     else:
@@ -46,11 +46,11 @@ def dict_verify(expect, response):
                 assert value == response.get(key)
 
         # 如果预期值是list则便利预期列表中的item是否都在实际结果中能找到
-        if type(value) == list:
+        if isinstance(value, list):
             real_value = response.get(key)
             for sub_value in value:
                 assert sub_value in real_value
 
         # 如果预期值是dict则再次调用本方法进行递归验证
-        if type(value) == dict:
+        if isinstance(value, dict):
             dict_verify(value, response.get(key))

@@ -2,6 +2,7 @@ import configparser
 import json
 import os
 
+import ruamel.yaml
 import yaml
 import jsonpath
 
@@ -26,6 +27,10 @@ def write_json_file(filepath, content):
     :param content:
     :return:
     """
+    with open(filepath, 'w', encoding='utf8') as fp:
+        # 将ensure_ascii 设置为false，避免将汉字转成ascii码
+        # indent 参数让json文本保持缩进格式，数字表述缩进字符数
+        json.dump(content, fp, ensure_ascii=False, indent=2)
 
 
 def read_yaml_file(filepath):
@@ -46,6 +51,17 @@ def write_yaml_file(filepath, content):
     :param content:
     :return:
     """
+    with open(filepath, 'w', encoding='utf8') as fp:
+        # allow_unicode参数为true时，才会进行编码。否则写入的文件都是进过url编码的
+        # default_flow_style 表示dump后的字典数据全部以yml格式显示,默认为为True
+        # sort_keys 不给key排序，这样能保持原来字典的顺序写入。为True时按字母的排序展示，默认为为True
+        # indent 参数让yaml文本保持缩进格式。有下次，列表符号不会跟随缩进
+        # yaml.safe_dump(content, fp, allow_unicode=True, default_flow_style=False, sort_keys=False, indent=4)
+
+        # ----为了dump保持缩进，这里采用另一个模块实现
+        r_yaml = ruamel.yaml.YAML()
+        r_yaml.indent(sequence=4, offset=2)
+        r_yaml.dump(content, fp)
 
 
 def read_ini_file(filename):

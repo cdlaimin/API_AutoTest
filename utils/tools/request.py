@@ -3,8 +3,8 @@ import json
 import requests
 
 from conf import settings
-from libs.exception import LoginFailException
-from libs.logger import logger
+from utils.libs.exception import LoginFailException
+from utils.libs.logger import logger
 
 
 class Requests:

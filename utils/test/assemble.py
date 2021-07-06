@@ -4,7 +4,7 @@ import re
 import pytest
 
 from conf import settings
-from libs.logger import logger
+from utils.libs.logger import logger
 from utils.action.file import get_case_data
 from utils.tools.data import DynamicData, StaticData
 

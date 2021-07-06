@@ -4,7 +4,7 @@ import requests
 from urllib3.exceptions import InsecureRequestWarning
 
 from conf import settings
-from libs.logger import logger
+from utils.libs.logger import logger
 
 
 def send_dingtalk(*args):
