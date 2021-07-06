@@ -201,25 +201,29 @@ def assemble_data_and_expect(content, **kwargs):
 
 
 if __name__ == '__main__':
-    case_path = 'tests/meiduo/demo/test_add_cart'
-    fixtures = ['fuck', 'foo', 'ioo']
-    data = [{'a': 'b', 'aa': 'bb'}, {'username': 'zhangjian123', 'password': '$$phone_number'}]
-    expect = [['a', 'hello'], {'qq': '123456', 'wechat': 'zj123456'}]
+    path = 'tests/meiduo/user/test_set_history'
+    app = 'meiduo'
+    api = 'set_history/'
+    method = 'post'
+    fixtures = ['params', 'foo', 'ioo']
+    data = [
+        {
+            "sku_id": 16
+        },
+    ]
+    expect = [
+        {
+            "sku_id": 16
+        },
+    ]
     info_list = [
         {
-            'model': '购物车',
-            'func': '添加购物车',
-            'case_name': '用例名称1',
-            'description': '描述1',
+            'model': '用户中心',
+            'func': '浏览记录',
+            'case_name': '添加浏览记录',
+            'description': '为当前用户添加一个sku的浏览记录',
             'level': 'H'
         },
-        {
-            'model': '腾讯',
-            'func': '腾讯11',
-            'case_name': '用例名称222',
-            'description': '描述2222',
-            'level': 'H'
-        }
     ]
 
-    build_case(case_path, 'meiduo', 'cart/', 'post', data, expect, info_list, fixture=fixtures)
+    build_case(path, app, api, method, data, expect, info_list)

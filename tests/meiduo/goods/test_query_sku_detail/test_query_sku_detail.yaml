@@ -1,0 +1,8 @@
+case_info:
+  - id: test_query_sku_detail_01
+    path: test_query_sku_detail
+    model: 商品
+    func: SKU
+    case_name: 查询sku详情
+    description: 指定一个sku_id，查询该sku的详情。
+    level: H
