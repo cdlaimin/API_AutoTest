@@ -6,7 +6,7 @@ import pytest
 from conf import settings
 from utils.libs.logger import logger
 from utils.action.file import get_case_data
-from utils.tools.data import DynamicData, StaticData
+from utils.tools.data import DynamicData, MdData
 
 
 def assemble_url(data):
@@ -20,9 +20,14 @@ def assemble_url(data):
     port = settings.APP_CONFIG.get(app).get('port')
 
     data = json.dumps(data)  # 把字典转换成json
-    # 替换ip和端口
+    # 替换ip
     data = data.replace(r'{ip}', ip)
-    data = data.replace(r'{port}', port)
+
+    # 替换端口。处理特殊端口80
+    if port == '80':
+        data = data.replace(r':{port}', '')
+    else:
+        data = data.replace(r'{port}', port)
 
     # 重新转回字典并返回
     return json.loads(data, strict=False)
@@ -57,8 +62,8 @@ def assemble_data(data):
     if match_list:
         for func_name in list(set(match_list)):
             # 判断function是否存在
-            if hasattr(StaticData, func_name):
-                function = getattr(StaticData, func_name)
+            if hasattr(MdData, func_name):
+                function = getattr(MdData, func_name)
                 instead_data = function()
                 # 替换数据
                 if type(instead_data) == str:

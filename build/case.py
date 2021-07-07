@@ -8,7 +8,7 @@ from utils.action.file import read_json_file, write_json_file, read_yaml_file, w
 from utils.libs.exception import ParamsCheckFailed, RequestMethodInvalid, ParamsTypeError
 
 
-def build_case(path: str, app: str, api: str, method: str, data: list, expect: list, args: list, fixture='params'):
+def build_case(path: str, app: str, api: str, method: str, headers: dict, data: list, expect: list, args: list, fixture='params'):
     """
     构建测试用例，函数入参没有全部传入时，生成用例后，需要测试人员手动补全用例。
     同时建议新增一个用例后，调试通过在生成下一个，避免生成垃圾用例
@@ -16,6 +16,7 @@ def build_case(path: str, app: str, api: str, method: str, data: list, expect: l
     :param api: 必填，测试API接口，以'/'结尾
     :param app: 必填，测试项目app名称
     :param method: 必填，请求方法
+    :param headers: 请求头字典
     :param fixture: 夹具。可以是单个夹具，也可以是一个夹具列表(请求参数的夹具放首位)。默认值：params
     :param data: 请求参数，字典组成的列表
     :param expect: 预期结果，字典组成的列表，尽量使用字典。为列表时，预期结果要与data/params保持一一对应
@@ -41,7 +42,7 @@ def build_case(path: str, app: str, api: str, method: str, data: list, expect: l
     build_py(abs_path, temp_path, fixture)
 
     # 构建json文件
-    build_json(abs_path, temp_path, api, app, method, data=data, expect=expect)
+    build_json(abs_path, temp_path, app, api, method, headers, data=data, expect=expect)
 
     # 构建yaml文件
     build_yaml(abs_path, temp_path, args)
@@ -81,7 +82,7 @@ def build_py(abs_path, temp_path, fixture):
         pn.write(new_content)
 
 
-def build_json(abs_path, temp_path, api, app, method, **kwargs):
+def build_json(abs_path, temp_path, app, api, method, headers, **kwargs):
     """
     构建测试数据的json文件
     :param abs_path: 要创建文件的目录
@@ -89,6 +90,7 @@ def build_json(abs_path, temp_path, api, app, method, **kwargs):
     :param api: 测试接口api
     :param app: 测试的app
     :param method: 请求方法
+    :param headers: 请求头
     :param kwargs: 包含data、expect的字典
     :return:
     """
@@ -102,7 +104,8 @@ def build_json(abs_path, temp_path, api, app, method, **kwargs):
     # 先组装通用参数
     content['method'] = method
     content['app'] = app
-    content = json.loads(json.dumps(content).replace('{api}', api if api[-1] == '/' else api + '/'))
+    # content = json.loads(json.dumps(content).replace('{api}', api if api[-1] == '/' else api + '/'))
+    content = json.loads(json.dumps(content).replace('{api}', api))
 
     # 根据请求方式弹出不需要的key
     if method == 'get':
@@ -112,6 +115,9 @@ def build_json(abs_path, temp_path, api, app, method, **kwargs):
 
     # 写入到json文件的内容
     json_dict = {}
+
+    # 组装headers
+    content = assemble_header(content, headers=headers)
 
     # 如果同时传入了data和expect那么就进入数据组装逻辑
     # 否则直接按模板生成待手工添加数据的json文件
@@ -200,30 +206,18 @@ def assemble_data_and_expect(content, **kwargs):
         raise ParamsTypeError('参数数据类型错误。')
 
 
-if __name__ == '__main__':
-    path = 'tests/meiduo/user/test_set_history'
-    app = 'meiduo'
-    api = 'set_history/'
-    method = 'post'
-    fixtures = ['params', 'foo', 'ioo']
-    data = [
-        {
-            "sku_id": 16
-        },
-    ]
-    expect = [
-        {
-            "sku_id": 16
-        },
-    ]
-    info_list = [
-        {
-            'model': '用户中心',
-            'func': '浏览记录',
-            'case_name': '添加浏览记录',
-            'description': '为当前用户添加一个sku的浏览记录',
-            'level': 'H'
-        },
-    ]
+def assemble_header(content, headers):
+    """
+    组装请求头
+    :param content: 取自json模板请求数据字典，即test_case_number的值
+    :param headers: 请求头字典
+    :return:
+    """
+    if headers:
+        content['headers'] = headers
+    else:
+        content['headers'] = {
+            "Content-Type": "application/json"
+        }
 
-    build_case(path, app, api, method, data, expect, info_list)
+    return content

@@ -1,0 +1,26 @@
+{
+  "test_modify_userinfo_01": {
+    "data": {
+      "uname": "$$people_name",
+      "sex": "2",
+      "province": "2589",
+      "city": "2590",
+      "area": "2591",
+      "city_ids": "2589,2590,2591",
+      "city_names": "四川 成都市 锦江区",
+      "intro": "$$sentence"
+    },
+    "url": "http://{ip}:{port}/thinksns/index.php?app=public&mod=Account&act=doSaveProfile",
+    "headers": {
+      "Referer": "http://{ip}:{port}/thinksns/index.php?app=public&mod=Account&act=index",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    "app": "ts",
+    "method": "post",
+    "expect": {
+      "status": true,
+      "info": "",
+      "data": null
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "test_signup_by_email_01": {
+    "data": {
+      "regType": "email",
+      "email": "$$email",
+      "uname": "$$user_name",
+      "password": "$$const_password",
+      "repassword": "$$const_password"
+    },
+    "url": "http://{ip}:{port}/thinksns/index.php?app=public&mod=Register&act=doStep1",
+    "headers": {
+      "Referer": "http://{ip}:{port}/thinksns/index.php?app=public&mod=Register&act=index",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    "app": "ts",
+    "method": "post",
+    "expect": {}
+  }
+}

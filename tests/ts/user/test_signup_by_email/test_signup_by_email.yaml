@@ -1,0 +1,8 @@
+case_info:
+  - id: test_signup_by_email_01
+    path: test_signup_by_email
+    model: 用户
+    func: 用户注册
+    case_name: 邮箱注册账号
+    description: 使用邮箱注册新账号，预期注册成功
+    level: H

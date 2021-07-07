@@ -5,6 +5,8 @@ import pytest
 import allure
 import xdist
 
+from conf.settings import DB_CONFIG
+from utils.action.database import Database
 from utils.libs.logger import logger
 from utils.libs.report import collect_item_info, categories_to_allure
 from utils.test.assemble import build_test_data
@@ -26,6 +28,7 @@ def pytest_addoption(parser):
     :param parser:
     :return:
     """
+    parser.addoption('--app', action='store', type=str, default='all', help='执行哪些app的用例，默认全部执行')
     parser.addoption('--job_name', action='store', type=str, default=None, help='jenkins执行时，job任务名称')
     parser.addoption('--build_number', action='store', type=int, default=None, help='当前job的构建number')
 
@@ -148,6 +151,16 @@ def pytest_unconfigure(config):
     :param config: pytest Config 对象
     :return:
     """
+    # 进程退出之前关闭所有数据库链接
+    app_name = config.getoption('app')
+    if app_name == 'all':
+        for app in DB_CONFIG.keys():
+            conn = Database(app)
+            conn.close()
+    else:
+        conn = Database(app_name)
+        conn.close()
+
     if os.environ.get('PYTEST_XDIST_WORKER') == 'master':
-        # 收集从机上的日志到master上
+        # 分布式执行时，收集从机上的日志到master上
         gather_logs()
