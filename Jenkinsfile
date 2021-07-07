@@ -46,7 +46,7 @@ pipeline {
         stage("执行测试") {
             steps {
                 echo "==================执行测试=================="
-                sh label: "执行测试", script: "./run.sh ${params.git_branch} $JOB_NAME $BUILD_NUMBER"
+                sh label: "执行测试", script: "./run.sh ${params.git_branch} $JOB_NAME $BUILD_NUMBER ${params.app}"
             }
         }
     }
