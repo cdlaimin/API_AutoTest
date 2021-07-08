@@ -1,11 +1,12 @@
 import os
+import re
 from datetime import datetime
 
 import pytest
 import allure
 import xdist
 
-from conf.settings import DB_CONFIG
+from conf.settings import DB_CONFIG, BASE_DIR
 from utils.action.database import DataBase
 from utils.libs.logger import logger
 from utils.libs.report import collect_item_info, categories_to_allure
@@ -59,14 +60,35 @@ def pytest_generate_tests(metafunc):
     fixtures = metafunc.fixturenames
     ids = get_case_id(yaml_path, case_name)
 
+    # 夹具参数化
     for fixture in fixtures:
         if fixture == 'params':
             metafunc.parametrize(fixture, ids, indirect=True)
 
 
+def pytest_ignore_collect(path, config):
+    """
+    忽略收集用例钩子
+    根据要测试app来收集用例
+    :param path: 当前收集路径的path类
+    :param config: pytest config 对象
+    :return:
+    """
+    app = config.getoption('app')
+
+    # 如是app是默认值all则收集所有用例
+    if app == 'all':
+        pass
+    # 如果没有当前收集路径不是测试app所在路径，则忽略收集
+    # return True 表示忽略当前收集的path
+    elif not re.match(os.path.join(BASE_DIR, 'tests', app), path.__str__()):
+        return True
+
+
 # xdist分布式执行时调用，xdist内部钩子，不是pytest钩子
 def pytest_xdist_make_scheduler(config, log):
     """
+    用例收集完成后，分发用例时调用的钩子
     自定义用例分发规则
     :param config:
     :return:
@@ -77,17 +99,12 @@ def pytest_xdist_make_scheduler(config, log):
         # 重写用例分发函数
         def _split_scope(self, nodeid):
             # 此处定义具体的分发规则：
-            app = self.config.getoption('app')
-            if app == 'all':
-                return nodeid
-            else:
-                if 'tests/' + app in nodeid:
-                    return nodeid
-
+            #     pass
             # # 如果不自定义，则调用父类分发方法
-            # super(MyScheduler, self)._split_scope(nodeid)
+            super(MyScheduler, self)._split_scope(nodeid)
 
-    return MyScheduler(config=config, log=log)
+    scheduler = MyScheduler(config=config, log=log)
+    return scheduler
 
 
 # 这里的装饰器和yield生成器，对钩子函数进行包装。在yield处，将将钩子函数的执行结果返回给yield
@@ -96,7 +113,7 @@ def pytest_runtest_makereport(item, call):
     """
     执行阶段钩子
     钩子函数被调用时，会创建一个包含setup、call、teardown三个阶段的测试报告
-    :param item: 当前测试用例
+    :param item: 当前测试用例对象
     :param call: 三个执行阶段的信息。三个属性：when(setup、call、teardown)、excinfo、result(一个列表)
     :return:
     """
