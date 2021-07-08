@@ -6,7 +6,7 @@ import allure
 import xdist
 
 from conf.settings import DB_CONFIG
-from utils.action.database import Database
+from utils.action.database import DataBase
 from utils.libs.logger import logger
 from utils.libs.report import collect_item_info, categories_to_allure
 from utils.test.assemble import build_test_data
@@ -76,11 +76,15 @@ def pytest_xdist_make_scheduler(config, log):
     class MyScheduler(LoadScopeScheduling):
         # 重写用例分发函数
         def _split_scope(self, nodeid):
-            # 此处定义具体的分发规则，例如：
-            # if 'Test_API/test_JieDianApp/test_customer_order' in nodeid:
-            #     return 'Test_API/test_JieDianApp/test_customer_order'
-            return nodeid
-
+            # 此处定义具体的分发规则：
+            app = self.config.getoption('app')
+            if app == 'all':
+                return nodeid
+            else:
+                if app in nodeid:
+                    return nodeid
+                else:
+                    return
             # # 如果不自定义，则调用父类分发方法
             # super(MyScheduler, self)._split_scope(nodeid)
 
@@ -155,10 +159,10 @@ def pytest_unconfigure(config):
     app_name = config.getoption('app')
     if app_name == 'all':
         for app in DB_CONFIG.keys():
-            conn = Database(app)
+            conn = DataBase(app)
             conn.close()
     else:
-        conn = Database(app_name)
+        conn = DataBase(app_name)
         conn.close()
 
     if os.environ.get('PYTEST_XDIST_WORKER') == 'master':

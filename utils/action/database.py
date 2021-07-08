@@ -5,7 +5,7 @@ from utils.libs.exception import DbConfigNotExist
 from utils.tools.singleton import Singleton
 
 
-class Database(metaclass=Singleton):
+class DataBase(metaclass=Singleton):
     """数据库相关操作封装"""
     def __init__(self, app):
         """初始化数据库连接对象"""

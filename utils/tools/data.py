@@ -2,7 +2,7 @@ import random
 
 from faker import Faker
 
-from utils.action.database import Database
+from utils.action.database import DataBase
 
 
 class DynamicData:
@@ -60,7 +60,7 @@ class DynamicData:
 class MdData:
     """美多数据库"""
 
-    md_db_conn = Database('meiduo')
+    md_db_conn = DataBase('meiduo')
 
     @classmethod
     def update_address_id(cls):
@@ -77,7 +77,7 @@ class MdData:
 
 class TsData:
     """ThinkSNS数据库"""
-    ts_db_conn = Database('ts')
+    ts_db_conn = DataBase('ts')
 
     @classmethod
     def all_user_email(cls) -> list:
