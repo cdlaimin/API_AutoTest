@@ -1,7 +1,7 @@
 case_info:
   - id: test_query_city_001
     path: test_query_city
-    model: 收货地址
+    model: 美多
     func: 省市区
     case_name: 查询河北省城市信息
     description: 查询河北省的城市信息
@@ -9,7 +9,7 @@ case_info:
 
   - id: test_query_city_002
     path: test_query_city
-    model: 收货地址
+    model: 美多
     func: 省市区
     case_name: 查询安徽省城市信息
     description: 查询安徽省的城市信息

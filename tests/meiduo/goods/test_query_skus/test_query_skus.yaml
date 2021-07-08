@@ -1,7 +1,7 @@
 case_info:
   - id: test_query_skus_01
     path: test_query_skus
-    model: 商品
+    model: 美多
     func: SKU
     case_name: 查询一个品类的skus
     description: 指定一个category_id，查询该该品类下所有的skus。

@@ -1,8 +1,8 @@
 case_info:
   - id: test_delete_address_001
     path: test_delete_address
-    model: 收货地址
-    func: 收货地址
+    model: 美多
+    func: 用户中心
     case_name: 删除收货地址
     description: 删除当前登陆用户的一个收货地址
     level: H

@@ -1,8 +1,8 @@
 case_info:
   - id: test_query_cart_001
     path: test_query_cart
-    model: 购物车
-    func: 查看购物车
+    model: 美多
+    func: 购物车
     case_name: 查看购物车信息
     description: 查看当前用户已添加的购物车信息
     level: H

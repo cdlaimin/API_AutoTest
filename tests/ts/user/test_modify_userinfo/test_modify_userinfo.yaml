@@ -1,7 +1,7 @@
 case_info:
   - id: test_modify_userinfo_01
     path: test_modify_userinfo
-    model: 用户
+    model: ThinkSNS
     func: 个人中心
     case_name: 修改用户信息
     description: 修改用户名、地区和个人简介，预期成功

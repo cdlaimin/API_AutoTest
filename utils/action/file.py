@@ -128,9 +128,9 @@ def get_case_data(filepath, case_id):
 
 
 if __name__ == '__main__':
-    file_path = '/Users/zhangjian/PycharmProjects/AutoTest_MeiDuo/tests/meiduo/delivery_address/test_query_province/test_query_province.json'
+    # file_path = '/Users/zhangjian/PycharmProjects/AutoTest_MeiDuo/tests/meiduo/delivery_address/test_query_province/test_query_province.json'
     # print(read_json_file(file_path))
     # print(type(read_json_file(file_path)))
-    # file_path = '/Users/zhangjian/PycharmProjects/AutoTest_MeiDuo/tests/meiduo/delivery_address/test_query_province/test_query_province.yaml'
+    file_path = '/Users/zhangjian/PycharmProjects/AutoTest_MeiDuo/tests/meiduo/delivery_address/test_query_province/test_query_province.yaml'
     # print(get_case_id(file_path, 'test_query_province'))
     print(get_case_data(file_path, 'test_query_province_001'))

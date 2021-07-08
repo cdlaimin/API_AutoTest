@@ -1,7 +1,7 @@
 case_info:
   - id: test_modify_userface_01
     path: test_modify_userface
-    model: 用户
+    model: ThinkSNS
     func: 个人中心
     case_name: 修改用户头像
     description: 修改用户头像：1、上传头像；2、保存修改。 预期成功

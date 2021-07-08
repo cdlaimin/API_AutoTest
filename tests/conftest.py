@@ -120,7 +120,7 @@ def pytest_runtest_makereport(item, call):
     # 获取当前接行阶段_Result对象
     out = yield
     if call.excinfo:
-        logger.error(f'测试异常：{call.excinfo}')
+        logger.error(f'{call.when}阶段出现异常：{call.excinfo}')
     if call.when == 'call':
         # 动态收集用例信息到allure
         collect_item_info(item)
