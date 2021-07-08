@@ -81,10 +81,9 @@ def pytest_xdist_make_scheduler(config, log):
             if app == 'all':
                 return nodeid
             else:
-                if app in nodeid:
+                if 'tests/' + app in nodeid:
                     return nodeid
-                else:
-                    return
+
             # # 如果不自定义，则调用父类分发方法
             # super(MyScheduler, self)._split_scope(nodeid)
 
