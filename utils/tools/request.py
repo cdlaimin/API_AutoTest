@@ -6,7 +6,7 @@ from conf import settings
 from utils.libs.exception import LoginFailException
 from utils.libs.logger import logger
 from utils.tools.data import TsData, DynamicData
-from utils.tools.helper import api_logger
+from utils.tools.helper import api_logger, resolve_frequent_operation
 
 
 class Requests:
@@ -18,6 +18,7 @@ class Requests:
         self.session = init_requests(self.app)
         self.kwargs = kwargs
 
+    @resolve_frequent_operation
     @api_logger
     def requests(self):
         """发起请求，返回响应对象"""
