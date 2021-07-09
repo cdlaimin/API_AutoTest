@@ -1,0 +1,19 @@
+{
+  "test_publish_trends_01": {
+    "data": {
+      "body": "$$sentence",
+      "type": "post",
+      "app_name": "public"
+    },
+    "url": "http://{ip}:{port}/thinksns/index.php?app=public&mod=Feed&act=PostFeed",
+    "headers": {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Referer": "http://{ip}/thinksns/index.php?app=public"
+    },
+    "app": "ts",
+    "method": "post",
+    "expect": {
+      "status": 1
+    }
+  }
+}

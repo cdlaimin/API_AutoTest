@@ -68,4 +68,5 @@ def gather_results(session, exitstatus):
 
 
 if __name__ == '__main__':
+
     gather_logs()
