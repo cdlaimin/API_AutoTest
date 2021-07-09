@@ -25,8 +25,6 @@ class Requests:
         if self.kwargs.get('data') and self.app != 'ts':
             self.kwargs['data'] = json.dumps(self.kwargs['data'])
 
-        print(self.kwargs['headers'])
-
         response = self.session.request(**self.kwargs)
         return response
 
