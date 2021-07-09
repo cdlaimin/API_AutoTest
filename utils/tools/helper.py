@@ -23,7 +23,7 @@ def api_logger(func):
         else:
             logger.info(f'请求地址:{response.request.url}')
             logger.info(f'请求方式:{response.request.method}')
-            logger.info(f"请求体:{response.request.body[:200]}")
+            logger.info(f"请求体:{response.request.body}")
 
             # 根据响应状态码确实使用什么日志方法
             log = getattr(logger, 'info' if response.status_code in (200, 201) else 'error')
@@ -37,7 +37,7 @@ def api_logger(func):
                     warnings.warn('主动抛出警告', DeprecationWarning)
                     log('响应体:{}'.format(response.text.encode('latin-1').decode('unicode_escape'))[:300])
             except UnicodeError:
-                log('响应体:{}'.format(response.text))
+                log('响应体:{}'.format(response.text[:300]))
         return response
     return wrapper
 
