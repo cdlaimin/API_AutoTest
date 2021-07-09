@@ -4,7 +4,7 @@ class LoginFailException(BaseException):
 
 
 class DbConfigNotExist(BaseException):
-    def __init__(self, err='数据库配置信息不存在。'):
+    def __init__(self, err='数据库配置信息错误。'):
         BaseException.__init__(self, err)
 
 
@@ -25,4 +25,9 @@ class RequestMethodInvalid(BaseException):
 
 class ParamsTypeError(BaseException):
     def __init__(self, err='入参类型不合法。'):
+        BaseException.__init__(self, err)
+
+
+class APIRequestError(BaseException):
+    def __init__(self, err='接口未知错误。'):
         BaseException.__init__(self, err)

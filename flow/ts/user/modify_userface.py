@@ -28,7 +28,7 @@ class ModifyUserface:
         # 验证结果
         self.verification(expect, response)
 
-        # 未确认提交拼接参数
+        # 为确认提交拼接参数
         self.submit_params['data']['picurl'] = response.json()['data']['picurl']
 
     @allure.step('确认提交')

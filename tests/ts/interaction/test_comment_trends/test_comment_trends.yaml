@@ -1,0 +1,8 @@
+case_info:
+  - id: test_comment_trends_01
+    path: test_comment_trends
+    model: ThinkSNS
+    func: 朋友圈
+    case_name: 评论动态
+    description: 在朋友圈随机选择一条动态，评论任意内容。预期成功。
+    level: M

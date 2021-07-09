@@ -13,7 +13,7 @@ from utils.libs.report import collect_item_info, categories_to_allure
 from utils.test.assemble import build_test_data
 from utils.action.file import get_case_id
 from utils.tools.gather import gather_logs, gather_results
-from utils.tools.notify import send_wechat, send_dingtalk
+from utils.tools.notification import send_wechat, send_dingtalk
 
 
 def pytest_addoption(parser):
@@ -120,7 +120,7 @@ def pytest_runtest_makereport(item, call):
     # 获取当前接行阶段_Result对象
     out = yield
     if call.excinfo:
-        logger.error(f'{call.when}阶段出现异常：{call.excinfo}')
+        logger.error(f'捕获异常：{call.excinfo}')
     if call.when == 'call':
         # 动态收集用例信息到allure
         collect_item_info(item)
@@ -130,7 +130,7 @@ def pytest_runtest_makereport(item, call):
         # outcome取值：failed、passed
         # nodeid(测试用例的名字)
         result = out.get_result()
-        logger.info(f'测试结果：{result.outcome}')
+        getattr(logger, 'info' if result.outcome == 'passed' else 'error')(f'测试结果:{result.outcome}')
 
 
 @pytest.fixture()

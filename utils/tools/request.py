@@ -6,6 +6,7 @@ from conf import settings
 from utils.libs.exception import LoginFailException
 from utils.libs.logger import logger
 from utils.tools.data import TsData, DynamicData
+from utils.tools.helper import api_logger
 
 
 class Requests:
@@ -17,23 +18,15 @@ class Requests:
         self.session = init_requests(self.app)
         self.kwargs = kwargs
 
+    @api_logger
     def requests(self):
-        try:
-            # ts是php开发的前后端不分离系统，比较特殊
-            if self.kwargs.get('data') and self.app != 'ts':
-                self.kwargs['data'] = json.dumps(self.kwargs['data'])
+        """发起请求，返回响应对象"""
+        # ts是php开发的前后端不分离系统，比较特殊
+        if self.kwargs.get('data') and self.app != 'ts':
+            self.kwargs['data'] = json.dumps(self.kwargs['data'])
 
-            response = self.session.request(**self.kwargs)
-
-            logger.info(f'请求地址:{response.request.url}')
-            logger.info(f'请求方式:{response.request.method}')
-            logger.info(f"请求体:{self.kwargs.get('data')}")
-
-            return response
-        except Exception as e:
-            logger.error('接口测试失败！')
-            logger.error(f'请求地址:{self.kwargs.get("url")}')
-            raise e
+        response = self.session.request(**self.kwargs)
+        return response
 
 
 def init_requests(app):

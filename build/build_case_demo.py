@@ -1,16 +1,21 @@
 from build.case import build_case
 
-path = 'tests/ts/user/test_modify_userface'
+path = 'tests/ts/interaction/test_comment_trends'
 app = 'ts'
-api = 'thinksns'
+api = 'thinksns/index.php?app=widget&mod=Comment&act=addcomment'
 method = 'post'
 headers = {
-    "Referer": "http://{ip}:{port}/thinksns/index.php?app=public&mod=Account&act=avatar",
-}
-fixtures = ['flow', ]
+    "Referer": "http://{ip}/thinksns/index.php?app=public",
+    "Content-Type": "application/x-www-form-urlencoded"}
+fixtures = ['params', ]
 data = [
     {
-
+        "app_name": "public",
+        "table_name": "feed",
+        "row_id": "@@feed_id",
+        "app_row_table": "feed",
+        "content": "$$sentence",
+        "app_detail_url": "http://{ip}/thinksns/index.php?app=public"
     },
 ]
 expect = [
@@ -20,10 +25,10 @@ expect = [
 ]
 info_list = [
     {
-        'model': '用户',
-        'func': '个人中心',
-        'case_name': '修改用户头像',
-        'description': '修改用户头像：1、上传头像；2、保存修改。 预期成功',
+        'model': 'ThinkSNS',
+        'func': '朋友圈',
+        'case_name': '评论动态',
+        'description': '在朋友圈随机选择一条动态，评论任意内容。预期成功。',
         'level': 'M'
     },
 ]

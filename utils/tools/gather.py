@@ -15,13 +15,19 @@ def gather_logs():
     all_logs = os.path.join(BASE_DIR, 'logs', 'all_logs.log')
 
     for tup in os.walk(log_path, topdown=False):
-        for file_name in tup[2]:
-            file_path = os.path.join(tup[0], file_name)
-            with open(file_path, 'r', encoding='utf8') as fr:
-                content = fr.read()
-            with open(all_logs, 'a+', encoding='utf8') as fw:
-                fw.write(content)
-                fw.write('\n')
+        with open(all_logs, 'ab') as target:
+            for file_name in tup[2]:
+                file_path = os.path.join(tup[0], file_name)
+                with open(file_path, 'rb+') as origin:
+                    for content in origin:
+                        target.write(content)
+                # seek() 方法用于移动文件读取指针到指定位置。
+                # 第一个参数，表示偏移的字节数
+                # 第二个参数，表示从哪里开始偏移。默认值是0。0代表从文件开头开始算起，1代表从当前位置开始算起，2代表从文件末尾算起。
+                # target.seek(0, 1)
+                # truncate() 方法用于截断文件，如果指定了可选参数 size，则表示截断文件为 size 个字符。
+                # 如果没有指定 size，则从当前位置起截断；截断之后 size 后面的所有字符被删除。
+                # target.truncate()
 
 
 def gather_results(session, exitstatus):

@@ -8,8 +8,6 @@ def verification(expect, real: object):
     :param real: 实际结果，接口响应对象
     :return:
     """
-    logger.info('响应体:' + real.content.decode('utf8')[:250])
-
     # 首先判断响应状态吗
     if expect.get('status_code'):
         assert expect.pop('status_code') == real.status_code

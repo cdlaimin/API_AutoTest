@@ -8,6 +8,7 @@ from utils.action.database import DataBase
 class DynamicData:
     """
     按需添加需要生成的动态数据
+    文本替换方式：$$ + 方法名
     """
     faker = Faker(locale='zh_CN')
 
@@ -58,7 +59,10 @@ class DynamicData:
 
 
 class MdData:
-    """美多数据库"""
+    """
+    美多数据库
+    文本替换方式：## + 方法名
+    """
 
     md_db_conn = DataBase('meiduo')
 
@@ -76,7 +80,10 @@ class MdData:
 
 
 class TsData:
-    """ThinkSNS数据库"""
+    """
+    ThinkSNS数据库
+    文本替换方式：@@ + 方法名
+    """
     ts_db_conn = DataBase('ts')
 
     @classmethod
@@ -95,8 +102,16 @@ class TsData:
         user_emails = TsData.all_user_email()
         return random.choice(user_emails)
 
+    @classmethod
+    def feed_id(cls):
+        """返回一个str的feed_id"""
+        sql = "SELECT DISTINCT feed_id FROM ts_feed_data;"
+        query_set = cls.ts_db_conn.query_many(sql)
+        feed_ids = list(map(lambda x: x[0], query_set))
+        return random.choice(feed_ids).__str__()
+
 
 if __name__ == '__main__':
     # print(StaticData.delete_address_id())
     # print(DynamicData.user_name())
-    print(TsData.all_user_email())
+    print(TsData.feed_id())

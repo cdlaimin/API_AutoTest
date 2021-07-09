@@ -29,7 +29,6 @@ def collect_item_info(item):
         dynamic.story(case_info.get('func'))
         dynamic.title(case_info.get('case_name'))
         dynamic.description(case_info.get('description'))
-        dynamic.label('测试LABEL')
         level = case_info.get('level')
         if level == 'H':
             dynamic.severity('critical')
