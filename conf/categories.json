@@ -1,32 +1,65 @@
 [
-  {
-    "name": "通过用例",
-    "matchedStatuses": [
-      "passed"
-    ]
-  },
-  {
-    "name": "跳过未执行用例",
-    "matchedStatuses": [
-      "skipped"
-    ]
-  },
-  {
-    "name": "失败用例",
-    "matchedStatuses": [
-      "failed"
-    ]
-  },
-  {
-    "name": "异常用例",
-    "matchedStatuses": [
-      "broken"
-    ]
-  },
-  {
-    "name": "请求失败或超时",
-    "matchedStatuses": [
-      "error"
-    ]
-  }
+    {
+        "name": "通过的用例数",
+        "matchedStatuses": [
+            "passed"
+        ]
+    },
+    {
+        "name": "Internal Server Error",
+        "matchedStatuses": [
+            "failed"
+        ],
+        "traceRegex": ".*期望结果的值:<200>和实际结果得值:<500>不相等.*"
+    },
+    {
+        "name": "Internal Server Error",
+        "matchedStatuses": [
+            "failed"
+        ],
+        "traceRegex": ".*期望结果的值:<200>和实际结果得值:<500>不相等.*",
+        "flaky": true
+    },
+    {
+        "name": "请求失败或超时",
+        "matchedStatuses": ["broken"],
+        "traceRegex": ".*RequestsError: 请求失败..*"
+    },
+    {
+        "name": "请求失败或超时",
+        "matchedStatuses": ["broken"],
+        "traceRegex": ".*RequestsError: 请求失败..*",
+        "flaky": true
+    },
+    {
+        "name": "实际结果与期望不符",
+        "matchedStatuses": ["failed"],
+        "traceRegex": "^((?!期望结果的值:<200>和实际结果得值:<500>不相等).)*$"
+    },
+    {
+        "name": "实际结果与期望不符",
+        "matchedStatuses": ["failed"],
+        "traceRegex": "^((?!期望结果的值:<200>和实际结果得值:<500>不相等).)*$",
+        "flaky": true
+    },
+    {
+        "name": "程序错误",
+        "matchedStatuses": ["broken"],
+        "traceRegex": "^((?!RequestsError).)*$"
+    },
+    {
+        "name": "程序错误",
+        "matchedStatuses": ["broken"],
+        "traceRegex": "^((?!RequestsError).)*$",
+        "flaky": true
+    },
+    {
+        "name": "跳过",
+        "matchedStatuses": ["skipped"]
+    },
+    {
+        "name": "跳过",
+        "matchedStatuses": ["skipped"],
+        "flaky": true
+    }
 ]
