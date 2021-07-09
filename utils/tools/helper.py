@@ -58,7 +58,7 @@ def resolve_frequent_operation(func):
             response_text = response.text
 
         if error_text in response_text:
-            time.sleep(3)
+            time.sleep(5)
             response = func(*args, **kwargs)
         return response
 
