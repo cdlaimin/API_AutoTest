@@ -1,0 +1,23 @@
+{
+  "test_share_trends_01": {
+    "data": {
+      "body": "$$sentence",
+      "type": "feed",
+      "app_name": "public",
+      "sid": "@@feed_id",
+      "comment": 1,
+      "curid": "@@feed_id",
+      "curtable": "feed"
+    },
+    "url": "http://{ip}:{port}/thinksns/index.php?app=public&mod=Feed&act=shareFeed",
+    "headers": {
+      "Referer": "http://{ip}/thinksns/index.php?app=public",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    "app": "ts",
+    "method": "post",
+    "expect": {
+      "status": 1
+    }
+  }
+}

@@ -1,0 +1,8 @@
+case_info:
+  - id: test_share_trends_01
+    path: test_share_trends
+    model: ThinkSNS
+    func: 朋友圈
+    case_name: 转发动态
+    description: 在朋友圈转发一条动态。预期成功。
+    level: M
