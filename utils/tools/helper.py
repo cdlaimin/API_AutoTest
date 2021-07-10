@@ -1,8 +1,3 @@
-# 写一个API接口调用的通用日志打印装饰器
-# 更新归总日志的代码
-# 写一个解决频繁操作的装饰器
-# allure用例顺序错乱问题解决
-# allure环境变量设置
 import time
 import warnings
 from functools import wraps
@@ -47,7 +42,6 @@ def api_logger(func):
 
 def resolve_frequent_operation(func):
     """处理频繁操作问题"""
-
     @wraps(func)
     def wrapper(*args, **kwargs):
         response = func(*args, **kwargs)

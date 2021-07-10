@@ -6,7 +6,8 @@ import pytest
 import allure
 import xdist
 
-from conf.settings import DB_CONFIG, BASE_DIR
+from conf.config import DB_CONFIG
+from conf.settings import BASE_DIR
 from utils.action.database import DataBase
 from utils.libs.logger import logger
 from utils.libs.reporter import collect_item_info, categories_to_allure
@@ -157,7 +158,7 @@ def pytest_sessionfinish(session, exitstatus):
     # 分布式执行时，收集测试执行结果，并发送到测试群
     if xdist.is_xdist_master(session):
         # copy分类信息到allure目录
-        categories_to_allure()
+        categories_to_allure(session)
 
         # 发送测试结果到测试群。钉钉或者企业微信
         results = gather_results(session, exitstatus)

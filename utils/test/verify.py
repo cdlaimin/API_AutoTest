@@ -1,6 +1,3 @@
-from utils.libs.logger import logger
-
-
 def verification(expect, real: object):
     """
     验证用例执行结果

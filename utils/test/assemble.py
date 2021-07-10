@@ -3,7 +3,8 @@ import re
 
 import pytest
 
-from conf import settings
+from conf.config import APP_CONFIG
+from conf.settings import DISABLE_ITEMS
 from utils.libs.logger import logger
 from utils.action.document import get_case_data
 from utils.tools.data import DynamicData, MdData, TsData
@@ -16,8 +17,8 @@ def assemble_url(data):
     :return:
     """
     app = data.get('app')
-    ip = settings.APP_CONFIG.get(app).get('ip')
-    port = settings.APP_CONFIG.get(app).get('port')
+    ip = APP_CONFIG.get(app).get('ip')
+    port = APP_CONFIG.get(app).get('port')
 
     data = json.dumps(data)  # 把字典转换成json
     # 替换ip
@@ -107,7 +108,7 @@ def build_test_data(request):
     logger.info(f'执行用例：{case_id}')
 
     # 判断用例是否已经弃用
-    if case_id in settings.DISABLE_ITEMS:
+    if case_id in DISABLE_ITEMS:
         pytest.skip(f'用例: {case_id} 已失效，跳过不执行')
     # 通过用例id获取测试数据
     data = get_case_data(json_path, case_id)

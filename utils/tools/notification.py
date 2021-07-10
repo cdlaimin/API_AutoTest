@@ -3,7 +3,7 @@ import json
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 
-from conf import settings
+from conf.config import NOTIFICATION_CONFIG
 from utils.libs.logger import logger
 
 
@@ -12,7 +12,7 @@ def send_dingtalk(*args):
     发送结果到钉钉群
     :return:
     """
-    config = settings.NOTIFICATION_CONFIG.get('dingtalk')
+    config = NOTIFICATION_CONFIG.get('dingtalk')
     ip = config.get('ip')
     port = config.get('port')
     title = config.get('title')
@@ -62,7 +62,7 @@ def send_wechat(*args):
     发送结果到企业微信
     :return:
     """
-    config = settings.NOTIFICATION_CONFIG.get('wechat')
+    config = NOTIFICATION_CONFIG.get('wechat')
     ip = config.get('ip')
     port = config.get('port')
     title = config.get('title')
@@ -102,4 +102,4 @@ def send_wechat(*args):
 
 
 if __name__ == '__main__':
-    print(settings.NOTIFICATION_CONFIG.get('wechat'))
+    print(NOTIFICATION_CONFIG.get('wechat'))

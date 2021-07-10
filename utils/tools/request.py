@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from conf import settings
+from conf.config import APP_CONFIG
 from utils.libs.exception import LoginFailException
 from utils.libs.logger import logger
 from utils.tools.data import TsData, DynamicData
@@ -42,8 +42,8 @@ def init_requests(app):
 def init_meiduo():
     """美多商城初始化"""
     session = requests.session()
-    host = settings.APP_CONFIG.get('meiduo').get('ip')
-    port = settings.APP_CONFIG.get('meiduo').get('port')
+    host = APP_CONFIG.get('meiduo').get('ip')
+    port = APP_CONFIG.get('meiduo').get('port')
 
     url = 'http://' + host + ':' + port + '/login/'
     method = 'post'
@@ -67,8 +67,8 @@ def init_ts():
     :return:
     """
     session = requests.session()
-    host = settings.APP_CONFIG.get('ts').get('ip')
-    port = settings.APP_CONFIG.get('ts').get('port')
+    host = APP_CONFIG.get('ts').get('ip')
+    port = APP_CONFIG.get('ts').get('port')
 
     if port == '80':
         url = 'http://' + host + '/thinksns/index.php?app=public&mod=Passport&act=doLogin'

@@ -1,6 +1,6 @@
 import pymysql
 
-from conf import settings
+from conf.config import DB_CONFIG
 from utils.libs.exception import DbConfigNotExist
 from utils.tools.singleton import Singleton
 
@@ -9,7 +9,7 @@ class DataBase(metaclass=Singleton):
     """数据库相关操作封装"""
     def __init__(self, app):
         """初始化数据库连接对象"""
-        db_config = settings.DB_CONFIG.get(app)
+        db_config = DB_CONFIG.get(app)
         if db_config is None:
             raise DbConfigNotExist
         try:
@@ -86,5 +86,5 @@ class DataBase(metaclass=Singleton):
 if __name__ == '__main__':
     app_name = 'meiduo'
     sql = 'select * from tb_sku'
-    db = Database(app_name).query_many(sql)
+    db = DataBase(app_name).query_many(sql)
     print(db)

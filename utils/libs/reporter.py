@@ -4,7 +4,8 @@ import shutil
 
 from allure import dynamic
 
-from conf import settings
+from conf.config import APP_CONFIG
+from conf.settings import BASE_DIR
 from utils.libs.exception import DirectoryPathNotExist
 from utils.libs.logger import logger
 from utils.action.document import get_case_info
@@ -37,20 +38,37 @@ def collect_item_info(item):
         logger.warning(f'用例:{case_id} 信息不存在，请检查！')
 
 
-def categories_to_allure():
+def categories_to_allure(session):
     """
     把allure分类信息的json配置文件，放到allure测试结果文件所在目录
     :return:
     """
-    category_file_path = os.path.join(settings.BASE_DIR, 'conf', 'categories.json')
-    allure_report_path = os.path.join(settings.BASE_DIR, 'allure-results')
+    category_file_path = os.path.join(BASE_DIR, 'conf', 'categories.json')
+    allure_report_path = os.path.join(BASE_DIR, 'allure-results')
 
     if os.path.exists(allure_report_path):
         try:
+            # 复制测试结果分类文件到报告目录
             shutil.copy(category_file_path, allure_report_path)
+
+            # 写入测试环境信息
+            app = session.config.getoption('app')
+            with open(os.path.join(allure_report_path, 'environment.properties'), 'w+', encoding='utf-8') as f:
+                if app == 'all':
+                    for index, app_name in enumerate(APP_CONFIG.keys()):
+                        f.write(
+                            f'app{index + 1}={app_name}\n'
+                        )
+                else:
+                    f.write(
+                        f'app={app}\n'
+                    )
         except Exception as e:
             logger.warning(f'导入用例分类信息失败！error: {e}')
     else:
         logger.warning(f'导入用例分类信息失败！error: {DirectoryPathNotExist}')
 
 
+if __name__ == '__main__':
+    for index, app_name in enumerate(APP_CONFIG.keys()):
+        print(index, app_name)
