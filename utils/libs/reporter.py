@@ -38,9 +38,10 @@ def collect_item_info(item):
         logger.warning(f'用例:{case_id} 信息不存在，请检查！')
 
 
-def categories_to_allure(session):
+def write_report_information(session):
     """
     把allure分类信息的json配置文件，放到allure测试结果文件所在目录
+    创建报告环境信息，主要是写入当前测试的app信息
     :return:
     """
     category_file_path = os.path.join(BASE_DIR, 'conf', 'categories.json')

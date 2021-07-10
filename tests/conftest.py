@@ -10,7 +10,7 @@ from conf.config import DB_CONFIG
 from conf.settings import BASE_DIR
 from utils.action.database import DataBase
 from utils.libs.logger import logger
-from utils.libs.reporter import collect_item_info, categories_to_allure
+from utils.libs.reporter import collect_item_info, write_report_information
 from utils.test.assemble import build_test_data
 from utils.action.document import get_case_id
 from utils.tools.gather import gather_logs, gather_results
@@ -157,8 +157,8 @@ def pytest_sessionfinish(session, exitstatus):
     """
     # 分布式执行时，收集测试执行结果，并发送到测试群
     if xdist.is_xdist_master(session):
-        # copy分类信息到allure目录
-        categories_to_allure(session)
+        # 为allure报告添加结果分类和环境信息
+        write_report_information(session)
 
         # 发送测试结果到测试群。钉钉或者企业微信
         results = gather_results(session, exitstatus)
