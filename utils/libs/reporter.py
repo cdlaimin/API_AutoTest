@@ -51,7 +51,7 @@ def categories_to_allure(session):
             # 复制测试结果分类文件到报告目录
             shutil.copy(category_file_path, allure_report_path)
 
-            # 写入测试环境信息
+            # 写入测试app信息
             app = session.config.getoption('app')
             with open(os.path.join(allure_report_path, 'environment.properties'), 'w+', encoding='utf-8') as f:
                 if app == 'all':
