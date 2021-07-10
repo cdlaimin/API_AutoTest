@@ -7,21 +7,18 @@ from allure import dynamic
 from conf import settings
 from utils.libs.exception import DirectoryPathNotExist
 from utils.libs.logger import logger
-from utils.action.file import get_case_info_by_id, get_case_info_by_path
+from utils.action.document import get_case_info
 
 
 def collect_item_info(item):
     """动态收集用例信息"""
 
     yaml_path = item.module.__file__.replace('.py', '.yaml')
-    case_name = item.name
-    case_id = re.findall("\\[(.+?)\\]", case_name)[0]
+    case_full_name = item.name
+    case_id = re.findall("\\[(.+?)\\]", case_full_name)[0]
 
     # 获取用例信息
-    if case_id:
-        case_info = get_case_info_by_id(yaml_path, case_id)
-    else:
-        case_info = get_case_info_by_path(yaml_path, case_name)
+    case_info = get_case_info(yaml_path, case_id)
 
     if case_info:
         # 开始写入用例信息
@@ -37,7 +34,7 @@ def collect_item_info(item):
         if level == 'L':
             dynamic.severity('minor')
     else:
-        logger.warning(f'用例：{case_name} 信息不存在，请检查！')
+        logger.warning(f'用例:{case_id} 信息不存在，请检查！')
 
 
 def categories_to_allure():

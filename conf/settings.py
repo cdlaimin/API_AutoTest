@@ -1,7 +1,6 @@
 import os
-import sys
 
-from utils.action.file import read_ini_file
+from utils.action.document import read_ini_file
 
 # 项目根路径
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,4 +21,4 @@ DISABLE_ITEMS = [
 
 
 if __name__ == '__main__':
-    print(BASE_DIR)
+    print(DB_CONFIG)

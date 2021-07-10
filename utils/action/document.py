@@ -6,7 +6,7 @@ import ruamel.yaml
 import yaml
 import jsonpath
 
-from conf import settings
+from conf.settings import BASE_DIR
 
 
 def read_json_file(filepath):
@@ -69,7 +69,7 @@ def read_ini_file(filename):
     固定读取conf文件夹里面的配置文件，传入文件名即可
     :return: dict
     """
-    filepath = os.path.join(settings.BASE_DIR, 'conf', filename)
+    filepath = os.path.join(BASE_DIR, 'conf', filename)
     reader = configparser.ConfigParser()
     reader.read(filepath, encoding='utf8')
 
@@ -94,7 +94,7 @@ def get_case_id(filepath, case_name):
     return case_id
 
 
-def get_case_info_by_id(filepath, case_id):
+def get_case_info(filepath, case_id):
     """
     获取用例ID对应的用例描述信息
     :param filepath:
@@ -102,17 +102,6 @@ def get_case_info_by_id(filepath, case_id):
     :return: dict
     """
     case_info = jsonpath.jsonpath(read_yaml_file(filepath), f"$.case_info..[?(@.id == '{case_id}')]")
-    return case_info[0] if case_info else {}
-
-
-def get_case_info_by_path(filepath, case_name):
-    """
-    通过用例名称获取用例描述信息
-    :param filepath:
-    :param case_name:
-    :return: dict
-    """
-    case_info = jsonpath.jsonpath(read_yaml_file(filepath), f"$.case_info..[?(@.path == '{case_name}')]")
     return case_info[0] if case_info else {}
 
 

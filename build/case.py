@@ -4,8 +4,8 @@ import re
 from copy import deepcopy
 
 from conf.settings import BASE_DIR
-from utils.action.file import read_json_file, write_json_file, read_yaml_file, write_yaml_file
-from utils.libs.exception import ParamsCheckFailed, RequestMethodInvalid, ParamsTypeError
+from utils.action.document import read_json_file, write_json_file, read_yaml_file, write_yaml_file
+from utils.libs.exception import ParamsCheckFailed, RequestMethodInvalid
 
 
 def build_case(path: str, app: str, api: str, method: str, headers: dict, data: list, expect: list, args: list, fixture='params'):
@@ -72,13 +72,13 @@ def build_py(abs_path, temp_path, fixture):
     elif isinstance(fixture, str):
         new_content = re.sub('fixtures|fixture', fixture, origin_content)
     else:
-        raise ParamsTypeError('夹具数据类型错误。')
+        raise ParamsCheckFailed('参数:fixture 数据类型错误。')
 
     # 写入用例名称
     new_content = re.sub(r'test_case_name', case_name, new_content)
 
     # 生成py文件
-    with open(os.path.join(abs_path, case_name + '.py'), 'w') as pn:
+    with open(os.path.join(abs_path, case_name, '.py'), 'w') as pn:
         pn.write(new_content)
 
 
@@ -132,7 +132,7 @@ def build_json(abs_path, temp_path, app, api, method, headers, **kwargs):
         json_dict[case_name + '_01'] = content
 
     # 生成json文件
-    write_json_file(os.path.join(abs_path, case_name + '.json'), json_dict)
+    write_json_file(os.path.join(abs_path, case_name, '.json'), json_dict)
 
 
 def build_yaml(abs_path, temp_path, args):
@@ -160,7 +160,7 @@ def build_yaml(abs_path, temp_path, args):
 
         value_list.append(content)
     elif not isinstance(args, list):
-        raise ParamsTypeError('参数数据类型错误。')
+        raise ParamsCheckFailed('参数:args 数据类型错误。')
     else:
         for index, sub_info in enumerate(args):
             value_list.append(deepcopy(content))
@@ -175,7 +175,7 @@ def build_yaml(abs_path, temp_path, args):
     yaml_dict['case_info'] = value_list
 
     # 生成yaml文件
-    write_yaml_file(os.path.join(abs_path, case_name + '.yaml'), yaml_dict)
+    write_yaml_file(os.path.join(abs_path, case_name, '.yaml'), yaml_dict)
 
 
 def assemble_data_and_expect(content, **kwargs):
@@ -191,7 +191,7 @@ def assemble_data_and_expect(content, **kwargs):
     elif 'params' in content:
         key = 'params'
     else:
-        raise ParamsTypeError('json模板数据类型错误，请联系管理员。')
+        raise ParamsCheckFailed('json模板数据类型错误，请联系管理员。')
 
     if isinstance(kwargs['data'], list) and isinstance(kwargs['expect'], list):
         if len(kwargs['data']) != len(kwargs['expect']):
@@ -203,7 +203,7 @@ def assemble_data_and_expect(content, **kwargs):
             request_list[index]['expect'] = expect
         return request_list
     else:
-        raise ParamsTypeError('参数数据类型错误。')
+        raise ParamsCheckFailed('参数:data或expect 数据类型错误。')
 
 
 def assemble_header(content, headers):

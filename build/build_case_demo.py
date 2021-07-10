@@ -36,4 +36,4 @@ info_list = [
 ]
 
 if __name__ == '__main__':
-    build_case(path, app, api, method, headers, data, expect, info_list, fixture=fixtures)
+    build_case(path, app, api, method, headers, data, expect, info_list, fixtures)

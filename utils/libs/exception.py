@@ -14,17 +14,12 @@ class DirectoryPathNotExist(BaseException):
 
 
 class ParamsCheckFailed(BaseException):
-    def __init__(self, err='入参校验失败。'):
+    def __init__(self, err='必填字段未填写。'):
         BaseException.__init__(self, err)
 
 
 class RequestMethodInvalid(BaseException):
     def __init__(self, err='请求类型不合法。'):
-        BaseException.__init__(self, err)
-
-
-class ParamsTypeError(BaseException):
-    def __init__(self, err='入参类型不合法。'):
         BaseException.__init__(self, err)
 
 

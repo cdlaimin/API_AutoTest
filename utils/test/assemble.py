@@ -5,7 +5,7 @@ import pytest
 
 from conf import settings
 from utils.libs.logger import logger
-from utils.action.file import get_case_data
+from utils.action.document import get_case_data
 from utils.tools.data import DynamicData, MdData, TsData
 
 
