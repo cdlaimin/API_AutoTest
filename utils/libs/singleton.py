@@ -9,7 +9,7 @@ class Singleton(type):
         super().__init__(*args, **kwargs)
         Singleton.__instance = None
 
-        # 创建一个弱引用类型的字典，其值必须是一个对象。当对应的key没有被强引用时，系统回回收其键值对内存
+        # 创建一个弱引用类型的字典，其值必须是一个对象。当对应的key没有被强引用时，系统将回收其键值对内存
         self._cache = weakref.WeakValueDictionary()
 
     def __call__(self, *args, **kwargs):

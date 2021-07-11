@@ -4,7 +4,7 @@
       "city_id": 510100,
       "district_id": 510107,
       "email": "$$email",
-      "id": "##update_address_id",
+      "id": "$$update_address_id",
       "mobile": "$$mobile",
       "place": "$$address",
       "province_id": 510000,

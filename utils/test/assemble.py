@@ -7,7 +7,7 @@ from conf.config import APP_CONFIG
 from conf.settings import DISABLE_ITEMS
 from utils.libs.logger import logger
 from utils.action.document import get_case_data
-from utils.tools.data import DynamicData, MdData, TsData
+from utils.libs.data import DynamicData, MdData, TsData
 
 
 def assemble_url(data):
@@ -46,10 +46,10 @@ def assemble_data(data):
     if match_list:
         for func_name in list(set(match_list)):
             # 判断function是否存在
-            if hasattr(DynamicData, func_name):
-                function = getattr(DynamicData, func_name)
+            function = getattr(DynamicData, func_name, None) or getattr(MdData, func_name, None) \
+                       or getattr(TsData, func_name, None)
+            if function:
                 instead_data = function()
-
                 # 替换数据
                 if type(instead_data) == str:
                     json_data = re.sub(f'\\$\\${func_name}', instead_data, json_data)
@@ -58,40 +58,8 @@ def assemble_data(data):
             else:
                 raise AttributeError(f'方法:{func_name} 不存在。')
 
-    # 正则匹配出需要替换的meiduo数据
-    match_list = re.findall(r'##(.+?)\"', json_data)
-    if match_list:
-        for func_name in list(set(match_list)):
-            # 判断function是否存在
-            if hasattr(MdData, func_name):
-                function = getattr(MdData, func_name)
-                instead_data = function()
-                # 替换数据
-                if type(instead_data) == str:
-                    json_data = re.sub(f'##{func_name}', instead_data, json_data)
-                if type(instead_data) == int:
-                    json_data = re.sub(f'\"##{func_name}\"', str(instead_data), json_data)
-            else:
-                raise AttributeError(f'方法:{func_name} 不存在。')
-
-    # 正则匹配出需要替换的ts数据
-    match_list = re.findall(r'@@(.+?)\"', json_data)
-    if match_list:
-        for func_name in list(set(match_list)):
-            # 判断function是否存在
-            if hasattr(TsData, func_name):
-                function = getattr(TsData, func_name)
-                instead_data = function()
-                # 替换数据
-                if type(instead_data) == str:
-                    json_data = re.sub(f'@@{func_name}', instead_data, json_data)
-                if type(instead_data) == int:
-                    json_data = re.sub(f'\"@@{func_name}\"', str(instead_data), json_data)
-            else:
-                raise AttributeError(f'方法:{func_name} 不存在。')
-
     # strict=False 解决报错：json.decoder.JSONDecodeError: Invalid control character...
-    # 原因：json.loads报错的原因，就是这个字符data数据尽量包含了\n,\r，tab键，特殊字符 等
+    # 原因：json.loads报错的原因，就是这个字符data数据包含了\n,\r，tab键，特殊字符 等
     return json.loads(json_data, strict=False)
 
 

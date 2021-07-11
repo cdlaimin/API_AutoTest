@@ -61,7 +61,7 @@ class DynamicData:
 class MdData:
     """
     美多数据库
-    文本替换方式：## + 方法名
+    文本替换方式：$$ + 方法名
     """
 
     md_db_conn = DataBase('meiduo')
@@ -82,7 +82,7 @@ class MdData:
 class TsData:
     """
     ThinkSNS数据库
-    文本替换方式：@@ + 方法名
+    文本替换方式：$$ + 方法名
     """
     ts_db_conn = DataBase('ts')
 

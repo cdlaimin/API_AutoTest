@@ -4,9 +4,9 @@
       "body": "$$sentence",
       "type": "feed",
       "app_name": "public",
-      "sid": "@@feed_id",
+      "sid": "$$feed_id",
       "comment": 1,
-      "curid": "@@feed_id",
+      "curid": "$$feed_id",
       "curtable": "feed"
     },
     "url": "http://{ip}:{port}/thinksns/index.php?app=public&mod=Feed&act=shareFeed",

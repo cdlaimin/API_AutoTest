@@ -3,7 +3,7 @@
     "data": {
       "app_name": "public",
       "table_name": "feed",
-      "row_id": "@@feed_id",
+      "row_id": "$$feed_id",
       "app_row_table": "feed",
       "content": "$$sentence",
       "app_detail_url": "http://{ip}/thinksns/index.php?app=public"

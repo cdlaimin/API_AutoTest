@@ -2,7 +2,7 @@ import pymysql
 
 from conf.config import DB_CONFIG
 from utils.libs.exception import DbConfigNotExist
-from utils.tools.singleton import Singleton
+from utils.libs.singleton import Singleton
 
 
 class DataBase(metaclass=Singleton):

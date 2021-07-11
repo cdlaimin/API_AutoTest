@@ -1,7 +1,7 @@
 {
   "test_delete_address_001": {
     "data": {
-      "id": "##delete_address_id"
+      "id": "$$delete_address_id"
     },
     "url": "http://{ip}:{port}/address/",
     "headers": {

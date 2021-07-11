@@ -1,8 +1,8 @@
 import pytest
 
-from flow.ts.user.modify_userface import ModifyUserface
 from utils.tools.request import Requests
 from utils.test.verify import verification
+from flow.ts.user.modify_userface import ModifyUserface
 
 
 def test_modify_userface(params):
