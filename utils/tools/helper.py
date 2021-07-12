@@ -47,7 +47,9 @@ def resolve_frequent_operation(func):
         response = func(*args, **kwargs)
         error_text = '发布内容过于频繁，请稍后再试'
         try:
-            response_text = response.text.encode('latin-1').decode('unicode_escape')
+            # 屏蔽DeprecationWarning告警
+            with deprecated_call():
+                response_text = response.text.encode('latin-1').decode('unicode_escape')
         except UnicodeError:
             response_text = response.text
 
