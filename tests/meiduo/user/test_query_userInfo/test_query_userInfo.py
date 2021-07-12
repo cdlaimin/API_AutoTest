@@ -1,12 +1,13 @@
+
 import pytest
 
 from utils.tools.request import Requests
 from utils.test.verify import verification
 
 
-def test_case_name(fixtures):
-    expect = fixture.pop('expect')
-    response = Requests(**fixture).requests()
+def test_query_userInfo(params):
+    expect = params.pop('expect')
+    response = Requests(**params).requests()
 
     # 验证结果
     verification(expect, response)

@@ -6,9 +6,12 @@ def verification(expect, real: object):
     :return:
     """
     # 首先判断响应状态吗
-    if expect.get('status_code'):
-        assert expect.pop('status_code') == real.status_code
-    else:
+    try:
+        if expect.get('status_code'):
+            assert expect.pop('status_code') == real.status_code
+        else:
+            assert real.status_code in (200, 201)
+    except AttributeError:
         assert real.status_code in (200, 201)
 
     # 判断是否有需要验证的预期结果，没有则仅完成状态码的校验
@@ -21,6 +24,8 @@ def verification(expect, real: object):
     if isinstance(expect, list):
         for sub_expect in expect:
             assert sub_expect in response
+    if type(expect) in (str, int):
+        assert expect == response
     else:
         dict_verify(expect, response)
 

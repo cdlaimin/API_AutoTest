@@ -1,5 +1,6 @@
 import json
 import re
+from importlib import import_module
 
 import pytest
 
@@ -45,7 +46,7 @@ def assemble_data(data):
     match_list = re.findall(r'\$\$(.+?)\"', json_data)
     if match_list:
         for func_name in list(set(match_list)):
-            # 判断function是否存在
+            # 判断function是否存在。后续可根据data模块内部新增类继续扩展
             function = getattr(DynamicData, func_name, None) or getattr(MdData, func_name, None) \
                        or getattr(TsData, func_name, None)
             if function:
@@ -63,11 +64,11 @@ def assemble_data(data):
     return json.loads(json_data, strict=False)
 
 
-def build_test_data(request):
+def build_test_params(request):
     """
-    构造测试数据
-    :param data:
-    :return:
+    为单接口构建测试数据
+    :param request: pytest request对象
+    :return: 加工后的json文件数据  dict
     """
     case_id = request.param
     json_path = request.module.__file__.replace('.py', '.json')
@@ -86,6 +87,40 @@ def build_test_data(request):
     data = assemble_data(data)
 
     return data
+
+
+def build_test_flow(request):
+    """
+    为多接口流程用例构建测试数据
+    :param request: pytest request对象
+    :return: 包含流程中具体step函数名的list
+    """
+    # 先调用build_test_params完成对json数据的组装
+    data = build_test_params(request)
+
+    # 找到flow文件路径。其路径结构和tests路径结构保持一致。一个用例文件夹对应一个flow的py文件
+    flow_name = re.findall("test_(.+?)_[0-9]+", request.param)[0]
+    flow_path = re.sub("/[a-zA-Z_]+/[a-zA-Z_]+\\.py", f"/{flow_name}", request.module.__file__)
+
+    module_path = 'flow' + flow_path.replace('/', '.').rsplit('tests', 1)[1]
+
+    # 从flow文件中导入流程类。类名和flow文件名一致
+    try:
+        flow_module = import_module(module_path)
+        flow_class = getattr(flow_module, flow_name)
+    except Exception as e:
+        raise e
+
+    # 实例化类
+    flow_object = flow_class(data)
+
+    # 获取需要执行的函数名称列表
+    func_list = list(filter(lambda func: re.match('test_', func), dir(flow_object)))
+
+    # 将实例化对象的函数组装成可执行的函数列表
+    exec_list = list(map(lambda func: getattr(flow_object, func), func_list))
+
+    return exec_list
 
 
 if __name__ == '__main__':

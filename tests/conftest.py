@@ -11,7 +11,7 @@ from conf.settings import BASE_DIR
 from utils.action.database import DataBase
 from utils.libs.logger import logger
 from utils.libs.reporter import collect_item_info, write_report_information
-from utils.test.assemble import build_test_data
+from utils.test.assemble import build_test_params, build_test_flow
 from utils.action.document import get_case_id
 from utils.tools.gather import gather_logs, gather_results
 from utils.tools.notification import send_wechat, send_dingtalk
@@ -63,7 +63,7 @@ def pytest_generate_tests(metafunc):
 
     # 夹具参数化
     for fixture in fixtures:
-        if fixture == 'params':
+        if fixture in ('params', 'flow'):
             metafunc.parametrize(fixture, ids, indirect=True)
 
 
@@ -143,9 +143,23 @@ def params(request):
     :return:
     """
     # 构造测试数据
-    data = build_test_data(request)
+    data = build_test_params(request)
 
     return data
+
+
+@pytest.fixture()
+@allure.step('准备测试数据')
+def flow(request):
+    """
+    多接口流程用例入参夹具
+    :param request:
+    :return:
+    """
+    # 构造测试数据
+    func_list = build_test_flow(request)
+
+    return func_list
 
 
 def pytest_sessionfinish(session, exitstatus):

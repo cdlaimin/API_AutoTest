@@ -1,0 +1,8 @@
+case_info:
+  - id: test_create_microBar_01
+    path: test_create_microBar
+    model: ThinkSNS
+    func: 微吧
+    case_name: 申请微吧
+    description: 申请微吧。1、上传微吧logo；2、填写微吧信息后提交
+    level: M

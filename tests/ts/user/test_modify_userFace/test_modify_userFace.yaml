@@ -1,6 +1,6 @@
 case_info:
-  - id: test_modify_userface_01
-    path: test_modify_userface
+  - id: test_modify_userFace_01
+    path: test_modify_userFace
     model: ThinkSNS
     func: 个人中心
     case_name: 修改用户头像
