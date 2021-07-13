@@ -24,7 +24,7 @@ def verification(expect, real: object):
     if isinstance(expect, list):
         for sub_expect in expect:
             assert sub_expect in response
-    if type(expect) in (str, int):
+    elif type(expect) in (str, int):
         assert expect == response
     else:
         dict_verify(expect, response)

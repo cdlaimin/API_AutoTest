@@ -2,7 +2,7 @@
 import pytest
 
 from utils.tools.request import Requests
-from utils.test.verify import verification
+from utils.test.verification import verification
 
 
 def test_query_userInfo(params):
