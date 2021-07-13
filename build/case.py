@@ -137,7 +137,7 @@ def write_flow_file(file, step, index):
     :param index:
     :return:
     """
-    # 调用本函数，step又为空时引发异常
+    # 调用本函数，step为空时引发异常
     if not step:
         raise ParamsCheckFailed('参数:step 数据错误。')
 
@@ -153,15 +153,14 @@ def write_flow_file(file, step, index):
         if step.get('setup'):
             for content in step['setup']:
                 if hasattr(templates, content):
-                    content = getattr(templates, content)
-                    fp.write(content)
+                    fp.write(getattr(templates, content) + '\n')
                 else:
-                    fp.write("        " + content)
+                    fp.write("        " + content + '\n')
 
         body_content = templates.FLOW_STEP_CONTENT
         body_content = body_content.replace('steps', 'step_0' + str(index + 1))
 
-        fp.write(body_content)
+        fp.write(body_content + '\n')
 
         # 检查是否有teardown
         if step.get('teardown'):
@@ -169,7 +168,7 @@ def write_flow_file(file, step, index):
                 if hasattr(templates, content):
                     fp.write(getattr(templates, content))
                 else:
-                    fp.write("        " + content)
+                    fp.write("        " + content + '\n')
 
 
 def build_yaml(abs_path, yaml):

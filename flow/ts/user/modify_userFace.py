@@ -28,6 +28,7 @@ class modify_userFace:
         files = {"file": ("head.jpeg", open(image_path, 'rb'), 'image/jpeg')}
 
         self.step_01['files'] = files
+
         expect = self.step_01.pop('expect')
         response = self.Requests(**self.step_01).requests()
     

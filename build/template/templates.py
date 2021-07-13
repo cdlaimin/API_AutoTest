@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
+#
 # 自动生成测试用例的模板集
+#
 # author: zhangjian
+#
 # date: 2021-07-12
 
 FLOW_BASE = '''
@@ -22,10 +26,10 @@ class class_name:
         self.verification = verification
 
         for key, value in params.items():
-            self.__setattr__(key, value)'''
+            self.__setattr__(key, value)
+'''
 
 FLOW_STEP_HEAD = '''
-
     @allure.step(step_name)
     def test_steps(self):    
 '''
@@ -36,14 +40,12 @@ FLOW_STEP_CONTENT = '''
     
         # 验证结果
         self.verification(expect, response)
-
 '''
 
 IMAGE = '''
         # 构建上传文件参数
         image_path = os.path.join(BASE_DIR, 'static', 'image', 'head.jpeg')
         files = {"file": ("head.jpeg", open(image_path, 'rb'), 'image/jpeg')}
-
 '''
 
 
