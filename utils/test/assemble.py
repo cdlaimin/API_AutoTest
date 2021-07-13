@@ -115,7 +115,7 @@ def build_test_flow(request):
     flow_object = flow_class(data)
 
     # 获取需要执行的函数名称列表
-    func_list = list(filter(lambda func: re.match('test_', func), dir(flow_object)))
+    func_list = list(filter(lambda func: re.match('test_', func), dir(flow_class)))
 
     # 将实例化对象的函数组装成可执行的函数列表
     exec_list = list(map(lambda func: getattr(flow_object, func), func_list))

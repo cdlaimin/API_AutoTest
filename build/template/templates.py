@@ -13,7 +13,7 @@ import allure
 
 from conf.settings import BASE_DIR
 from utils.tools.request import Requests
-from utils.test.verify import verification
+from utils.test.verification import verification
 
 
 class class_name:
