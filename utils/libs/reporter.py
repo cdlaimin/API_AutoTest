@@ -1,6 +1,7 @@
 import os
 import re
 import shutil
+import warnings
 
 from allure import dynamic
 
@@ -35,6 +36,7 @@ def collect_item_info(item):
         if level == 'L':
             dynamic.severity('minor')
     else:
+        warnings.warn(f'用例:{case_id} 信息不存在，请检查！')
         logger.warning(f'用例:{case_id} 信息不存在，请检查！')
 
 
