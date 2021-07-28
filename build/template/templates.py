@@ -81,3 +81,9 @@ def test_case_name(fixture):
 if __name__ == '__main__':
     pytest.main(['-s'])
 '''
+
+YAML_HEAD = '''
+version: v1.0
+owner: jian.z
+create_time: 2021-07-26
+'''

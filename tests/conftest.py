@@ -58,7 +58,8 @@ def pytest_generate_tests(metafunc):
     """
     yaml_path = metafunc.module.__file__.replace('.py', '.yaml')
     case_name = metafunc.function.__name__
-    fixtures = metafunc.fixturenames
+    # fixtures = metafunc.fixturenames
+    fixtures = metafunc.definition._fixtureinfo.argnames
     ids = get_case_id(yaml_path, case_name)
 
     # 夹具参数化

@@ -17,7 +17,7 @@
       "spec": "钻雕金_128GB"
     }
   },
-    "test_add_cart_002": {
+  "test_add_cart_002": {
     "data": {
       "count": "$$count",
       "sku_id": 16,
@@ -54,7 +54,7 @@
       ]
     }
   },
-    "test_add_cart_004": {
+  "test_add_cart_004": {
     "data": {
       "count": "$$count",
       "sku_id": 16

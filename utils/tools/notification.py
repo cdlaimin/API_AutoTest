@@ -33,7 +33,7 @@ def send_dingtalk(*args):
         "msgtype": "markdown",
         "markdown": {
             "title": f"{title}",
-            "text": f"### {title} [点击查看报告]({report_url})\n\n" +
+            "text": f"### {title}  [点击查看报告]({report_url})\n\n" +
                     f"> {text}" + "\n\n" +
                     f"> 测试结果:**{result}** \t 用例总数:**{total}** \t 通过率:**{passrate}** \n\n" +
                     f"> 测试耗时:**{h}小时 {m}分 {s}秒** \n\n"
@@ -83,13 +83,13 @@ def send_wechat(*args):
         "msgtype": "markdown",
         "markdown": {
             "content": f"### {title} [点击查看报告]({report_url})\n\n" +
-                       f"> {text}" + "\n\n" +
-                       f">  测试结果:**{result}** \n通过率:**{passrate}** \n测试耗时:**{h}小时 {m}分 {s}秒** \n\n" +
-                       f"> 用例总数:**{total}** \n\n" +
-                       f"> -通过用例: {passed}\n" +
-                       f"> -失败用例: {failed}\n" +
-                       f"> -跳过用例: {skiped}\n" +
-                       f"> -错误用例: {error}\n",
+                       f" {text}" + "\n\n" +
+                       f"  测试结果:**{result}** \n通过率:**{passrate}** \n测试耗时:**{h}小时 {m}分 {s}秒** \n\n" +
+                       f" 用例总数:**{total}** \n\n" +
+                       f" -通过用例: {passed}\n" +
+                       f" -失败用例: {failed}\n" +
+                       f" -跳过用例: {skiped}\n" +
+                       f" -错误用例: {error}\n",
         },
     }
     try:
@@ -99,6 +99,41 @@ def send_wechat(*args):
         logger.error(f'企业微信-测试结果发送失败：{e}')
     else:
         logger.info('企业微信-测试结果已发送：' + response.text)
+
+
+def send_upload_result_to_wechat(**kwargs):
+    config = NOTIFICATION_CONFIG.get('wechat')
+    token = config.get('token')
+
+    print(kwargs)
+    total = kwargs.get('total')
+    success = kwargs.get('success')
+    fail = kwargs.get('fail')
+    msg = kwargs.get('msg')
+
+    text = ""
+
+    if msg:
+        text = '\n\n'.join(list(msg))
+
+    host = f"https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={token}"
+    headers = {"Content-Type": "application/json; charset=UTF-8"}
+
+    msg_body = {
+        "msgtype": "markdown",
+        "markdown": {
+            "content": f"### 用例同步结果:\n\n\n" +
+                       (f"{text} \n\n\n" if text else "无异常信息\n\n\n") +
+                       f"同步总数: {total} \t 成功: {len(success)} \t 失败: {len(fail)}"
+        },
+    }
+    try:
+        requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+        response = requests.post(url=host, data=json.dumps(msg_body), headers=headers, verify=False)
+    except Exception as e:
+        logger.error(f'企业微信-同步结果发送失败：{e}')
+    else:
+        logger.info('企业微信-同步结果已发送：' + response.text)
 
 
 if __name__ == '__main__':

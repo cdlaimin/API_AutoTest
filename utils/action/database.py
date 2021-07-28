@@ -1,7 +1,7 @@
 import pymysql
 
 from conf.config import DB_CONFIG
-from utils.libs.exception import DbConfigNotExist
+from utils.libs.exception import ConfigInfoNotExist
 from utils.libs.singleton import Singleton
 
 
@@ -11,7 +11,7 @@ class DataBase(metaclass=Singleton):
         """初始化数据库连接对象"""
         db_config = DB_CONFIG.get(app)
         if db_config is None:
-            raise DbConfigNotExist
+            raise ConfigInfoNotExist('数据库配置信息不存在。')
         try:
             db_config['port'] = int(db_config['port'])
             # 创建链接

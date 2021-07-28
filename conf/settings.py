@@ -10,4 +10,4 @@ DISABLE_ITEMS = [
 
 
 if __name__ == '__main__':
-    print(BASE_DIR)
+    print("a")

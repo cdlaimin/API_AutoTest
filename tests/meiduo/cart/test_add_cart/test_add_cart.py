@@ -13,4 +13,4 @@ def test_add_cart(params):
 
 
 if __name__ == '__main__':
-    pytest.main(['-s'])
+    pytest.main(['test_add_cart.py::test_add_cart', '-s'])

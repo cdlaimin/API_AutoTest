@@ -1,3 +1,6 @@
+version: v1.0
+owner: jian.z
+create_time: "2021-07-25"
 case_info:
   - id: test_create_microBar_01
     path: test_create_microBar

@@ -3,8 +3,8 @@ class LoginFailException(BaseException):
         BaseException.__init__(self, err)
 
 
-class DbConfigNotExist(BaseException):
-    def __init__(self, err='数据库配置信息错误。'):
+class ConfigInfoNotExist(BaseException):
+    def __init__(self, err='配置信息不存在。'):
         BaseException.__init__(self, err)
 
 
