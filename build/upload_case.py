@@ -133,6 +133,7 @@ def upload_case():
 
 
 if __name__ == '__main__':
+    # 执行文件时，依次传入 用户名 密码 收集目录
     async_collect(sys.argv[3])
     upload_case()
 

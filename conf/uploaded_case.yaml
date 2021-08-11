@@ -1,28 +1,2 @@
 case_list:
-  - case_demo
-  - test_create_microBar_01
-  - test_modify_userFace_01
-  - test_signup_by_email_01
-  - test_modify_userinfo_01
-  - test_share_trends_01
-  - test_comment_trends_01
-  - test_publish_trends_01
-  - test_set_history_01
-  - test_query_address_001
-  - test_update_address_001
-  - test_delete_address_001
-  - test_query_userInfo_01
-  - test_add_address_001
-  - test_query_sku_detail_01
-  - test_query_skus_01
-  - test_query_province_001
-  - test_query_province_002
-  - test_query_city_001
-  - test_query_city_002
-  - test_query_district_001
-  - test_query_district_002
-  - test_query_cart_001
-  - test_add_cart_001
-  - test_add_cart_002
-  - test_add_cart_003
-  - test_add_cart_004
+  -
