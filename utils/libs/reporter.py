@@ -9,7 +9,7 @@ from conf.config import APP_CONFIG
 from conf.settings import BASE_DIR
 from utils.libs.exception import DirectoryPathNotExist
 from utils.libs.logger import logger
-from utils.action.document import get_case_info
+from utils.action.document import get_case_info, read_yaml_file
 
 
 def collect_item_info(item):
@@ -19,11 +19,14 @@ def collect_item_info(item):
     case_full_name = item.name
     case_id = re.findall("\\[(.+?)\\]", case_full_name)[0]
 
+    author = read_yaml_file(yaml_path).get('owner')
+
     # 获取用例信息
     case_info = get_case_info(yaml_path, case_id)
 
     if case_info:
         # 开始写入用例信息
+        dynamic.link(author)
         dynamic.feature(case_info.get('model'))
         dynamic.story(case_info.get('func'))
         dynamic.title(case_info.get('case_name'))
