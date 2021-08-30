@@ -105,7 +105,6 @@ def send_upload_result_to_wechat(**kwargs):
     config = NOTIFICATION_CONFIG.get('wechat')
     token = config.get('token')
 
-    print(kwargs)
     total = kwargs.get('total')
     success = kwargs.get('success')
     fail = kwargs.get('fail')

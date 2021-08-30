@@ -2,6 +2,7 @@ import configparser
 import json
 import os
 
+import openpyxl as openpyxl
 import ruamel.yaml
 import yaml
 import jsonpath
@@ -114,6 +115,46 @@ def get_case_data(filepath, case_id):
     """
     data = read_json_file(filepath)
     return data.get(case_id)
+
+
+def read_Excel(path: str):
+    """
+    返回一个包含多个列表的列表：[[],[],[]...]
+    """
+    table = openpyxl.load_workbook(path)
+    sheet_names = table.get_sheet_names()
+
+    # 默认读取第一个sheet页
+    sheet = table.get_sheet_by_name(sheet_names[0])
+    rows = sheet.rows
+    sheet_list = []
+
+    for row in rows:
+        row_list = []
+        for cell in row:
+            row_list.append(cell.value)
+        sheet_list.append(row_list)
+
+    return sheet_list
+
+
+def write_Excel(path: str, data: list):
+    """
+    按行写入excel
+    :param path:
+    :param data: [[],[],[]...]
+    :return:
+    """
+    excel = openpyxl.Workbook()
+
+    # 创建sheet，并指定为第一个sheet。创建表格对象时会默认创建一个sheet
+    sheet = excel.create_sheet('ExportData', 0)
+
+    for row_no, row in enumerate(data):
+        for col_no, value in enumerate(row):
+            sheet.cell(row_no + 1, col_no + 1).value = value
+
+    excel.save(path)
 
 
 if __name__ == '__main__':
