@@ -6,6 +6,8 @@ import sys
 import gevent
 import requests
 
+from utils.libs.logger import logger
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from conf.settings import BASE_DIR
@@ -15,7 +17,6 @@ from conf.config import APP_CONFIG, UPLOADED_CASES
 from utils.action.document import read_yaml_file, write_yaml_file
 from utils.tools.notification import send_upload_result_to_wechat
 
-logger = logging.getLogger('test_plat')
 
 # 用例信息列表，每一个item即为一条用例信息
 case_list = list()
