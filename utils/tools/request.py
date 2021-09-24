@@ -5,7 +5,7 @@ import requests
 from conf.config import APP_CONFIG
 from utils.libs.exception import LoginFailException
 from utils.libs.logger import logger
-from utils.libs.data import TsData, DynamicData
+from utils.libs.dupe import TsData, DynamicData
 from utils.tools.helper import api_logger, resolve_frequent_operation
 
 

@@ -2,7 +2,7 @@ import os
 
 from datetime import datetime
 
-from conf.settings import BASE_DIR
+from conf import BASE_DIR
 
 
 def gather_logs():

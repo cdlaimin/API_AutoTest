@@ -1,16 +1,13 @@
 import configparser
 import json
-import os
 
 import openpyxl as openpyxl
 import ruamel.yaml
 import yaml
 import jsonpath
 
-from conf.settings import BASE_DIR
 
-
-def read_json_file(filepath):
+def load_json(filepath):
     """
     读取json文件
     :param filepath:
@@ -21,7 +18,7 @@ def read_json_file(filepath):
     return data
 
 
-def write_json_file(filepath, content):
+def dump_json(filepath, content):
     """
     写入json文件
     :param filepath:
@@ -34,7 +31,7 @@ def write_json_file(filepath, content):
         json.dump(content, fp, ensure_ascii=False, indent=2)
 
 
-def read_yaml_file(filepath):
+def load_yaml(filepath):
     """
     读取yaml文件
     :param filepath:
@@ -45,7 +42,7 @@ def read_yaml_file(filepath):
     return data
 
 
-def write_yaml_file(filepath, content):
+def dump_yaml(filepath, content):
     """
     写入yaml文件
     :param filepath:
@@ -65,59 +62,35 @@ def write_yaml_file(filepath, content):
         r_yaml.dump(content, fp)
 
 
-def read_ini_file(filename):
+def load_ini(filepath):
     """
-    固定读取conf文件夹里面的配置文件，传入文件名即可
+    固定读取conf文件夹里面的配置文件
     :return: dict
     """
-    filepath = os.path.join(BASE_DIR, 'conf', filename)
-    reader = configparser.ConfigParser()
-    reader.read(filepath, encoding='utf8')
+    loader = configparser.ConfigParser()
+    loader.read(filepath, encoding='utf8')
 
     ini_dict = {}
-    for section in reader.sections():
+    for section in loader.sections():
         section_dict = {}
-        for option in reader.options(section):
-            section_dict.setdefault(option, reader.get(section, option))
+        for option in loader.options(section):
+            section_dict.setdefault(option, loader.get(section, option))
         ini_dict.setdefault(section, section_dict)
 
     return ini_dict
 
 
-def get_case_id(filepath, case_name):
+def dump_ini(filepath, content: dict):
     """
-    获取用例下面的多个caseId
+    写入ini文件信息
     :param filepath:
-    :param case_name:
-    :return: list => [id, id, id]
-    """
-    case_id = jsonpath.jsonpath(read_yaml_file(filepath), f"$.case_info..[?(@.path == '{case_name}')]..id")
-    return case_id
-
-
-def get_case_info(filepath, case_id):
-    """
-    获取用例ID对应的用例描述信息
-    :param filepath:
-    :param case_id:
-    :return: dict
-    """
-    case_info = jsonpath.jsonpath(read_yaml_file(filepath), f"$.case_info..[?(@.id == '{case_id}')]")
-    return case_info[0] if case_info else {}
-
-
-def get_case_data(filepath, case_id):
-    """
-    获取用例ID对应的用例测试数据
-    :param filepath:
-    :param case_id:
+    :param content:
     :return:
     """
-    data = read_json_file(filepath)
-    return data.get(case_id)
+    pass
 
 
-def read_Excel(path: str):
+def load_excel(path: str):
     """
     返回一个包含多个列表的列表：[[],[],[]...]
     """
@@ -138,7 +111,7 @@ def read_Excel(path: str):
     return sheet_list
 
 
-def write_Excel(path: str, data: list):
+def dump_excel(path: str, data: list):
     """
     按行写入excel
     :param path:
@@ -157,10 +130,43 @@ def write_Excel(path: str, data: list):
     excel.save(path)
 
 
+def get_case_id(filepath, case_name):
+    """
+    获取用例下面的多个caseId
+    :param filepath:
+    :param case_name:
+    :return: list => [id, id, id]
+    """
+    case_id = jsonpath.jsonpath(load_yaml(filepath), f"$.case_info..[?(@.path == '{case_name}')]..id")
+    return case_id
+
+
+def get_case_info(filepath, case_id):
+    """
+    获取用例ID对应的用例描述信息
+    :param filepath:
+    :param case_id:
+    :return: dict
+    """
+    case_info = jsonpath.jsonpath(load_yaml(filepath), f"$.case_info..[?(@.id == '{case_id}')]")
+    return case_info[0] if case_info else {}
+
+
+def get_case_data(filepath, case_id):
+    """
+    获取用例ID对应的用例测试数据
+    :param filepath:
+    :param case_id:
+    :return:
+    """
+    data = load_json(filepath)
+    return data.get(case_id)
+
+
 if __name__ == '__main__':
     # file_path = '/Users/zhangjian/PycharmProjects/AutoTest_MeiDuo/tests/meiduo/areas/test_query_province/test_query_province.json'
-    # print(read_json_file(file_path))
-    # print(type(read_json_file(file_path)))
+    # print(load_json_file(file_path))
+    # print(type(load_json_file(file_path)))
     file_path = '/tests/meiduo/areas/test_query_province/test_query_province.yaml'
     # print(get_case_id(file_path, 'test_query_province'))
     print(get_case_data(file_path, 'test_query_province_001'))

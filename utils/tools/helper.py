@@ -6,7 +6,7 @@ from pytest import deprecated_call
 from requests.exceptions import HTTPError, SSLError, Timeout, URLRequired, TooManyRedirects
 
 from utils.libs.logger import logger
-from utils.libs.exception import APIRequestError
+from utils.libs.exception import RequestError
 
 
 def api_logger(func):
@@ -15,8 +15,9 @@ def api_logger(func):
         try:
             response = func(*args, **kwargs)
         except (HTTPError, SSLError, Timeout, URLRequired, TooManyRedirects) as e:
-            raise APIRequestError(f'请求失败，错误信息:' + str(e))
+            raise RequestError(f'请求失败，错误信息:' + str(e))
         else:
+            logger.info(f'=====================分割线====================')
             logger.info(f'请求地址:{response.request.url}')
             logger.info(f'请求方式:{response.request.method}')
             logger.info(f'请求头:{response.request.headers}')
@@ -59,8 +60,3 @@ def resolve_frequent_operation(func):
         return response
 
     return wrapper
-
-
-if __name__ == '__main__':
-    aa = getattr(logger, 'info' if 200 in (200, 201, 301, 302, 304) else 'error')
-    aa('aaaaa')

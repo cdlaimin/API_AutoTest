@@ -5,11 +5,11 @@ import warnings
 
 from allure import dynamic
 
-from conf.config import APP_CONFIG
-from conf.settings import BASE_DIR
-from utils.libs.exception import DirectoryPathNotExist
+from conf import APP_CONFIG
+from conf import BASE_DIR
+from utils.libs.exception import DirectoryNotExist
 from utils.libs.logger import logger
-from utils.action.document import get_case_info, read_yaml_file
+from utils.action.document import get_case_info, load_yaml
 
 
 def collect_item_info(item):
@@ -19,7 +19,7 @@ def collect_item_info(item):
     case_full_name = item.name
     case_id = re.findall("\\[(.+?)\\]", case_full_name)[0]
 
-    author = read_yaml_file(yaml_path).get('owner')
+    author = load_yaml(yaml_path).get('owner')
     tag = "MD" if '/meiduo/' in yaml_path else "TS"
 
     # 获取用例信息
@@ -74,7 +74,7 @@ def write_report_information(session):
         except Exception as e:
             logger.warning(f'导入用例分类信息失败！error: {e}')
     else:
-        logger.warning(f'导入用例分类信息失败！error: {DirectoryPathNotExist}')
+        logger.warning(f'导入用例分类信息失败！error: {DirectoryNotExist}')
 
 
 if __name__ == '__main__':

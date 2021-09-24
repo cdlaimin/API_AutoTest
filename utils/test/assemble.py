@@ -1,14 +1,12 @@
 import json
+import os
 import re
 from importlib import import_module
 
-import pytest
-
-from conf.config import APP_CONFIG
-from conf.settings import DISABLE_ITEMS
+from conf import APP_CONFIG
 from utils.libs.logger import logger
 from utils.action.document import get_case_data
-from utils.libs.data import DynamicData, MdData, TsData
+from utils.libs.dupe import FakerData
 
 
 def assemble_url(data):
@@ -47,17 +45,16 @@ def assemble_data(data):
     if match_list:
         for func_name in list(set(match_list)):
             # 判断function是否存在。后续可根据data模块内部新增类继续扩展
-            function = getattr(DynamicData, func_name, None) or getattr(MdData, func_name, None) \
-                       or getattr(TsData, func_name, None)
+            function = getattr(FakerData, func_name, None)
             if function:
                 instead_data = function()
                 # 替换数据
-                if type(instead_data) == str:
+                if isinstance(instead_data, str):
                     json_data = re.sub(f'\\$\\${func_name}', instead_data, json_data)
-                if type(instead_data) == int:
+                if isinstance(instead_data, int):
                     json_data = re.sub(f'\"\\$\\${func_name}\"', str(instead_data), json_data)
             else:
-                raise AttributeError(f'方法:{func_name} 不存在。')
+                raise AttributeError(f'类 FakerData 中，方法:{func_name} 不存在。')
 
     # strict=False 解决报错：json.decoder.JSONDecodeError: Invalid control character...
     # 原因：json.loads报错的原因，就是这个字符data数据包含了\n,\r，tab键，特殊字符 等
@@ -76,9 +73,6 @@ def build_test_params(request):
     # 构造测试数据，返回给用例开始执行
     logger.info(f'执行用例：{case_id}')
 
-    # 判断用例是否已经弃用
-    if case_id in DISABLE_ITEMS:
-        pytest.skip(f'用例: {case_id} 已失效，跳过不执行')
     # 通过用例id获取测试数据
     data = get_case_data(json_path, case_id)
     # 添加ip
@@ -89,7 +83,7 @@ def build_test_params(request):
     return data
 
 
-def build_test_flow(request):
+def build_test_flow(request, agent):
     """
     为多接口流程用例构建测试数据
     :param request: pytest request对象
@@ -102,7 +96,11 @@ def build_test_flow(request):
     flow_name = re.findall("test_(.+?)_[0-9]+", request.param)[0]
     flow_path = re.sub("/[a-zA-Z_]+/[a-zA-Z_]+\\.py", f"/{flow_name}", request.module.__file__)
 
-    module_path = 'flow' + flow_path.replace('/', '.').rsplit('tests', 1)[1]
+    module_path = 'libs' + flow_path.replace('/', '.').rsplit('tests', 1)[1]
+
+    # 找到flow文件路径。在library中
+    module_path = os.path.join('libs', agent, request.module.__name__.rsplit('.', 1)[1].split('_', 1)[1])
+    module_path = module_path.replace('/', '.')
 
     # 从flow文件中导入流程类。类名和flow文件名一致
     try:
@@ -118,7 +116,8 @@ def build_test_flow(request):
     func_list = list(filter(lambda func: re.match('test_', func), dir(flow_class)))
 
     # 将实例化对象的函数组装成可执行的函数列表
-    exec_list = list(map(lambda func: getattr(flow_object, func), func_list))
+    # exec_list = list(map(lambda func: getattr(flow_object, func), func_list))
+    exec_list = [getattr(flow_object, func) for func in func_list]
 
     return exec_list
 

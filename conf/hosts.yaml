@@ -1,0 +1,6 @@
+test_plat:
+  host: http://121.4.47.229:8000/
+  login:
+    url: login/account
+    user: laolitou
+    pwd: Zj123456

@@ -1,25 +1,34 @@
 import pymysql
+from pymysql.cursors import DictCursor
 
-from conf.config import DB_CONFIG
-from utils.libs.exception import ConfigInfoNotExist
+from conf import DB_CONFIG
+from utils.libs.exception import ConfNotExist
 from utils.libs.singleton import Singleton
 
 
 class DataBase(metaclass=Singleton):
     """数据库相关操作封装"""
-    def __init__(self, app):
+
+    def __init__(self, agent):
         """初始化数据库连接对象"""
-        db_config = DB_CONFIG.get(app)
+        db_config = DB_CONFIG.get(agent)
         if db_config is None:
-            raise ConfigInfoNotExist('数据库配置信息不存在。')
+            raise ConfNotExist('数据库配置信息不存在')
         try:
             db_config['port'] = int(db_config['port'])
+            db_config['cursorclass'] = DictCursor
             # 创建链接
             self.conn = pymysql.Connect(**db_config)
         except Exception:
             raise
         else:
             self.cursor = self.conn.cursor()
+
+    def __del__(self):
+        if self.cursor:
+            self.cursor.close()
+        if self.conn:
+            self.conn.close()
 
     def query_one(self, sql):
         """
@@ -34,18 +43,26 @@ class DataBase(metaclass=Singleton):
         else:
             return self.cursor.fetchone()
 
-    def query_many(self, sql):
+    def query_many(self, sql, param=None, size=None):
         """
-        查询多条条数据
-        :param sql:
-        :return: ((字段1，字段2，..),(字段1，字段2，..),(字段1，字段2，..))
+        执行查询，并取出多条结果集
+        @param sql:查询sql，多条件使用参数[param]传递进来。sql中的字符型占位符，需要加""，例如 where name = "%s"
+        @param param: 可选参数，条件列表值（元组/列表）
+        @param size: 查询条数
+        @return: result list(字典对象)/boolean 查询到的结果集
         """
-        try:
-            self.cursor.execute(sql)
-        except Exception:
-            raise
+        if param is None:
+            count = self.cursor.execute(sql)
         else:
-            return self.cursor.fetchall()
+            count = self.cursor.execute(sql, param)
+        if count > 0:
+            if size:
+                result = self.cursor.fetchmany(size)
+            else:
+                result = self.cursor.fetchall()
+        else:
+            result = False
+        return result
 
     def execute_one(self, sql):
         """
@@ -54,33 +71,27 @@ class DataBase(metaclass=Singleton):
         :return: none
         """
         try:
-            self.cursor.execute(sql)
+            count = self.cursor.execute(sql)
+            self.conn.commit()
         except Exception:
             self.conn.rollback()
-            raise
-        else:
-            self.conn.commit()
+            count = False
+        return count
 
-    def execute_many(self, sql, params: list):
+    def execute_many(self, sql, param):
         """
-        执行数据库批量操作。
-        :param sql: sql中需要有占位符接收param
-        :return: none
+        增删改操作多条数据
+        @param sql:要插入的sql，需要占位符占位
+        @param param:要插入的记录数据tuple(tuple)/list[list]
+        @return: count 受影响的行数
         """
         try:
-            self.cursor.executemany(sql, params)
+            count = self.cursor.executemany(sql, param)
+            self.conn.commit()
         except Exception:
             self.conn.rollback()
-            raise
-        else:
-            self.conn.commit()
-
-    def close(self):
-        """
-        关闭链接
-        """
-        self.cursor.close()
-        self.conn.close()
+            count = False
+        return count
 
 
 if __name__ == '__main__':

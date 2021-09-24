@@ -64,7 +64,7 @@ def pytest_generate_tests(metafunc):
 
     # 夹具参数化
     for fixture in fixtures:
-        if fixture in ('params', 'flow'):
+        if fixture in ('params', 'libs'):
             metafunc.parametrize(fixture, ids, indirect=True)
 
 

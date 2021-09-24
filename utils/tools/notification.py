@@ -1,9 +1,10 @@
 import json
+import time
 
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 
-from conf.config import NOTIFICATION_CONFIG
+from conf import NOTIFICATION_CONFIG
 from utils.libs.logger import logger
 
 
@@ -70,7 +71,7 @@ def send_wechat(*args):
     token = config.get('token')
     job_name, build_number, total, result, passrate, time, passed, failed, skiped, error = args
 
-    time = time.seconds
+    time = 60
     m, s = divmod(time, 60)
     h, m = divmod(m, 60)
 
@@ -82,14 +83,15 @@ def send_wechat(*args):
     msg_body = {
         "msgtype": "markdown",
         "markdown": {
-            "content": f"### {title} [点击查看报告]({report_url})\n\n" +
-                       f" {text}" + "\n\n" +
-                       f"  测试结果:**{result}** \n通过率:**{passrate}** \n测试耗时:**{h}小时 {m}分 {s}秒** \n\n" +
-                       f" 用例总数:**{total}** \n\n" +
-                       f" -通过用例: {passed}\n" +
-                       f" -失败用例: {failed}\n" +
-                       f" -跳过用例: {skiped}\n" +
-                       f" -错误用例: {error}\n",
+            "content":
+                f"### {title} [点击查看报告]({report_url})\n\n\n" +
+                f" {text}" + "\n\n" +
+                f"测试结果:**{result}**  通过率:**{passrate}**  \n测试耗时:**{h}小时 {m}分 {s}秒** \n\n\n" +
+                f"用例总数:**{total}** \n\n" +
+                f" - 通过用例: {passed}\n" +
+                f" - 失败用例: {failed}\n" +
+                f" - 跳过用例: {skiped}\n" +
+                f" - 错误用例: {error}\n",
         },
     }
     try:
@@ -136,4 +138,5 @@ def send_upload_result_to_wechat(**kwargs):
 
 
 if __name__ == '__main__':
-    print(NOTIFICATION_CONFIG.get('wechat'))
+    a = time.time()
+    send_wechat(1, 2, 2, 3, 4, a, 6, 7, 8, 9)
