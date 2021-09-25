@@ -27,7 +27,7 @@ def flow(request):
     :return:
     """
     # 构造测试数据
-    func_list = build_test_flow(request)
+    func_list = build_test_flow(request, 'tp')
 
     return func_list
 

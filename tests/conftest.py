@@ -3,15 +3,13 @@ import re
 from datetime import datetime
 
 import pytest
-import allure
 import xdist
 
-from conf.config import DB_CONFIG
-from conf.settings import BASE_DIR
+from conf import DB_CONFIG
+from conf import BASE_DIR
 from utils.action.database import DataBase
 from utils.libs.logger import logger
 from utils.libs.reporter import collect_item_info, write_report_information
-from utils.test.assemble import build_test_params, build_test_flow
 from utils.action.document import get_case_id
 from utils.tools.gather import gather_logs, gather_results
 from utils.tools.notification import send_wechat, send_dingtalk
@@ -30,7 +28,7 @@ def pytest_addoption(parser):
     :param parser:
     :return:
     """
-    parser.addoption('--app', action='store', type=str, default='all', help='执行哪些app的用例，默认全部执行')
+    parser.addoption('--agent', action='store', type=str, default='all', help='执行哪些agent，默认执行全部')
     parser.addoption('--job_name', action='store', type=str, default=None, help='jenkins执行时，job任务名称')
     parser.addoption('--build_number', action='store', type=int, default=None, help='当前job的构建number')
 
@@ -76,14 +74,14 @@ def pytest_ignore_collect(path, config):
     :param config: pytest config 对象
     :return:
     """
-    app = config.getoption('app')
+    agent = config.getoption('agent')
 
     # 如是app是默认值all则收集所有用例
-    if app == 'all':
+    if agent == 'all':
         pass
     # 如果没有当前收集路径不是测试app所在路径，则忽略收集
     # return True 表示忽略当前收集的path
-    elif not re.match(os.path.join(BASE_DIR, 'tests', app), path.__str__()):
+    elif not re.match(os.path.join(BASE_DIR, 'tests', agent), path.__str__()):
         return True
 
 
