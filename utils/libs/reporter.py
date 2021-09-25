@@ -20,7 +20,6 @@ def collect_item_info(item):
     case_id = re.findall("\\[(.+?)\\]", case_full_name)[0]
 
     author = load_yaml(yaml_path).get('owner')
-    tag = "MD" if '/meiduo/' in yaml_path else "TS"
 
     # 获取用例信息
     case_info = get_case_info(yaml_path, case_id)
@@ -28,7 +27,6 @@ def collect_item_info(item):
     if case_info:
         # 开始写入用例信息
         dynamic.link(author)
-        dynamic.tag(tag)
         dynamic.feature(case_info.get('model'))
         dynamic.story(case_info.get('func'))
         dynamic.title(case_info.get('case_name'))

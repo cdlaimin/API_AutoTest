@@ -1,24 +1,15 @@
 import threading
-import weakref
+from collections import defaultdict
 
 
 class Singleton(type):
-    _instance_lock = threading.Lock()
+    __instance_lock = threading.Lock()
+    __instance_dict = defaultdict()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        Singleton.__instance = None  # 设置类属性
+    def __call__(cls, *args, **kwargs):
+        key = ''.join(args) + '' + ''.join([str(item) for item in kwargs.items()])
 
-        # 创建一个弱引用类型的字典，其值必须是一个对象。当对应的value没有被强引用时，系统将回收其键值对内存
-        self._cache = weakref.WeakValueDictionary()
-
-    def __call__(self, *args, **kwargs):
-        kargs = ''.join('%s' % key for key in args) if args else ''
-        kkwargs = ''.join(list('%s' % key for key in kwargs.keys())) if kwargs else ''
-        with Singleton._instance_lock:
-            if kargs + kkwargs not in self._cache:
-                Singleton.__instance = super().__call__(*args, **kwargs)
-                self._cache[kargs + kkwargs] = Singleton.__instance
-            else:
-                Singleton.__instance = self._cache[kargs + kkwargs]
-        return Singleton.__instance
+        with Singleton.__instance_lock:
+            if key not in cls.__instance_dict:
+                cls.__instance_dict[key] = super().__call__(*args, **kwargs)
+        return cls.__instance_dict[key]

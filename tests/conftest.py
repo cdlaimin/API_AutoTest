@@ -135,34 +135,6 @@ def pytest_runtest_makereport(item, call):
         getattr(logger, 'info' if result.outcome == 'passed' else 'error')(f'测试结果:{result.outcome}')
 
 
-@pytest.fixture()
-@allure.step('准备测试数据')
-def params(request):
-    """
-    通用用例入参夹具
-    :param request:
-    :return:
-    """
-    # 构造测试数据
-    data = build_test_params(request)
-
-    return data
-
-
-@pytest.fixture()
-@allure.step('准备测试数据')
-def flow(request):
-    """
-    多接口流程用例入参夹具
-    :param request:
-    :return:
-    """
-    # 构造测试数据
-    func_list = build_test_flow(request)
-
-    return func_list
-
-
 def pytest_sessionfinish(session, exitstatus):
     """
     测试完成后，session关闭之前的钩子
