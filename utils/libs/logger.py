@@ -28,14 +28,14 @@ class PropagateHandler(logging.Handler):
 config = {
     "handlers": [
         # 配置info日志
-        {"sink": log_path, "format": "{time:YYYY-MM-DD HH:mm:ss} {level} {message}", "level": "INFO",
-         "encoding": "utf-8", "colorize": False, "enqueue": True},
+        {"sink": log_path(), "format": "{time:YYYY-MM-DD HH:mm:ss} {level} {message}", "level": "INFO",
+         "colorize": False, "enqueue": True},
         # loguru报告重定logging输出
         {"sink": PropagateHandler(), "format": "{time:YYYY-MM-DD HH:mm:ss} {message}", "level": "INFO",
          "colorize": False, "enqueue": True},
-        # 输出到控制台
+        # # 输出到控制台
         {"sink": sys.stderr, "format": "{time:YYYY-MM-DD HH:mm:ss} {level} {message}", "level": "INFO",
-         "colorize": False, "enqueue": True},
+         "colorize": True, "enqueue": False},
     ],
     "extra": {"user": "someone"}
 }

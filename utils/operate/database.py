@@ -1,7 +1,7 @@
 import pymysql
 from pymysql.cursors import DictCursor
 
-from conf import DB_CONFIG
+from conf import DB_CONF
 from utils.libs.exception import ConfNotExist
 from utils.libs.singleton import Singleton
 
@@ -11,7 +11,7 @@ class DataBase(metaclass=Singleton):
 
     def __init__(self, agent):
         """初始化数据库连接对象"""
-        db_config = DB_CONFIG.get(agent)
+        db_config = DB_CONF.get(agent)
         if db_config is None:
             raise ConfNotExist('数据库配置信息不存在')
         try:
@@ -92,10 +92,3 @@ class DataBase(metaclass=Singleton):
             self.conn.rollback()
             count = False
         return count
-
-
-if __name__ == '__main__':
-    app_name = 'meiduo'
-    sql = 'select * from tb_sku'
-    db = DataBase(app_name).query_many(sql)
-    print(db)

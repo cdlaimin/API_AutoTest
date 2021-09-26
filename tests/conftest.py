@@ -4,15 +4,13 @@ from datetime import datetime
 
 import pytest
 import xdist
+from loguru import logger
 
-from conf import DB_CONFIG
 from conf import BASE_DIR
-from utils.action.database import DataBase
-from utils.libs.logger import logger
-from utils.libs.reporter import collect_item_info, write_report_information
-from utils.action.document import get_case_id
-from utils.tools.gather import gather_logs, gather_results
-from utils.tools.notification import send_wechat, send_dingtalk
+from utils.libs.report import collect_item_info, write_report_information
+from utils.operate.document import get_case_id
+from utils.libs.gather import gather_logs, gather_results
+from utils.libs.notice import send_wechat, send_dingtalk
 
 
 def pytest_addoption(parser):
@@ -28,7 +26,7 @@ def pytest_addoption(parser):
     :param parser:
     :return:
     """
-    parser.addoption('--agent', action='store', type=str, default='all', help='执行哪些agent，默认执行全部')
+    parser.addoption('--target', action='store', type=str, default='all', help='执行哪些agent，默认执行全部')
     parser.addoption('--job_name', action='store', type=str, default=None, help='jenkins执行时，job任务名称')
     parser.addoption('--build_number', action='store', type=int, default=None, help='当前job的构建number')
 
@@ -59,10 +57,11 @@ def pytest_generate_tests(metafunc):
     # fixtures = metafunc.fixturenames
     fixtures = metafunc.definition._fixtureinfo.argnames
     ids = get_case_id(yaml_path, case_name)
+    print(ids)
 
     # 夹具参数化
     for fixture in fixtures:
-        if fixture in ('params', 'libs'):
+        if fixture in ('tp_data', 'tp_flow'):  # 维护需要参数化的夹具
             metafunc.parametrize(fixture, ids, indirect=True)
 
 
@@ -74,7 +73,7 @@ def pytest_ignore_collect(path, config):
     :param config: pytest config 对象
     :return:
     """
-    agent = config.getoption('agent')
+    agent = config.getoption('target')
 
     # 如是app是默认值all则收集所有用例
     if agent == 'all':
@@ -157,16 +156,6 @@ def pytest_unconfigure(config):
     :param config: pytest Config 对象
     :return:
     """
-    # 进程退出之前关闭所有数据库链接
-    app_name = config.getoption('app')
-    if app_name == 'all':
-        for app in DB_CONFIG.keys():
-            conn = DataBase(app)
-            conn.close()
-    else:
-        conn = DataBase(app_name)
-        conn.close()
-
     if os.environ.get('PYTEST_XDIST_WORKER') == 'master':
         # 分布式执行时，收集从机上的日志到master上
         gather_logs()

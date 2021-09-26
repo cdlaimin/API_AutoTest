@@ -3,37 +3,15 @@ import os
 import re
 from importlib import import_module
 
-from conf import APP_CONFIG
-from utils.libs.logger import logger
-from utils.action.document import get_case_data
-from utils.libs.dupe import FakerData
+import pytest
+from loguru import logger
+
+from conf import HOST
+from utils.libs.deceiver import FakerData
+from utils.operate.document import load_json
 
 
-def assemble_url(data):
-    """
-    给测试数据组装IP和PORT
-    :param data:
-    :return:
-    """
-    app = data.get('app')
-    ip = APP_CONFIG.get(app).get('ip')
-    port = APP_CONFIG.get(app).get('port')
-
-    data = json.dumps(data)  # 把字典转换成json
-    # 替换ip
-    data = data.replace(r'{ip}', ip)
-
-    # 替换端口。处理特殊端口80
-    if port == '80':
-        data = data.replace(r':{port}', '')
-    else:
-        data = data.replace(r'{port}', port)
-
-    # 重新转回字典并返回
-    return json.loads(data, strict=False)
-
-
-def assemble_data(data):
+def assemble_dynamic_data(data):
     """
     为用例写入动态数据
     :param data: dict
@@ -54,60 +32,72 @@ def assemble_data(data):
                 if isinstance(instead_data, int):
                     json_data = re.sub(f'\"\\$\\${func_name}\"', str(instead_data), json_data)
             else:
-                raise AttributeError(f'类 FakerData 中，方法:{func_name} 不存在。')
+                raise AttributeError(f'类 FakerData 中，方法: {func_name} 不存在。')
 
     # strict=False 解决报错：json.decoder.JSONDecodeError: Invalid control character...
     # 原因：json.loads报错的原因，就是这个字符data数据包含了\n,\r，tab键，特殊字符 等
     return json.loads(json_data, strict=False)
 
 
-def build_test_params(request):
+def build_test_data(request, target):
     """
     为单接口构建测试数据
     :param request: pytest request对象
+    :param target: 测试对象
     :return: 加工后的json文件数据  dict
     """
     case_id = request.param
     json_path = request.module.__file__.replace('.py', '.json')
 
-    # 构造测试数据，返回给用例开始执行
-    logger.info(f'执行用例：{case_id}')
+    # 读取测试数据
+    file = load_json(json_path)
+    data = file.get(case_id)
 
-    # 通过用例id获取测试数据
-    data = get_case_data(json_path, case_id)
-    # 添加ip
-    data = assemble_url(data)
-    # 添加数据
-    data = assemble_data(data)
+    data['url'] = HOST[target] + file['url']
+    data['method'] = file['method']
+
+    # 检查是否定制请求头
+    if 'headers' in file:
+        data['headers'] = file['headers']
+    else:
+        data['headers'] = {"Content-Type": "application/json;charset=UTF-8"}
+
+    # 组装动态数据
+    data = assemble_dynamic_data(data)
 
     return data
 
 
-def build_test_flow(request, agent):
+def build_test_flow(request, target):
     """
     为多接口流程用例构建测试数据
     :param request: pytest request对象
+    :param target: 测试对象
     :return: 包含流程中具体step函数名的list
     """
-    # 先调用build_test_params完成对json数据的组装
-    data = build_test_params(request)
+    case_id = request.param
+    json_path = request.module.__file__.replace('.py', '.json')
 
-    # 找到flow文件路径。其路径结构和tests路径结构保持一致。一个用例文件夹对应一个flow的py文件
-    flow_name = re.findall("test_(.+?)_[0-9]+", request.param)[0]
-    flow_path = re.sub("/[a-zA-Z_]+/[a-zA-Z_]+\\.py", f"/{flow_name}", request.module.__file__)
+    # 读取测试数据
+    file = load_json(json_path)
+    data = file.get(case_id)
 
-    module_path = 'libs' + flow_path.replace('/', '.').rsplit('tests', 1)[1]
+    # 组装动态数据
+    data = assemble_dynamic_data(data)
 
-    # 找到flow文件路径。在library中
-    module_path = os.path.join('libs', agent, request.module.__name__.rsplit('.', 1)[1].split('_', 1)[1])
+    data['url'] = HOST[target] + data['url']
+
+    # 找到flow文件路径，在libs中
+    module_path = os.path.join('libs', target, request.module.__name__.rsplit('.', 1)[1].split('_', 1)[1])
     module_path = module_path.replace('/', '.')
 
-    # 从flow文件中导入流程类。类名和flow文件名一致
+    # 从flow文件中导入流程类。类名固定 Template
     try:
         flow_module = import_module(module_path)
-        flow_class = getattr(flow_module, flow_name)
-    except Exception as e:
-        raise e
+        flow_class = getattr(flow_module, 'Template')
+    except ModuleNotFoundError:
+        logger.error(f"依赖模板文件不存在:{module_path}")
+        pytest.xfail(f"依赖模板文件不存在:{module_path}")
 
     # 实例化类
     flow_object = flow_class(data)
@@ -120,7 +110,3 @@ def build_test_flow(request, agent):
     exec_list = [getattr(flow_object, func) for func in func_list]
 
     return exec_list
-
-
-if __name__ == '__main__':
-    assemble_url('aa')

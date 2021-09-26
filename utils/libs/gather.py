@@ -24,10 +24,10 @@ def gather_logs():
                 # seek() 方法用于移动文件读取指针到指定位置。
                 # 第一个参数，表示偏移的字节数
                 # 第二个参数，表示从哪里开始偏移。默认值是0。0代表从文件开头开始算起，1代表从当前位置开始算起，2代表从文件末尾算起。
-                target.seek(0, 1)
+                # target.seek(0, 1)
                 # truncate() 方法用于截断文件，如果指定了可选参数 size，则表示截断文件为 size 个字符。
                 # 如果没有指定 size，则从当前位置起截断；截断之后 size 后面的所有字符被删除。
-                target.truncate()
+                # target.truncate()
 
 
 def gather_results(session, exitstatus):

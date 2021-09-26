@@ -3,25 +3,23 @@ import re
 
 from build.template import templates
 from build.template.templates import YAML_HEAD
-from conf.settings import BASE_DIR
-from utils.action.document import write_json_file, write_yaml_file
-from utils.libs.exception import ParamsCheckFailed
+from conf import BASE_DIR
+from utils.operate.document import load_json, dump_yaml
 
 
-def build_case(path, app, fixture, json: list, yaml: list):
+def build_case(path, fixture, json: list, yaml: list):
     """
     构建测试用例，函数入参没有全部传入时，生成用例后，需要测试人员手动补全用例。
     同时建议新增一个用例后，调试通过在生成下一个，避免生成垃圾用例
     :param path: 必填，相对于项目根目录(BASE_DIR)的相对目录，最后一级应是用例目录
-    :param app: 必填，测试项目app名称
     :param fixture: 必填，夹具。可以是单个夹具，也可以是一个夹具列表(请求参数的夹具放首位)
     :param json: 必填，测试数据集
     :param yaml: 必填，用例信息集
     :return: None
     """
     # 校验必填字段
-    if not all([path, fixture, app, json, yaml]):
-        raise ParamsCheckFailed('必填字段校验失败，请检查。')
+    if not all([path, fixture, json, yaml]):
+        raise ValueError('必填字段校验失败，请检查。')
 
     # 创建用例文件夹
     abs_path = os.path.join(BASE_DIR, path)
@@ -32,7 +30,7 @@ def build_case(path, app, fixture, json: list, yaml: list):
     build_py(abs_path, fixture)
 
     # 构建json文件
-    build_json(abs_path, fixture, app, json)
+    build_json(abs_path, fixture, json)
 
     # 构建yaml文件
     build_yaml(abs_path, yaml)
@@ -63,7 +61,7 @@ def build_py(abs_path, fixture):
     elif isinstance(fixture, str):
         new_content = re.sub('fixtures|fixture', fixture, origin_content)
     else:
-        raise ParamsCheckFailed('参数:fixture 数据类型错误。')
+        raise ValueError('参数:fixture 数据类型错误。')
 
     # 写入用例名称
     new_content = re.sub(r'test_case_name', case_name, new_content)
@@ -73,12 +71,11 @@ def build_py(abs_path, fixture):
         pn.write(new_content)
 
 
-def build_json(abs_path, fixture, app, json):
+def build_json(abs_path, fixture, json):
     """
     构建测试数据的json文件
     :param abs_path: 要创建文件的目录
     :param fixture: 夹具
-    :param app: 测试的app
     :param json: 用例数据列表
     :return:
     """
@@ -110,24 +107,21 @@ def build_json(abs_path, fixture, app, json):
 
             # json数据组装
             temp_dict = dict()
-            temp_dict['app'] = app
             for index, sub_json in enumerate(json):
                 # flow逻辑
                 step = sub_json.pop('step')
                 write_flow_file(file, step, index)
 
-                sub_json['app'] = app
                 temp_dict['step_0' + str(index + 1)] = sub_json
             json_dict[case_name + '_01'] = temp_dict
         else:
             for index, sub_json in enumerate(json):
-                sub_json['app'] = app
                 json_dict[case_name + '_0' + str(index + 1)] = sub_json
     else:
-        raise ParamsCheckFailed('参数:json 数据类型错误。')
+        raise ValueError('参数:json 数据类型错误。')
 
     # 生成json文件
-    write_json_file(os.path.join(abs_path, case_name + '.json'), json_dict)
+    load_json(os.path.join(abs_path, case_name + '.json'), json_dict)
 
 
 def write_flow_file(file, step, index):
@@ -140,7 +134,7 @@ def write_flow_file(file, step, index):
     """
     # 调用本函数，step为空时引发异常
     if not step:
-        raise ParamsCheckFailed('参数:step 数据错误。')
+        raise ValueError('参数:step 数据错误。')
 
     with open(file, 'a', encoding='utf8') as fp:
         # 头部
@@ -198,7 +192,7 @@ def build_yaml(abs_path, yaml):
 
         value_list.append(content)
     elif not isinstance(yaml, list):
-        raise ParamsCheckFailed('参数:yaml 数据类型错误。')
+        raise ValueError('参数:yaml 数据类型错误。')
     else:
         for index, sub_info in enumerate(yaml):
             content = dict()
@@ -215,7 +209,7 @@ def build_yaml(abs_path, yaml):
     yaml_dict['case_info'] = value_list
 
     # 生成yaml文件
-    write_yaml_file(os.path.join(abs_path, case_name + '.yaml'), yaml_dict)
+    dump_yaml(os.path.join(abs_path, case_name + '.yaml'), yaml_dict)
 
 
 if __name__ == '__main__':

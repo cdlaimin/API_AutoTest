@@ -1,5 +1,4 @@
 import json
-import logging
 import os
 import sys
 
@@ -14,8 +13,8 @@ from conf.settings import BASE_DIR
 from conf.config import APP_CONFIG, UPLOADED_CASES
 
 
-from utils.action.document import read_yaml_file, write_yaml_file
-from utils.tools.notification import send_upload_result_to_wechat
+from utils.operate.document import read_yaml_file, write_yaml_file
+from utils.libs.notice import send_upload_result_to_wechat
 
 
 # 用例信息列表，每一个item即为一条用例信息

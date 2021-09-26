@@ -4,12 +4,11 @@ import shutil
 import warnings
 
 from allure import dynamic
+from loguru import logger
 
-from conf import APP_CONFIG
 from conf import BASE_DIR
 from utils.libs.exception import DirectoryNotExist
-from utils.libs.logger import logger
-from utils.action.document import get_case_info, load_yaml
+from utils.operate.document import get_case_info, load_yaml
 
 
 def collect_item_info(item):
@@ -58,23 +57,12 @@ def write_report_information(session):
             shutil.copy(category_file_path, allure_report_path)
 
             # 写入测试app信息
-            app = session.config.getoption('app')
+            agent = session.config.getoption('agent')
             with open(os.path.join(allure_report_path, 'environment.properties'), 'w+', encoding='utf-8') as f:
-                if app == 'all':
-                    for index, app_name in enumerate(APP_CONFIG.keys()):
-                        f.write(
-                            f'app{index + 1}={app_name}\n'
-                        )
-                else:
-                    f.write(
-                        f'app={app}\n'
-                    )
+                pass
         except Exception as e:
             logger.warning(f'导入用例分类信息失败！error: {e}')
     else:
         logger.warning(f'导入用例分类信息失败！error: {DirectoryNotExist}')
 
 
-if __name__ == '__main__':
-    for index, app_name in enumerate(APP_CONFIG.keys()):
-        print(index, app_name)

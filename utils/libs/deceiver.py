@@ -45,7 +45,12 @@ class FakerData:
         """生成一个1～10之间的随机数"""
         return random.randint(start, end)
 
+    @staticmethod
+    def case_priority(start: int = 1, end: int = 3):
+        """用例等级"""
+        return random.randint(start, end)
+
     @classmethod
     def sentence(cls):
         """生成一段中文文字信息"""
-        return cls.faker.sentence(nb_words=6, variable_nb_words=True, ext_word_list=None)
+        return cls.faker.sentence(nb_words=10, variable_nb_words=True, ext_word_list=None)

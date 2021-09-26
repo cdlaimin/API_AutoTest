@@ -137,7 +137,7 @@ def get_case_id(filepath, case_name):
     :param case_name:
     :return: list => [id, id, id]
     """
-    case_id = jsonpath.jsonpath(load_yaml(filepath), f"$.case_info..[?(@.path == '{case_name}')]..id")
+    case_id = jsonpath.jsonpath(load_yaml(filepath), f"$.datas..[?(@.CasePath == '{case_name}')]..CaseID")
     return case_id
 
 
@@ -148,25 +148,5 @@ def get_case_info(filepath, case_id):
     :param case_id:
     :return: dict
     """
-    case_info = jsonpath.jsonpath(load_yaml(filepath), f"$.case_info..[?(@.id == '{case_id}')]")
+    case_info = jsonpath.jsonpath(load_yaml(filepath), f"$.datas..[?(@.CaseID == '{case_id}')]")
     return case_info[0] if case_info else {}
-
-
-def get_case_data(filepath, case_id):
-    """
-    获取用例ID对应的用例测试数据
-    :param filepath:
-    :param case_id:
-    :return:
-    """
-    data = load_json(filepath)
-    return data.get(case_id)
-
-
-if __name__ == '__main__':
-    # file_path = '/Users/zhangjian/PycharmProjects/AutoTest_MeiDuo/tests/meiduo/areas/test_query_province/test_query_province.json'
-    # print(load_json_file(file_path))
-    # print(type(load_json_file(file_path)))
-    file_path = '/tests/meiduo/areas/test_query_province/test_query_province.yaml'
-    # print(get_case_id(file_path, 'test_query_province'))
-    print(get_case_data(file_path, 'test_query_province_001'))

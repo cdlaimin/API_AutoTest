@@ -2,10 +2,10 @@ import time
 import warnings
 from functools import wraps
 
+from loguru import logger
 from pytest import deprecated_call
 from requests.exceptions import HTTPError, SSLError, Timeout, URLRequired, TooManyRedirects
 
-from utils.libs.logger import logger
 from utils.libs.exception import RequestError
 
 

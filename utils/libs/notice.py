@@ -2,10 +2,10 @@ import json
 import time
 
 import requests
+from loguru import logger
 from urllib3.exceptions import InsecureRequestWarning
 
-from conf import NOTIFICATION_CONFIG
-from utils.libs.logger import logger
+from conf import NOTICE_TEMP
 
 
 def send_dingtalk(*args):
@@ -13,7 +13,7 @@ def send_dingtalk(*args):
     发送结果到钉钉群
     :return:
     """
-    config = NOTIFICATION_CONFIG.get('dingtalk')
+    config = NOTICE_TEMP.get('dingtalk')
     ip = config.get('ip')
     port = config.get('port')
     title = config.get('title')
@@ -63,7 +63,7 @@ def send_wechat(*args):
     发送结果到企业微信
     :return:
     """
-    config = NOTIFICATION_CONFIG.get('wechat')
+    config = NOTICE_TEMP.get('wechat')
     ip = config.get('ip')
     port = config.get('port')
     title = config.get('title')
@@ -104,7 +104,7 @@ def send_wechat(*args):
 
 
 def send_upload_result_to_wechat(**kwargs):
-    config = NOTIFICATION_CONFIG.get('wechat')
+    config = NOTICE_TEMP.get('wechat')
     token = config.get('token')
 
     total = kwargs.get('total')
