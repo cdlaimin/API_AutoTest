@@ -7,7 +7,7 @@ import pytest
 from loguru import logger
 
 from conf import HOST
-from utils.libs.deceiver import FakerData
+from utils.suport.deceiver import FakerData
 from utils.operate.document import load_json
 
 
@@ -21,7 +21,7 @@ def assemble_dynamic_data(data):
     # 正则匹配出需要替换的动态数据
     match_list = re.findall(r'\$\$(.+?)\"', json_data)
     if match_list:
-        for func_name in list(set(match_list)):
+        for func_name in set(match_list):
             # 判断function是否存在。后续可根据data模块内部新增类继续扩展
             function = getattr(FakerData, func_name, None)
             if function:
@@ -34,7 +34,7 @@ def assemble_dynamic_data(data):
             else:
                 raise AttributeError(f'类 FakerData 中，方法: {func_name} 不存在。')
 
-    # strict=False 解决报错：json.decoder.JSONDecodeError: Invalid control character...
+    # strict=False 不进行严格校验，解决报错：json.decoder.JSONDecodeError: Invalid control character...
     # 原因：json.loads报错的原因，就是这个字符data数据包含了\n,\r，tab键，特殊字符 等
     return json.loads(json_data, strict=False)
 
@@ -85,10 +85,15 @@ def build_test_flow(request, target):
     # 组装动态数据
     data = assemble_dynamic_data(data)
 
-    data['url'] = HOST[target] + data['url']
+    # 拼接url、拼接headers
+    for key, value in data.items():
+        data[key]['url'] = HOST[target] + data[key]['url']
+
+        if 'headers' not in data[key]:
+            data[key]['headers'] = {"Content-Type": "application/json;charset=UTF-8"}
 
     # 找到flow文件路径，在libs中
-    module_path = os.path.join('libs', target, request.module.__name__.rsplit('.', 1)[1].split('_', 1)[1])
+    module_path = os.path.join('libs/flow', target, request.module.__name__.rsplit('.', 1)[1].split('_', 1)[1])
     module_path = module_path.replace('/', '.')
 
     # 从flow文件中导入流程类。类名固定 Template
@@ -103,10 +108,10 @@ def build_test_flow(request, target):
     flow_object = flow_class(data)
 
     # 获取需要执行的函数名称列表
-    func_list = list(filter(lambda func: re.match('test_', func), dir(flow_class)))
+    funcs = filter(lambda func: re.match('test_', func), flow_class.__dict__)
 
     # 将实例化对象的函数组装成可执行的函数列表
     # exec_list = list(map(lambda func: getattr(flow_object, func), func_list))
-    exec_list = [getattr(flow_object, func) for func in func_list]
+    exec_list = [getattr(flow_object, func) for func in funcs]
 
     return exec_list

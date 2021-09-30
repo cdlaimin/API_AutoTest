@@ -1,0 +1,45 @@
+{
+  "test_dispatch_job_01": {
+    "step_01": {
+      "url": "/testJob/",
+      "method": "post",
+      "data": {
+        "executor": [],
+        "task_name": "$$sentence",
+        "task_detail": "$$sentence",
+        "level": "$$case_priority",
+        "type": "$$job_type",
+        "product": "$$people_name",
+        "frontend": "$$people_name",
+        "backend": "$$people_name",
+        "prd_no": "$$msisdn",
+        "expect_end_time": "$$strftime",
+        "case": [
+          6,
+          9,
+          16,
+          20,
+          25
+        ]
+      },
+      "expect": {
+        "msg": "测试任务创建成功"
+      }
+    },
+    "step_02": {
+      "url": "/dispatchJob/",
+      "method": "put",
+      "data": {
+        "ids": [
+          3023
+        ],
+        "job_ids": [
+          "<id>"
+        ]
+      },
+      "expect": {
+        "msg": "任务指派完成"
+      }
+    }
+  }
+}

@@ -47,7 +47,7 @@ def build_py(abs_path, fixture):
     case_name = abs_path.rsplit('/', 1)[1]
 
     # 读取模版文件
-    if 'libs' in fixture:
+    if 'suport' in fixture:
         origin_content = templates.MULTI_API_PY
 
     else:
@@ -91,11 +91,11 @@ def build_json(abs_path, fixture, json):
     # 根据夹具来决定json数据文件的组装方式
     if all([json, isinstance(json, list)]):
         # 组装json文件，根据夹具决定拼接方式
-        if 'libs' in fixture:
+        if 'suport' in fixture:
             # 组装json文件时，同步完成flow文件的步骤文件
             class_name = case_name.split('_', 1)[1]
             # 生成flow步骤py文件
-            flow_path = abs_path.rsplit('/', 1)[0].replace('/tests/', '/libs/')
+            flow_path = abs_path.rsplit('/', 1)[0].replace('/tests/', '/suport/')
             # 检查目录路径是否存在，不存在则创建
             if not os.path.exists(flow_path):
                 os.makedirs(flow_path)

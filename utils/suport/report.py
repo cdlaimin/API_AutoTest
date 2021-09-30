@@ -7,7 +7,7 @@ from allure import dynamic
 from loguru import logger
 
 from conf import BASE_DIR
-from utils.libs.exception import DirectoryNotExist
+from utils.suport.exception import DirectoryNotExist
 from utils.operate.document import get_case_info, load_yaml
 
 

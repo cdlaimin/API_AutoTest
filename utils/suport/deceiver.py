@@ -1,4 +1,5 @@
 import random
+import time
 
 from faker import Faker
 
@@ -6,7 +7,7 @@ from faker import Faker
 class FakerData:
     """
     按需添加需要生成的动态数据
-    文本替换方式：$$ + 方法名
+    文本替换方式：$$ + 方法名。例如：{"name": "$$user_name"}
     """
     faker = Faker(locale='zh_CN')
 
@@ -41,8 +42,8 @@ class FakerData:
         return cls.faker.user_name()
 
     @staticmethod
-    def count(start: int = 1, end: int = 10):
-        """生成一个1～10之间的随机数"""
+    def job_type(start: int = 0, end: int = 4):
+        """测试任务类型"""
         return random.randint(start, end)
 
     @staticmethod
@@ -54,3 +55,13 @@ class FakerData:
     def sentence(cls):
         """生成一段中文文字信息"""
         return cls.faker.sentence(nb_words=10, variable_nb_words=True, ext_word_list=None)
+
+    @classmethod
+    def thirteen_timestamp(cls):
+        """十三位时间戳"""
+        return int(time.time() * 1000)
+
+    @classmethod
+    def strftime(cls):
+        """格式化时间 %Y-%m-%d %H:%M:%S"""
+        return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(cls.thirteen_timestamp()/1000))

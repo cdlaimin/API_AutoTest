@@ -1,6 +1,9 @@
 test_plat:
-  url: /login/
   test:
-    user: laolitou
-    pwd: Zj123456
+    id: 3023
+    username: laolitou
+    password: Zj123456
   admin:
+    id: 200
+    username: xiuyingyi
+    password: Zj123456

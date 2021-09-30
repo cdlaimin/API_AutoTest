@@ -16,7 +16,3 @@ NOTICE_TEMP = load_ini(os.path.join(BASE_DIR, 'conf', 'notice_temp.ini'))
 
 # 登陆账户信息
 ACCOUNT = load_yaml(os.path.join(BASE_DIR, 'conf', 'account.yaml'))
-
-
-if __name__ == '__main__':
-    print(BASE_DIR)

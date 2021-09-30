@@ -5,7 +5,7 @@ import sys
 import gevent
 import requests
 
-from utils.libs.logger import logger
+from utils.suport.logger import logger
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -14,7 +14,7 @@ from conf.config import APP_CONFIG, UPLOADED_CASES
 
 
 from utils.operate.document import read_yaml_file, write_yaml_file
-from utils.libs.notice import send_upload_result_to_wechat
+from utils.suport.notice import send_upload_result_to_wechat
 
 
 # 用例信息列表，每一个item即为一条用例信息
@@ -86,7 +86,7 @@ def async_collect(dir_path="tests"):
 
 def upload_case():
     # 登陆获取token
-    app = APP_CONFIG.get('test_plat')
+    app = APP_CONFIG.get('api')
     login_host = 'http://' + app.get('ip') + ':' + app.get('port') + '/login/'
     user = {
         "username": sys.argv[1],

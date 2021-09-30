@@ -1,17 +1,20 @@
 import pymysql
+from loguru import logger
 from pymysql.cursors import DictCursor
 
-from conf import DB_CONF
-from utils.libs.exception import ConfNotExist
-from utils.libs.singleton import Singleton
+from conf import DB_CONF, ACCOUNT
+from utils.suport.exception import ConfNotExist
+from utils.suport.singleton import Singleton
 
 
 class DataBase(metaclass=Singleton):
     """数据库相关操作封装"""
 
-    def __init__(self, agent):
+    def __init__(self, target):
         """初始化数据库连接对象"""
-        db_config = DB_CONF.get(agent)
+        self.account = ACCOUNT.get(target)
+
+        db_config = DB_CONF.get(target)
         if db_config is None:
             raise ConfNotExist('数据库配置信息不存在')
         try:
@@ -23,6 +26,7 @@ class DataBase(metaclass=Singleton):
             raise
         else:
             self.cursor = self.conn.cursor()
+            logger.info(f'目标数据库 {target} 链接成功。')
 
     def __del__(self):
         if self.cursor:
@@ -38,10 +42,13 @@ class DataBase(metaclass=Singleton):
         """
         try:
             self.cursor.execute(sql)
-        except Exception:
-            raise
-        else:
-            return self.cursor.fetchone()
+            result = self.cursor.fetchone()
+            logger.info(f"{sql}  -- 执行成功 !!")
+        except Exception as e:
+            logger.info(f"{sql}  >> 执行失败 ！！ \n {e}")
+            result = None
+
+        return result
 
     def query_many(self, sql, param=None, size=None):
         """
@@ -51,17 +58,20 @@ class DataBase(metaclass=Singleton):
         @param size: 查询条数
         @return: result list(字典对象)/boolean 查询到的结果集
         """
-        if param is None:
-            count = self.cursor.execute(sql)
-        else:
-            count = self.cursor.execute(sql, param)
-        if count > 0:
+        try:
+            if param is None:
+                self.cursor.execute(sql)
+            else:
+                self.cursor.execute(sql, param)
             if size:
                 result = self.cursor.fetchmany(size)
             else:
                 result = self.cursor.fetchall()
-        else:
-            result = False
+            logger.info(f"{sql}  -- 执行成功 !!")
+        except Exception as e:
+            logger.info(f"{sql}  >> 执行失败 ！！ \n {e}")
+            result = None
+
         return result
 
     def execute_one(self, sql):
@@ -71,12 +81,12 @@ class DataBase(metaclass=Singleton):
         :return: none
         """
         try:
-            count = self.cursor.execute(sql)
+            self.cursor.execute(sql)
             self.conn.commit()
-        except Exception:
+            logger.info(f"{sql}  -- 执行成功 !!")
+        except Exception as e:
             self.conn.rollback()
-            count = False
-        return count
+            logger.info(f"{sql}  >> 执行失败 ！！ \n {e}")
 
     def execute_many(self, sql, param):
         """
@@ -86,9 +96,9 @@ class DataBase(metaclass=Singleton):
         @return: count 受影响的行数
         """
         try:
-            count = self.cursor.executemany(sql, param)
+            self.cursor.executemany(sql, param)
             self.conn.commit()
-        except Exception:
+            logger.info(f"{sql}  -- 执行成功 !!")
+        except Exception as e:
             self.conn.rollback()
-            count = False
-        return count
+            logger.info(f"{sql}  >> 执行失败 ！！ \n {e}")

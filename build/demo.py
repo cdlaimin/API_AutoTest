@@ -3,7 +3,7 @@ from build.upload_case import async_collect, upload_case
 
 path = 'tests/ts/user/test_modify_userFace'
 app = 'ts'
-fixtures = ['libs', ]
+fixtures = ['suport', ]
 json = [
     {
         "step": {

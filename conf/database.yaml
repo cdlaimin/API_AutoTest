@@ -1,4 +1,4 @@
-test_plat: 
+test_plat:
   host: 121.4.47.229
   port: 3300
   user: root

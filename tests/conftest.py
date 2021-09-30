@@ -7,10 +7,10 @@ import xdist
 from loguru import logger
 
 from conf import BASE_DIR
-from utils.libs.report import collect_item_info, write_report_information
+from utils.suport.report import collect_item_info, write_report_information
 from utils.operate.document import get_case_id
-from utils.libs.gather import gather_logs, gather_results
-from utils.libs.notice import send_wechat, send_dingtalk
+from utils.suport.gather import gather_logs, gather_results
+from utils.suport.notice import send_wechat, send_dingtalk
 
 
 def pytest_addoption(parser):
@@ -57,7 +57,6 @@ def pytest_generate_tests(metafunc):
     # fixtures = metafunc.fixturenames
     fixtures = metafunc.definition._fixtureinfo.argnames
     ids = get_case_id(yaml_path, case_name)
-    print(ids)
 
     # 夹具参数化
     for fixture in fixtures:

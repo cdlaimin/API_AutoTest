@@ -1,7 +1,8 @@
 import allure
 import pytest
 
-from libs.login import TestPlat
+from libs.common.login import TestPlat
+from libs.sql.test_plat import DBOps
 from utils.test.assemble import build_test_flow, build_test_data
 
 
@@ -36,3 +37,12 @@ def tp_flow(request):
 @pytest.fixture(scope='session')
 def tp_test_session():
     return TestPlat('test').get_session
+
+
+def pytest_unconfigure(config):
+    """
+    实例化一次数据库
+    清理自动化测试数据
+    """
+    db = DBOps()
+    db.delete_case_by_id()

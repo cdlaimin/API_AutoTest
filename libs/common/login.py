@@ -3,7 +3,7 @@ import requests
 from loguru import logger
 
 from conf import HOST, ACCOUNT
-from utils.libs.singleton import Singleton
+from utils.suport.singleton import Singleton
 
 
 class TestPlat(metaclass=Singleton):
@@ -14,17 +14,15 @@ class TestPlat(metaclass=Singleton):
 
     @property
     def get_session(self):
-        data = {
-            'type': "account",
-            'username': self.account[self.role]['user'],
-            'password': self.account[self.role]['pwd'],
-        }
+        data = self.account[self.role]
+        data['type'] = "account"
         headers = {
             'Content-Type': 'application/json;'
         }
         session = requests.session()
         try:
-            response = session.post(url=self.host + self.account['url'], data=json.dumps(data), headers=headers)
+            response = session.request(url=self.host + '/login/', data=json.dumps(data),
+                                       method='post', headers=headers)
             if response.status_code == 200:
                 token = response.json().get('token')
                 session.headers['Authorization'] = 'JWT ' + token
