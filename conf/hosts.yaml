@@ -2,10 +2,10 @@
 jenkins: http://121.4.47.229:3600/job/{job_name}/{build_number}/allure
 
 # 钉钉群消息机器人
-ding_robot: https://oapi.dingtalk.com/robot/send?access_token=deb1a6bf839ae0cbff23b85500fbb05f9aaa9c8d4339d7563c03d426056581d8
+ding_robot: https://oapi.dingtalk.com/robot/send?access_token=
 
 # 企微群消息机器人
-wechat_robot: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=faed287a-9bcc-469a-b950-6286b8309236
+wechat_robot: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=
 
 # 测试平台
 test_plat: http://121.4.47.229:8000

@@ -33,7 +33,5 @@ class DBOps(DataBase, metaclass=Singleton):
                     f'DELETE FROM test_plat.tp_job_tester where job_id = {job_id};',
                     f'DELETE FROM test_plat.tp_job where id = {job_id};']
 
-        print(sql_list)
-
         for sql in sql_list:
             self.execute_one(sql)

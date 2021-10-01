@@ -29,6 +29,8 @@ def pytest_addoption(parser):
     parser.addoption('--target', action='store', type=str, default='all', help='执行哪些agent，默认执行全部')
     parser.addoption('--job_name', action='store', type=str, default=None, help='jenkins执行时，job任务名称')
     parser.addoption('--build_number', action='store', type=int, default=None, help='当前job的构建number')
+    parser.addoption('--send_wechat', action='store', type=bool, default=False, help='是否发送测试报告到企微群')
+    parser.addoption('--wechat_token', action='store', type=str, default=None, help='企微群消息token')
 
 
 def pytest_sessionstart(session):
@@ -146,7 +148,7 @@ def pytest_sessionfinish(session, exitstatus):
         # 发送测试结果到测试群。钉钉或者企业微信
         results = gather_results(session, exitstatus)
         send_wechat(*results)
-        send_dingtalk(*results)
+        # send_dingtalk(*results)
 
 
 def pytest_unconfigure(config):
