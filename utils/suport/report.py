@@ -1,7 +1,6 @@
 import os
 import re
 import shutil
-import warnings
 
 from allure import dynamic
 from loguru import logger
@@ -38,7 +37,6 @@ def collect_item_info(item):
         if level == 'L':
             dynamic.severity('minor')
     else:
-        warnings.warn(f'用例:{case_id} 信息不存在，请检查！')
         logger.warning(f'用例:{case_id} 信息不存在，请检查！')
 
 
@@ -48,7 +46,7 @@ def write_report_information(session):
     创建报告环境信息，主要是写入当前测试的app信息
     :return:
     """
-    category_file_path = os.path.join(BASE_DIR, 'conf', 'categories.json')
+    category_file_path = os.path.join(BASE_DIR, 'static', 'allure', 'categories.json')
     allure_report_path = os.path.join(BASE_DIR, 'allure-results')
 
     if os.path.exists(allure_report_path):
@@ -57,7 +55,7 @@ def write_report_information(session):
             shutil.copy(category_file_path, allure_report_path)
 
             # 写入测试app信息
-            agent = session.config.getoption('agent')
+            target = session.config.getoption('target')
             with open(os.path.join(allure_report_path, 'environment.properties'), 'w+', encoding='utf-8') as f:
                 pass
         except Exception as e:
