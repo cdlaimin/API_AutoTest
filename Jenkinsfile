@@ -60,14 +60,14 @@ pipeline {
                 sh label: "指定启动镜像", script: "sed -i 's/demo/${JOB_NAME}_${params.git_branch}/g' docker-compose.yaml"
                 sh label: "指定挂载目录", script: "sed -i 's/job_name/${JOB_NAME}/g' docker-compose.yaml"
                 sh label: "启动容器", script: "docker-compose up -d"
-                // sh label: "修改shell操作权限", script: "chmod 777 run.sh"
+                sh label: "修改shell操作权限", script: "chmod 777 run.sh"
             }
         }
         stage("执行测试") {
             steps {
                 echo "==================执行测试=================="
                 // ./ 执行shell文件，需要文件本身具有可执行权限；sh 执行shell文件则不需要
-                sh label: "执行测试", script: "sh run.sh $JOB_NAME $BUILD_NUMBER ${params.target}  ${params.git_branch} ${params.tag} ${params.send_wechat} ${params.wechat_token}"
+                sh label: "执行测试", script: "./run.sh $JOB_NAME $BUILD_NUMBER ${params.target}  ${params.git_branch} ${params.tag} ${params.send_wechat} ${params.wechat_token}"
             }
         }
     }
