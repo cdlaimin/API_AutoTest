@@ -5,7 +5,7 @@ import requests
 from loguru import logger
 from urllib3.exceptions import InsecureRequestWarning
 
-from conf import NOTICE_TEMP
+from conf import NOTICE_TEMP, HOST
 
 
 def send_dingtalk(*args):
@@ -14,21 +14,18 @@ def send_dingtalk(*args):
     :return:
     """
     config = NOTICE_TEMP.get('dingtalk')
-    ip = config.get('ip')
-    port = config.get('port')
     title = config.get('title')
     text = config.get('text')
-    token = config.get('token')
-    job_name, build_number, total, result, passrate, time, passed, failed, skiped, error = args
+    job_name, build_number, total, result, passrate, time, passed, failed, skiped, error, token = args
 
     time = time.seconds
     m, s = divmod(time, 60)
     h, m = divmod(m, 60)
 
-    host = f"https://oapi.dingtalk.com/robot/send?access_token={token}"
+    host = HOST['ding_robot'] + token
     headers = {"Content-Type": "application/json; charset=UTF-8"}
 
-    report_url = f"http://{ip}:{port}/job/{job_name}/{build_number}/allure/"
+    report_url = f"{HOST['jenkins']}"
 
     msg_body = {
         "msgtype": "markdown",
@@ -64,21 +61,18 @@ def send_wechat(*args):
     :return:
     """
     config = NOTICE_TEMP.get('wechat')
-    ip = config.get('ip')
-    port = config.get('port')
     title = config.get('title')
     text = config.get('text')
-    token = config.get('token')
-    job_name, build_number, total, result, passrate, time, passed, failed, skiped, error = args
+    job_name, build_number, total, result, passrate, time, passed, failed, skiped, error, token = args
 
     time = 60
     m, s = divmod(time, 60)
     h, m = divmod(m, 60)
 
-    host = f"https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={token}"
+    host = HOST['wechat_robot'] + token
     headers = {"Content-Type": "application/json; charset=UTF-8"}
 
-    report_url = f"http://{ip}:{port}/job/{job_name}/{build_number}/allure/"
+    report_url = f"{HOST['jenkins']}"
 
     msg_body = {
         "msgtype": "markdown",
