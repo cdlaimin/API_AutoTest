@@ -3,11 +3,11 @@ import time
 import warnings
 from functools import wraps
 
-from loguru import logger
 from pytest import deprecated_call
 from requests.exceptions import HTTPError, SSLError, Timeout, URLRequired, TooManyRedirects
 
 from utils.suport.exception import RequestError
+from utils.suport.logger import logger
 
 
 def api_logger(func):

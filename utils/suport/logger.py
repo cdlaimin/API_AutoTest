@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 
-from loguru import logger
+from loguru import logger as log
 
 from conf import BASE_DIR
 
@@ -40,4 +40,6 @@ config = {
     "extra": {"user": "someone"}
 }
 
-logger.configure(**config)
+log.configure(**config)
+
+logger = log
