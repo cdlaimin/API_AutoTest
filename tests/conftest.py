@@ -28,8 +28,8 @@ def pytest_addoption(parser):
     """
     parser.addoption('--target', action='store', type=str, default='all', help='执行哪些agent，默认执行全部')
     parser.addoption('--job_name', action='store', type=str, default=None, help='jenkins执行时，job任务名称')
-    parser.addoption('--build_number', action='store', type=int, default=None, help='当前job的构建number')
-    parser.addoption('--send_wechat', action='store', type=bool, default=False, help='是否发送测试报告到企微群')
+    parser.addoption('--build_number', action='store', type=str, default=None, help='当前job的构建number')
+    parser.addoption('--send_wechat', action='store', type=str, default='false', help='是否发送测试报告到企微群')
     parser.addoption('--wechat_token', action='store', type=str, default=None, help='企微群消息token')
 
 
@@ -123,7 +123,7 @@ def pytest_runtest_makereport(item, call):
         logger.error(f'捕获异常：{call.excinfo}')
     if call.when == 'call':
         # 动态收集用例信息到allure
-        # collect_item_info(item)
+        collect_item_info(item)
 
         # 获取当前阶段执行结果的报告对象。三个属性：阶段属性when、阶段执行结果属性outcome、nodeid
         # when取值：setup、call、teardown
