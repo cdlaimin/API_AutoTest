@@ -1,5 +1,5 @@
 # jenkins 报告
-jenkins: http://121.4.47.229:3600/job/{job_name}/{build_number}/allure
+jenkins: http://121.4.47.229:3600/job/{}/{}/allure
 
 # 钉钉群消息机器人
 ding_robot: https://oapi.dingtalk.com/robot/send?access_token=

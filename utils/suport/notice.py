@@ -72,7 +72,7 @@ def send_wechat(*args):
     host = HOST['wechat_robot'] + token
     headers = {"Content-Type": "application/json; charset=UTF-8"}
 
-    report_url = f"{HOST['jenkins']}"
+    report_url = HOST['jenkins'].format(job_name, build_number)
 
     msg_body = {
         "msgtype": "markdown",
