@@ -158,6 +158,6 @@ def pytest_unconfigure(config):
     :param config: pytest Config 对象
     :return:
     """
-    if os.environ.get('PYTEST_XDIST_WORKER') == 'master':
+    # if os.environ.get('PYTEST_XDIST_WORKER') == 'master':
         # 分布式执行时，收集从机上的日志到master上
-        gather_logs()
+        # gather_logs()
