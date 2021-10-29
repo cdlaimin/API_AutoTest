@@ -34,20 +34,20 @@ services:
     command: "python /depends/nodeServer.py"
 
 
-  pytest_slave_002:
-    image: demo:latest
-    restart: always
-    volumes:
-      - /var/local/jenkins/jenkins_home/workspace/job_name/logs/node_02:/pytest_workdir/pyexecnetcache/logs
-      - /var/local/jenkins/jenkins_home/workspace/job_name:/pytest_workdir/pyexecnetcache
-    logging:
-      driver: json-file
-      options:
-        max-size: "30m"
-        max-file: "5"
-    depends_on:
-      - pytest_master
-    links:
-      - pytest_master
-    command: "python /depends/nodeServer.py"
+#  pytest_slave_002:
+#    image: demo:latest
+#    restart: always
+#    volumes:
+#      - /var/local/jenkins/jenkins_home/workspace/job_name/logs/node_02:/pytest_workdir/pyexecnetcache/logs
+#      - /var/local/jenkins/jenkins_home/workspace/job_name:/pytest_workdir/pyexecnetcache
+#    logging:
+#      driver: json-file
+#      options:
+#        max-size: "30m"
+#        max-file: "5"
+#    depends_on:
+#      - pytest_master
+#    links:
+#      - pytest_master
+#    command: "python /depends/nodeServer.py"
 
