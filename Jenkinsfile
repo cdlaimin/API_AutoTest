@@ -10,7 +10,7 @@ pipeline {
         string(name: "wechat_token", defaultValue: "73d36c76-5e62-43fd-b18d-eb710fcb4c0e", description: "企微群token")
     }
     environment {
-        PATH = "$PATH:/usr/local/bin/"
+        PATH = "$PATH:/usr/local/bin/docker-compose"
     }
     stages {
         stage("构建docker镜像") {
@@ -24,7 +24,7 @@ pipeline {
                 echo "==================停止异常容器=================="
                 // 当前stage报错时，设置构建结果为成功，保证后续stage继续执行
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
-                    sh label: '停止测试并删除容器', script: 'docker-compose down'
+                    sh label: '停止测试并删除容器', script: '/usr/local/bin/docker-compose down'
                 }
             }
         }
@@ -59,7 +59,7 @@ pipeline {
                 // 当前测试在mac上进行，unix和linux sed 命令有些区别，使用 -i 时，要在后面加上一个空字符。linux不能加
                 sh label: "指定启动镜像", script: "sed -i 's/demo/${JOB_NAME}_${params.git_branch}/g' docker-compose.yaml"
                 sh label: "指定挂载目录", script: "sed -i 's/job_name/${JOB_NAME}/g' docker-compose.yaml"
-                sh label: "启动容器", script: "docker-compose up -d"
+                sh label: "启动容器", script: "/usr/local/bin/docker-compose up -d"
                 sh label: "修改shell操作权限", script: "chmod 777 run.sh"
             }
         }
@@ -83,7 +83,7 @@ pipeline {
                 ])
             }
             echo "==================停止测试并删除容器==================="
-            sh label: '停止测试并删除容器', script: 'docker-compose down'
+            sh label: '停止测试并删除容器', script: '/usr/local/bin/docker-compose down'
         }
     }
 }
