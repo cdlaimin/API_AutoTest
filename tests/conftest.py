@@ -147,8 +147,9 @@ def pytest_sessionfinish(session, exitstatus):
 
         # 发送测试结果到测试群。钉钉或者企业微信
         results = gather_results(session, exitstatus)
-        send_wechat(*results, session.config.getoption('wechat_token'))
-        # send_dingtalk(*results)
+        if session.config.getoption('send_wechat') == 'true':
+            send_wechat(*results, session.config.getoption('wechat_token'))
+            # send_dingtalk(*results)
 
 
 def pytest_unconfigure(config):
