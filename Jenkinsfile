@@ -73,6 +73,8 @@ pipeline {
     }
     post {
         always {
+            echo "==================停止测试并删除容器==================="
+            sh label: '停止测试并删除容器', script: '/usr/local/bin/docker-compose down'
             echo "==================正在收集并生成报告=================="
             script {
                 allure([
@@ -82,8 +84,6 @@ pipeline {
                     results: [[path: "allure-results"]]
                 ])
             }
-            echo "==================停止测试并删除容器==================="
-            sh label: '停止测试并删除容器', script: '/usr/local/bin/docker-compose down'
         }
     }
 }
