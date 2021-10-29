@@ -123,7 +123,7 @@ def pytest_runtest_makereport(item, call):
         logger.error(f'捕获异常：{call.excinfo}')
     if call.when == 'call':
         # 动态收集用例信息到allure
-        collect_item_info(item)
+        # collect_item_info(item)
 
         # 获取当前阶段执行结果的报告对象。三个属性：阶段属性when、阶段执行结果属性outcome、nodeid
         # when取值：setup、call、teardown
