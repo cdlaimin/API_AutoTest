@@ -25,16 +25,14 @@ def collect_item_info(item):
     if case_info:
         # 开始写入用例信息
         dynamic.link(author)
-        dynamic.feature(case_info.get('model'))
-        dynamic.story(case_info.get('func'))
-        dynamic.title(case_info.get('case_name'))
-        dynamic.description(case_info.get('description'))
-        level = case_info.get('level')
-        if level == 'H':
+        dynamic.title(case_info.get('CaseName'))
+        dynamic.description(case_info.get('desc'))
+        priority = case_info.get('priority')
+        if priority == '高':
             dynamic.severity('critical')
-        if level == 'M':
+        if priority == '中':
             dynamic.severity('normal')
-        if level == 'L':
+        if priority == '低':
             dynamic.severity('minor')
     else:
         logger.warning(f'用例:{case_id} 信息不存在，请检查！')
