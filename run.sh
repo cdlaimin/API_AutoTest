@@ -5,4 +5,5 @@ names=( `/usr/local/bin/docker-compose ps | grep ${project_name} | awk '{print $
 echo "=================开始进行测试,当前测试HUB分支: $4================="
 echo ${names[0]}
 echo ${names[1]}
-docker exec -i ${names[0]} pytest -m "$5" --show-capture=no --job_name="$1" --build_number="$2" --target="$3" --send_wechat="$6" --wechat_token="$7" -d --tx socket=${names[1]}:8888 --tx socket=${names[2]}:8888 --rsyncdir tests/ tests/ --alluredir=allure-results --clean-alluredir --reruns=1 || true
+#docker exec -i ${names[0]} pytest -m "$5" --show-capture=no --job_name="$1" --build_number="$2" --target="$3" --send_wechat="$6" --wechat_token="$7" -d --tx socket=${names[1]}:8888 --tx socket=${names[2]}:8888 --rsyncdir tests/ tests/ --alluredir=allure-results --clean-alluredir --reruns=1 || true
+docker exec -i ${names[0]} pytest -m "$5" --show-capture=no --job_name="$1" --build_number="$2" --target="$3" --send_wechat="$6" --wechat_token="$7" -d --tx socket=${names[1]}:8888 --rsyncdir tests/ tests/ --alluredir=allure-results --clean-alluredir --reruns=1 || true
