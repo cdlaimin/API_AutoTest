@@ -1,11 +1,11 @@
 import allure
 
-from libs.sql.test_plat import DBOps
+from libs.database.test_plat import Operation
 from utils.test.execute import start_test, relate
 from utils.test.verify import verify
 
 
-class Template:
+class Template(Operation):
     """模版类"""
 
     def __init__(self, data):
@@ -13,14 +13,7 @@ class Template:
         for key, value in data.items():
             self.__setattr__(key, value)
 
-        # 实例化数据库操作
-        self.db = DBOps()
-
         super().__init__()
-
-    def __del__(self):
-        # 后置
-        self.db.delete_test_job_by_id(self.id)
 
     @allure.step("创建测试任务")
     def test_step_01(self, session):
@@ -41,3 +34,6 @@ class Template:
         response = start_test(session, self.step_02)
         # 验证结果
         verify(expect, response)
+
+        self.delete_test_job_by_id(self.id)
+

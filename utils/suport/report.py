@@ -7,7 +7,7 @@ from loguru import logger
 
 from conf import BASE_DIR
 from utils.suport.exception import DirectoryNotExist
-from utils.operate.document import get_case_info, load_yaml
+from utils.operation.file import get_case_info, load_yaml
 
 
 def collect_item_info(item):

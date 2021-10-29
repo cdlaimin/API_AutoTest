@@ -8,7 +8,7 @@ from loguru import logger
 
 from conf import HOST
 from utils.suport.deceiver import FakerData
-from utils.operate.document import load_json
+from utils.operation.file import load_json
 
 
 def assemble_dynamic_data(data):

@@ -1,8 +1,8 @@
+from utils.operation.database import DataBase
 from utils.suport.singleton import Singleton
-from utils.operate.database import DataBase
 
 
-class DBOps(DataBase, metaclass=Singleton):
+class Operation(DataBase, metaclass=Singleton):
     """数据库相关操作"""
 
     def __init__(self):

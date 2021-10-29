@@ -2,7 +2,7 @@ import allure
 import pytest
 
 from libs.common.login import TestPlat
-from libs.sql.test_plat import DBOps
+from libs.database.test_plat import Operation
 from utils.test.assemble import build_test_flow, build_test_data
 
 
@@ -44,5 +44,6 @@ def pytest_unconfigure(config):
     实例化一次数据库
     清理自动化测试数据
     """
-    db = DBOps()
+    # 处理自动化测试数据
+    db = Operation()
     db.delete_case_by_id()

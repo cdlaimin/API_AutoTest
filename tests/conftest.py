@@ -8,7 +8,7 @@ from loguru import logger
 
 from conf import BASE_DIR
 from utils.suport.report import collect_item_info, write_report_information
-from utils.operate.document import get_case_id
+from utils.operation.file import get_case_id
 from utils.suport.gather import gather_logs, gather_results
 from utils.suport.notice import send_wechat, send_dingtalk
 

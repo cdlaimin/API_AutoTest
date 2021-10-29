@@ -1,6 +1,6 @@
 import os
 
-from utils.operate.document import load_ini, load_yaml
+from utils.operation.file import load_ini, load_yaml
 
 # 项目根路径
 BASE_DIR = os.path.abspath(__file__).rsplit('/', 2)[0]
