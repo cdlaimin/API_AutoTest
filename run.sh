@@ -1,7 +1,7 @@
 #!/bin/bash
 dir=$(cd `dirname $0`; pwd)
 project_name=${dir##*/}
-names=( `/usr/local/bin/docker-compose ps | awk '{print $1}' | grep ${project_name}` )
+names=( `/usr/local/bin/docker-compose ps | grep ${project_name} | awk '{print $1}' ` )
 echo "=================开始进行测试,当前测试HUB分支: $4================="
 echo ${names[0]}
 echo ${names[1]}
