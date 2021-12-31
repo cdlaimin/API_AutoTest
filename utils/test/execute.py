@@ -1,6 +1,7 @@
 import inspect
 import json
 import types
+import allure
 
 from utils.suport.exception import FuncBuildError
 from utils.suport.logger import api_logger

@@ -14,16 +14,24 @@ def collect_item_info(item):
     """动态收集用例信息"""
 
     yaml_path = item.module.__file__.replace('.py', '.yaml')
+
+    # 获取用例ID
     case_full_name = item.name
     case_id = re.findall("\\[(.+?)\\]", case_full_name)[0]
-    author = load_yaml(yaml_path).get('owner')
+
+    # 获取用例所属服务
+    server = re.findall("/tests/(.+?)/", yaml_path)[0]
+
+    # 获取作者信息
+    author = load_yaml(yaml_path).get('author')
 
     # 获取用例信息
     case_info = get_case_info(yaml_path, case_id)
 
     if case_info:
         # 开始写入用例信息
-        dynamic.link(author)
+        dynamic.feature(server)
+        dynamic.issue(author)
         dynamic.title(case_info.get('CaseName'))
         dynamic.description(case_info.get('desc'))
         priority = case_info.get('priority')

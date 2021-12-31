@@ -30,5 +30,3 @@ def admin(request):
     管理员
     """
     return request.config.TP_ROLE.admin
-
-

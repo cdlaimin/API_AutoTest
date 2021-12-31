@@ -39,7 +39,7 @@ config = {
         {"sink": log_path(), "format": "{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}", "level": "INFO",
          "colorize": False, "enqueue": True},
         # loguru报告重定logging输出
-        {"sink": PropagateHandler(), "format": "{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}", "level": "INFO",
+        {"sink": PropagateHandler(), "format": "| {time:YYYY-MM-DD HH:mm:ss} | {message}", "level": "INFO",
          "colorize": False, "enqueue": True, "backtrace": True, "diagnose": True},
         # 输出到控制台
         {"sink": sys.stdout, "level": "INFO", "colorize": True, "enqueue": False}
