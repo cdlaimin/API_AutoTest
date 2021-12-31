@@ -131,7 +131,7 @@ def pytest_runtest_makereport(item, call):
     if call.excinfo:
         # 由框架层统一记录用例执行过程中的异常信息
         logger.error(f'ERROR: {call.excinfo}')
-        pytest.fail(msg=f"测试执行出现异常: {call.excinfo}")
+        pytest.fail(msg=f"测试执行出现异常: {call.excinfo}", pytrace=False)
     if call.when == 'call':
         # 动态收集用例信息到allure
         collect_item_info(item)
@@ -174,17 +174,17 @@ def pytest_unconfigure(config):
     """
     # 清理测试数据
     # 1、导入数据清理模块
-    module = import_module('libs.clear')
+    module = import_module('libs.clean')
 
     # 2、获取到模块中所有的类名
     cls_members = []
-    for class_name, _ in inspect.getmembers(module, inspect.isclass):
-        cls_members.append(class_name)
+    for cls_name, _ in inspect.getmembers(module, inspect.isclass):
+        cls_members.append(cls_name)
 
     # 3、导入具体的清理类完成清理
     env = config.getoption('env')
     for cls in cls_members:
-        getattr(module, cls)(env).clear()
+        getattr(module, cls)(env).clean()
 
 
 @pytest.fixture()

@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class ClearDB(metaclass=ABCMeta):
+class Clean(metaclass=ABCMeta):
     """
     数据库测试数据清理基类
     """
@@ -10,5 +10,5 @@ class ClearDB(metaclass=ABCMeta):
         self.instance = database(env)
 
     @abstractmethod
-    def clear(self) -> None:
+    def clean(self) -> None:
         pass

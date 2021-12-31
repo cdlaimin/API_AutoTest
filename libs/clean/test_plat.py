@@ -1,5 +1,5 @@
 from conf import ACCOUNT
-from utils.factory import ClearDB
+from utils.factory import Clean
 from utils.suport.other import switch_name
 from utils.tools.db import DataBase
 from utils.suport.singleton import Singleton
@@ -38,7 +38,7 @@ class TestPlat(DataBase, metaclass=Singleton):
 
     # 根据自动化专用账户统一清理测试任务
     def clear_job(self):
-        # 查询由测试账号创建的所有用例id
+        # 查询由测试账号创建的所有任务id
         job_ids = []
         query_sql = "SELECT id FROM test_plat.tp_job WHERE create_user_id = %s;"
         for user_id in self.ids:
@@ -53,16 +53,16 @@ class TestPlat(DataBase, metaclass=Singleton):
             self.execute_many(sql, job_ids)
 
 
-class ClearTestPlat(ClearDB):
+class CleanTestPlat(Clean):
     """
     清理test_plat具体类
     """
 
     def __init__(self, env):
-        super(ClearTestPlat, self).__init__(TestPlat, env)
+        super(CleanTestPlat, self).__init__(TestPlat, env)
 
     # 实现具体的清理过程
-    def clear(self) -> None:
+    def clean(self) -> None:
         self.instance.clear_job()
         self.instance.clear_case()
 
