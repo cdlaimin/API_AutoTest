@@ -1,10 +1,10 @@
 #!/bin/bash
 dir=$(
-  "cd $(dirname "$0")"
+  cd $(dirname "$0")
   pwd
 )
 project_name=${dir##*/}
-names=("$(docker-compose ps | grep "${project_name}" | awk '{print $1}')")
+names=($(docker-compose ps | grep "${project_name}" | awk '{print $1}'))
 echo "=================开始进行测试,当前测试HUB分支: $2================="
 # 记录一个坑：
 # pytest 基于 docker socket分布式测试时，要保证下面命令中 socket=容器名:8888，不能使用容器ID
