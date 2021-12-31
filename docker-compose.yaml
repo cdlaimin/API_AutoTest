@@ -2,7 +2,6 @@ version: "2.0"
 services:
   pytest_master:
     image: demo:latest
-    container_name: demo
     restart: always
     volumes:
       - /var/local/myapp/jenkins/jenkins_home/workspace/job_name/logs:/pytest_workdir/logs
