@@ -56,7 +56,7 @@ def write_report_information(session):
             env = session.config.getoption('env')
             with open(os.path.join(allure_report_path, 'environment.properties'), 'w+', encoding='utf-8') as f:
                 if server == 'all':
-                    for server, hosts in HOSTS:
+                    for server, hosts in HOSTS.items():
                         if hosts.get(env):
                             f.write(f"{server}_{env}={hosts.get(env)}\n")
                 else:
