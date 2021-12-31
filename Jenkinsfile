@@ -1,4 +1,5 @@
 pipeline {
+    // 创建 JOB 时，任务名称 小写，且避免使用短横线、下划线等其他符号
     agent any
     options {
         disableConcurrentBuilds()
@@ -71,7 +72,7 @@ pipeline {
     post {
         always {
             echo "==================停止测试并删除容器==================="
-//             sh label: '测试执行结束, 删除测试容器', script: 'docker-compose down'
+            sh label: '测试执行结束, 删除测试容器', script: 'docker-compose down'
             echo "==================正在收集并生成报告=================="
             script {
                 allure([

@@ -5,7 +5,7 @@ import shutil
 from allure import dynamic
 from loguru import logger
 
-from conf import BASE_DIR
+from conf import BASE_DIR, HOSTS
 from utils.suport.exception import DirectoryNotExist
 from utils.tools.file import get_case_info, load_yaml
 
@@ -51,10 +51,21 @@ def write_report_information(session):
             # 复制测试结果分类文件到报告目录
             shutil.copy(category_file_path, allure_report_path)
 
-            # 写入测试app信息
-            target = session.config.getoption('target')
+            # 写入测试环境信息
+            server = session.config.getoption('server')
+            env = session.config.getoption('env')
             with open(os.path.join(allure_report_path, 'environment.properties'), 'w+', encoding='utf-8') as f:
-                pass
+                if server == 'all':
+                    for server, hosts in HOSTS:
+                        if hosts.get(env):
+                            f.write(f"{server}_{env}={hosts.get(env)}\n")
+                else:
+                    server_list = server.split(',')
+                    for server in server_list:
+                        hosts = HOSTS.get(server)
+                        if hosts:
+                            if hosts.get(env):
+                                f.write(f"{server}_{env}={hosts.get(env)}\n")
         except Exception as e:
             logger.warning(f'导入用例分类信息失败！error: {e}')
     else:
