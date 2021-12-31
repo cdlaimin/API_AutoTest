@@ -4,8 +4,8 @@ services:
     image: demo:latest
     restart: always
     volumes:
-      - /var/local/jenkins/jenkins_home/workspace/job_name/logs:/pytest_workdir/logs
-      - /var/local/jenkins/jenkins_home/workspace/job_name:/pytest_workdir
+      - /var/local/myapp/jenkins/jenkins_home/workspace/job_name/logs:/pytest_workdir/logs
+      - /var/local/myapp/jenkins/jenkins_home/workspace/job_name:/pytest_workdir
     logging:
       driver: json-file
       options:
@@ -17,11 +17,10 @@ services:
     image: demo:latest
     restart: always
     volumes:
-      # - /var/lib/jenkins/workspace/job_name/logs/node_01:/logs
-      - /var/local/jenkins/jenkins_home/workspace/job_name/logs/node_01:/pytest_workdir/pyexecnetcache/logs
+      - /var/local/myapp/jenkins/jenkins_home/workspace/job_name/logs/node_01:/pytest_workdir/pyexecnetcache/logs
       # worker执行机需要将项目放到pyexecnetcache下，才能完成与master的通信
       # pytest-xdist是使用了python自带的execnet库，实例化了一个网关来实现主从之间的通信。默认顶级工作目录就是pyexecnetcache
-      - /var/local/jenkins/jenkins_home/workspace/job_name:/pytest_workdir/pyexecnetcache
+      - /var/local/myapp/jenkins/jenkins_home/workspace/job_name:/pytest_workdir/pyexecnetcache
     logging:
       driver: json-file
       options:
@@ -34,20 +33,20 @@ services:
     command: "python /depends/nodeServer.py"
 
 
-#  pytest_slave_002:
-#    image: demo:latest
-#    restart: always
-#    volumes:
-#      - /var/local/jenkins/jenkins_home/workspace/job_name/logs/node_02:/pytest_workdir/pyexecnetcache/logs
-#      - /var/local/jenkins/jenkins_home/workspace/job_name:/pytest_workdir/pyexecnetcache
-#    logging:
-#      driver: json-file
-#      options:
-#        max-size: "30m"
-#        max-file: "5"
-#    depends_on:
-#      - pytest_master
-#    links:
-#      - pytest_master
-#    command: "python /depends/nodeServer.py"
+  pytest_slave_002:
+    image: demo:latest
+    restart: always
+    volumes:
+      - /var/local/myapp/jenkins/jenkins_home/workspace/job_name/logs/node_02:/pytest_workdir/pyexecnetcache/logs
+      - /var/local/myapp/jenkins/jenkins_home/workspace/job_name:/pytest_workdir/pyexecnetcache
+    logging:
+      driver: json-file
+      options:
+        max-size: "30m"
+        max-file: "5"
+    depends_on:
+      - pytest_master
+    links:
+      - pytest_master
+    command: "python /depends/nodeServer.py"
 

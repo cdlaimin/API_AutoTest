@@ -7,7 +7,7 @@ class Singleton(type):
     __instance_dict = defaultdict()
 
     def __call__(cls, *args, **kwargs):
-        key = str(args) + str(kwargs)
+        key = cls.__module__ + cls.__name__ + str(args) + str(kwargs)
 
         with Singleton.__instance_lock:
             if key not in cls.__instance_dict:

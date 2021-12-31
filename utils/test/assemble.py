@@ -1,21 +1,21 @@
 import json
-import os
 import re
 from importlib import import_module
 
-import pytest
-from loguru import logger
+import jsonpath
 
-from conf import HOST
-from utils.suport.deceiver import FakerData
-from utils.operation.file import load_json
+from conf import HOSTS
+from utils.suport.exception import CaseStepsError, SourceDataError
+from utils.suport.logger import logger
+from utils.suport.simulate import FakerData
+from utils.tools.file import get_case_info
 
 
-def assemble_dynamic_data(data):
+def __assemble_dynamic_data(data):
     """
     为用例写入动态数据
-    :param data: dict
-    :return: dict
+    :param data:
+    :return:
     """
     json_data = json.dumps(data)
     # 正则匹配出需要替换的动态数据
@@ -39,79 +39,57 @@ def assemble_dynamic_data(data):
     return json.loads(json_data, strict=False)
 
 
-def build_test_data(request, target):
+def assemble(request) -> list:
     """
-    为单接口构建测试数据
+    为用例API构建测试数据
     :param request: pytest request对象
-    :param target: 测试对象
-    :return: 加工后的json文件数据  dict
+    :return: 加工后的json文件数据 [dict, dict, ...]
     """
+    # 记录一下日志，开始组装测试数据也就意味着测试开始了
+    logger.info("====================分割线====================")
+    logger.info(f"开始测试 - {request.param}")
+
+    # 获取测试相关信息
     case_id = request.param
-    json_path = request.module.__file__.replace('.py', '.json')
+    yaml_path = request.module.__file__.replace('.py', '.yaml')
+    server = yaml_path.split("/tests/")[1].split("/")[0]
+    env = request.config.getoption("env")
 
-    # 读取测试数据
-    file = load_json(json_path)
-    data = file.get(case_id)
+    # 用例测试步骤
+    steps = get_case_info(yaml_path, case_id).get("steps", None)
+    if steps is None:
+        raise CaseStepsError(f"用例 {case_id} 信息详情中没有 steps 属性")
 
-    data['url'] = HOST[target] + file['url']
-    data['method'] = file['method']
+    # 每个用例可能有多个接口，同一保存到列表中
+    api_origin_list = []
+    api_list = []
 
-    # 检查是否定制请求头
-    if 'headers' in file:
-        data['headers'] = file['headers']
-    else:
-        data['headers'] = {"Content-Type": "application/json;charset=UTF-8"}
+    # 根据测试步骤从基础数据中获取需要的接口数据
+    source_data = getattr(request.config, server)
+    for stage in steps:
+        api_data = jsonpath.jsonpath(source_data, "$." + stage)
+        if not api_data:
+            raise SourceDataError(f"服务 {server} 的测试数据中未找到接口 {stage} 相关信息")
+        api_origin_list.append((stage.split(".", 1)[0], api_data[0]))
 
-    # 组装动态数据
-    data = assemble_dynamic_data(data)
+    # 导入API模块
+    api_module = import_module("libs.api." + server)
 
-    return data
+    # 组装基础数据，将其组装成可执行数据
+    for api_name, api_data in api_origin_list:
+        # 获取 api 信息
+        api_info = getattr(api_module, api_name)
+        # 拼接 url，保存请求方式
+        api_data['url'] = HOSTS[server][env] + api_info.get('route')
+        api_data['method'] = api_info.get('method')
+        # 检查请求头，默认 "Content-Type": "application/json;charset=UTF-8"
+        if 'headers' in api_info:
+            api_data['headers'] = api_info.get('headers')
+        else:
+            api_data['headers'] = {"Content-Type": "application/json;charset=UTF-8"}
 
+        # 生成动态数据
+        api_list.append((api_name, __assemble_dynamic_data(api_data)))
 
-def build_test_flow(request, target):
-    """
-    为多接口流程用例构建测试数据
-    :param request: pytest request对象
-    :param target: 测试对象
-    :return: 包含流程中具体step函数名的list
-    """
-    case_id = request.param
-    json_path = request.module.__file__.replace('.py', '.json')
-
-    # 读取测试数据
-    file = load_json(json_path)
-    data = file.get(case_id)
-
-    # 组装动态数据
-    data = assemble_dynamic_data(data)
-
-    # 拼接url、拼接headers
-    for key, value in data.items():
-        data[key]['url'] = HOST[target] + data[key]['url']
-
-        if 'headers' not in data[key]:
-            data[key]['headers'] = {"Content-Type": "application/json;charset=UTF-8"}
-
-    # 找到flow文件路径，在libs中
-    module_path = os.path.join('libs/flow', target, request.module.__name__.rsplit('.', 1)[1].split('_', 1)[1])
-    module_path = module_path.replace('/', '.')
-
-    # 从flow文件中导入流程类。类名固定 Template
-    try:
-        flow_module = import_module(module_path)
-        flow_class = getattr(flow_module, 'Template')
-    except ModuleNotFoundError:
-        logger.error(f"依赖模板文件不存在:{module_path}")
-        pytest.xfail(f"依赖模板文件不存在:{module_path}")
-
-    # 实例化类
-    flow_object = flow_class(data)
-
-    # 获取需要执行的函数名称列表
-    funcs = filter(lambda func: re.match('test_', func), flow_class.__dict__)
-
-    # 将实例化对象的函数组装成可执行的函数列表
-    # exec_list = list(map(lambda func: getattr(flow_object, func), func_list))
-    exec_list = [getattr(flow_object, func) for func in funcs]
-
-    return exec_list
+    # 如果 api_list 长度为 1，表示为 单接口 用例
+    return api_list

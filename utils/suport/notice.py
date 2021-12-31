@@ -5,7 +5,7 @@ import requests
 from loguru import logger
 from urllib3.exceptions import InsecureRequestWarning
 
-from conf import NOTICE_TEMP, HOST
+from conf import NOTICE, HOSTS
 
 
 def send_dingtalk(*args):
@@ -13,7 +13,7 @@ def send_dingtalk(*args):
     发送结果到钉钉群
     :return:
     """
-    config = NOTICE_TEMP.get('dingtalk')
+    config = NOTICE.get('dingtalk')
     title = config.get('title')
     text = config.get('text')
     job_name, build_number, total, result, passrate, time, passed, failed, skiped, error, token = args
@@ -22,10 +22,10 @@ def send_dingtalk(*args):
     m, s = divmod(time, 60)
     h, m = divmod(m, 60)
 
-    host = HOST['ding_robot'] + token
+    host = HOSTS['ding_robot'] + token
     headers = {"Content-Type": "application/json; charset=UTF-8"}
 
-    report_url = f"{HOST['jenkins']}"
+    report_url = f"{HOSTS['jenkins']}"
 
     msg_body = {
         "msgtype": "markdown",
@@ -60,7 +60,7 @@ def send_wechat(*args):
     发送结果到企业微信
     :return:
     """
-    config = NOTICE_TEMP.get('wechat')
+    config = NOTICE.get('wechat')
     title = config.get('title')
     text = config.get('text')
     job_name, build_number, total, result, passrate, time, passed, failed, skiped, error, token = args
@@ -69,10 +69,10 @@ def send_wechat(*args):
     m, s = divmod(time, 60)
     h, m = divmod(m, 60)
 
-    host = HOST['wechat_robot'] + token
+    host = HOSTS['wechat_robot'] + token
     headers = {"Content-Type": "application/json; charset=UTF-8"}
 
-    report_url = HOST['jenkins'].format(job_name, build_number)
+    report_url = HOSTS['jenkins'].format(job_name, build_number)
 
     msg_body = {
         "msgtype": "markdown",
@@ -98,7 +98,7 @@ def send_wechat(*args):
 
 
 def send_upload_result_to_wechat(**kwargs):
-    config = NOTICE_TEMP.get('wechat')
+    config = NOTICE.get('wechat')
     token = config.get('token')
 
     total = kwargs.get('total')

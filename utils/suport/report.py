@@ -7,7 +7,7 @@ from loguru import logger
 
 from conf import BASE_DIR
 from utils.suport.exception import DirectoryNotExist
-from utils.operation.file import get_case_info, load_yaml
+from utils.tools.file import get_case_info, load_yaml
 
 
 def collect_item_info(item):
@@ -16,7 +16,6 @@ def collect_item_info(item):
     yaml_path = item.module.__file__.replace('.py', '.yaml')
     case_full_name = item.name
     case_id = re.findall("\\[(.+?)\\]", case_full_name)[0]
-
     author = load_yaml(yaml_path).get('owner')
 
     # 获取用例信息

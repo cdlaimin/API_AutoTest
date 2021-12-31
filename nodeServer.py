@@ -3,7 +3,7 @@
 """
     start socket based minimal readline exec server
 
-    it can exeuted in 2 modes of operation
+    it can exeuted in 2 modes of tools
 
     1. as normal script, that listens for new connections
 

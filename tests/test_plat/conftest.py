@@ -1,49 +1,34 @@
-import allure
+from importlib import import_module
+
 import pytest
 
-from libs.common.login import TestPlat
-from libs.database.test_plat import Operation
-from utils.test.assemble import build_test_flow, build_test_data
+from utils.suport.role import TestPlatRole
 
 
-@pytest.fixture()
-@allure.step('准备测试数据')
-def tp_data(request):
-    """
-    通用用例入参夹具
-    :param request:
-    :return:
-    """
-    # 构造测试数据
-    data = build_test_data(request, 'test_plat')
+def pytest_configure(config):
+    # 完成对测试角色对象的初始化
+    env = config.getoption("env")
+    config.TP_ROLE = TestPlatRole(env)
 
-    return data
-
-
-@pytest.fixture()
-@allure.step('准备测试数据')
-def tp_flow(request):
-    """
-    多接口流程用例入参夹具
-    :param request:
-    :return:
-    """
-    # 构造测试数据
-    func_list = build_test_flow(request, 'test_plat')
-
-    return func_list
+    # 加载测试数据到配置
+    # 从 libs.data 中读取接口基础数据信息
+    data_module = import_module("libs.data")
+    config.test_plat = getattr(data_module, "test_plat")
 
 
 @pytest.fixture(scope='session')
-def tp_test_session():
-    return TestPlat('test').get_session
+def staff(request):
+    """
+    普通职员
+    """
+    return request.config.TP_ROLE.staff
 
 
-def pytest_unconfigure(config):
+@pytest.fixture(scope="session")
+def admin(request):
     """
-    实例化一次数据库
-    清理自动化测试数据
+    管理员
     """
-    # 处理自动化测试数据
-    db = Operation()
-    db.delete_case_by_id()
+    return request.config.TP_ROLE.admin
+
+

@@ -1,16 +1,18 @@
-import os
-import re
-from datetime import datetime
+import inspect
 
+import allure
 import pytest
 import xdist
-from loguru import logger
 
-from conf import BASE_DIR
-from utils.suport.report import collect_item_info, write_report_information
-from utils.operation.file import get_case_id
+from datetime import datetime
+from importlib import import_module
+
+from utils.suport import logger
+from utils.test import assemble
+from utils.tools.file import get_case_id
 from utils.suport.gather import gather_logs, gather_results
 from utils.suport.notice import send_wechat, send_dingtalk
+from utils.suport.report import collect_item_info, write_report_information
 
 
 def pytest_addoption(parser):
@@ -26,7 +28,9 @@ def pytest_addoption(parser):
     :param parser:
     :return:
     """
-    parser.addoption('--target', action='store', type=str, default='all', help='执行哪些agent，默认执行全部')
+    parser.addoption('--server', action='store', type=str, default='all',
+                     help='指定执行tests文件夹中那些服务，默认执行全部。如果需要指定多个服务，服务名之间用用英文逗号隔开。如:oms,wms')
+    parser.addoption('--env', action='store', type=str, default='dev', help='指定服务的测试环境，默认dev')
     parser.addoption('--job_name', action='store', type=str, default=None, help='jenkins执行时，job任务名称')
     parser.addoption('--build_number', action='store', type=str, default=None, help='当前job的构建number')
     parser.addoption('--send_wechat', action='store', type=str, default='false', help='是否发送测试报告到企微群')
@@ -43,8 +47,6 @@ def pytest_sessionstart(session):
     if xdist.is_xdist_master(session):
         # 将测试开始时间记录到option
         session.config.option.start_time = datetime.now()
-        # 设置环境变量
-        os.environ.setdefault('PYTEST_XDIST_WORKER', 'master')
 
 
 def pytest_generate_tests(metafunc):
@@ -62,27 +64,34 @@ def pytest_generate_tests(metafunc):
 
     # 夹具参数化
     for fixture in fixtures:
-        if fixture in ('tp_data', 'tp_flow'):  # 维护需要参数化的夹具
+        if fixture in ('api_list',):  # 维护需要参数化的夹具
             metafunc.parametrize(fixture, ids, indirect=True)
 
 
 def pytest_ignore_collect(path, config):
     """
     忽略收集用例钩子
-    根据要测试app来收集用例
+    根据要测试的服务来收集用例
     :param path: 当前收集路径的path类
     :param config: pytest config 对象
     :return:
     """
-    agent = config.getoption('target')
+    server = config.getoption('server')
 
-    # 如是app是默认值all则收集所有用例
-    if agent == 'all':
+    # 如是是all则收集所有用例
+    if server == 'all':
         pass
-    # 如果没有当前收集路径不是测试app所在路径，则忽略收集
+
+    # 如果没有当前收集路径不是测试server所在路径，则忽略收集
     # return True 表示忽略当前收集的path
-    elif not re.match(os.path.join(BASE_DIR, 'tests', agent), path.__str__()):
-        return True
+    else:
+        # 解析服务列表
+        server_list = server.split(',')
+        # 从 path 路径中截取当前收集路径所在服务
+        cur = path.__str__().split('/tests/')[1].split('/')[0]
+        # 如果服务不在指定的列表中，就忽略用例收集
+        if cur not in server_list:
+            return True
 
 
 # xdist分布式执行时调用，xdist内部钩子，不是pytest钩子
@@ -120,7 +129,9 @@ def pytest_runtest_makereport(item, call):
     # 获取当前接行阶段_Result对象
     out = yield
     if call.excinfo:
-        logger.error(f'捕获异常：{call.excinfo}')
+        # 由框架层统一记录用例执行过程中的异常信息
+        logger.error(f'ERROR: {call.excinfo}')
+        pytest.fail(msg=f"测试执行出现异常: {call.excinfo}")
     if call.when == 'call':
         # 动态收集用例信息到allure
         collect_item_info(item)
@@ -130,7 +141,7 @@ def pytest_runtest_makereport(item, call):
         # outcome取值：failed、passed
         # nodeid(测试用例的名字)
         result = out.get_result()
-        getattr(logger, 'info' if result.outcome == 'passed' else 'error')(f'测试结果:{result.outcome}')
+        getattr(logger, 'info' if result.outcome == 'passed' else 'error')(f'执行结束 {result.outcome.upper()}')
 
 
 def pytest_sessionfinish(session, exitstatus):
@@ -151,6 +162,9 @@ def pytest_sessionfinish(session, exitstatus):
             send_wechat(*results, session.config.getoption('wechat_token'))
             # send_dingtalk(*results)
 
+        # 分布式执行时，收集从机上的日志到master上
+        gather_logs()
+
 
 def pytest_unconfigure(config):
     """
@@ -158,6 +172,28 @@ def pytest_unconfigure(config):
     :param config: pytest Config 对象
     :return:
     """
-    # if os.environ.get('PYTEST_XDIST_WORKER') == 'master':
-        # 分布式执行时，收集从机上的日志到master上
-        # gather_logs()
+    # 清理测试数据
+    # 1、导入数据清理模块
+    module = import_module('libs.clear')
+
+    # 2、获取到模块中所有的类名
+    cls_members = []
+    for class_name, _ in inspect.getmembers(module, inspect.isclass):
+        cls_members.append(class_name)
+
+    # 3、导入具体的清理类完成清理
+    env = config.getoption('env')
+    for cls in cls_members:
+        getattr(module, cls)(env).clear()
+
+
+@pytest.fixture()
+@allure.step('准备测试数据')
+def api_list(request):
+    """
+    返回一个列表，由每个接口的测试数据组成
+    :param request: request 是 pytest 内置夹具，内置夹具可以直接作为自定义夹具的入参。目前常用的内置夹具: request、pytestconfig
+    :return: list
+    """
+    # 构造测试数据并返回
+    return assemble(request)

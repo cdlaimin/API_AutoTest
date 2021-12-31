@@ -1,50 +1,53 @@
+import inspect
 import json
-import re
+import types
 
-from utils.suport.decorator import api_logger, repeats
+from utils.suport.exception import FuncBuildError
+from utils.suport.logger import api_logger
+from utils.suport.templates import STANDARD_RUN
+from utils.test import verify, relate
 
 
-@repeats
 @api_logger
-def start_test(session, data: dict):
-    if 'json' in data['headers']['Content-Type'] and data['data']:
+def call_api(client, data: dict):
+    """
+    负责完成API接口请求工作
+    """
+    if data.get("data") and 'json' in data['headers']['Content-Type']:
         data['data'] = json.dumps(data['data'])
-    return session.request(**data)
-
-
-def relate(origin: dict, new: dict):
-    """
-    origin中，value格式为<xxx>的字符串，则认为需要在new中找到键为xxx的值，替换origin中的value
-    """
-    # 拆解new字典，将其多级结构拆成单级的字典
-    simple_dict = dict()
-
-    def parse_dict(data: dict):
-        for key, value in data.items():
-            if isinstance(value, (str, int)):
-                simple_dict[key] = value
+    if data.get("params") and 'json' in data['headers']['Content-Type']:
+        # params 参数中如果还有二级对象，需要将其转成 json 串
+        for key, value in data.pop("params").items():
             if isinstance(value, dict):
-                parse_dict(value)
-            if isinstance(value, list):
-                for item in value:
-                    if isinstance(item, dict):
-                        parse_dict(item)
+                value = json.dumps(value)
+            data.setdefault("params", {})[key] = value
 
-    parse_dict(new)
+    return client.request(**data)
 
-    # 替换源字典中需要替换的值
-    def replace(data: dict):
-        data = json.dumps(data)
-        sets = set(re.findall(r'<(\w+)>', data))
 
-        for field in sets:
-            value = simple_dict.get(field, None)
-            # 替换数据
-            if isinstance(value, str):
-                data = re.sub(fr'<{field}>', value, data)
-            if isinstance(value, int):
-                data = re.sub(fr'\"<{field}>\"', str(value), data)
+def run(func):
+    """
+    装饰器
+    动态生成测试函数
+    负责用例的执行
+    """
+    args = inspect.getfullargspec(func).args
+    function = None
 
-        return json.loads(data)
+    # 根据入参动态选取模板生成code
+    if len(args) == 3:
+        self, role, api_list = args
+        string = STANDARD_RUN.format(self=self, role=role, api_list=api_list)
 
-    return replace(origin)
+        # 将code串编译成code对象
+        code = compile(source=string, filename=func.__name__, mode="exec").co_consts[0]
+        # 创建函数
+        # globals 选项为函数提供全局变量。比如函数内部需要调用其他方法，如果不指定会ERROR
+        # locals()\globals() 内置函数分别返回局部(所在局部块，这里就是函数内部作用域)/全局(当前模块)的作用域字典
+        function = types.FunctionType(code=code, globals=globals(), name=func.__name__)
+
+    # 校验函数
+    if not function:
+        raise FuncBuildError
+
+    return function

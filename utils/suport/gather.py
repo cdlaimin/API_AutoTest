@@ -65,8 +65,3 @@ def gather_results(session, exitstatus):
     else:
         result = "未知"
     return job_name, build_number, total, result, passrate, time, passed, failed, skipped, error
-
-
-if __name__ == '__main__':
-
-    gather_logs()

@@ -1,0 +1,39 @@
+type: single
+owner: zhangjian
+create_time: "2021-09-18"
+version: v1
+datas:
+  - CaseID: test_create_case_01
+    CasePath: test_create_case
+    CaseName: 创建手工测试用例成功
+    desc:
+    status: T
+    priority: 高
+    steps: [ "create_case.non_auto" ]
+
+  - CaseID: test_create_case_02
+    CasePath: test_create_case
+    CaseName: 创建自动化测试用例成功
+    desc:
+    status: T
+    priority: 中
+    steps: [ "create_case.auto" ]
+
+
+  - CaseID: test_modify_case_01
+    CasePath: test_modify_case
+    CaseName: 修改用例信息
+    desc:
+    status: T
+    priority: 中
+    steps: [ "create_case.non_auto", "modify_case.non_auto" ]
+
+
+  - CaseID: test_delete_case_01
+    CasePath: test_delete_case
+    CaseName: 删除用例
+    desc:
+    status: T
+    priority: 中
+    steps: [ "create_case.auto", "delete_case.dynamic_id" ]
+

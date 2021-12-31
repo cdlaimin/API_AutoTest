@@ -1,0 +1,20 @@
+type: Multi
+owner: zhangjian
+create_time: "2021-09-23"
+version: v1
+datas:
+  - CaseID: test_dispatch_job_01
+    CasePath: test_dispatch_job
+    CaseName: 创建并分发测试任务-单人单任务
+    desc:
+    status: T
+    priority: 中
+    steps: [ "create_job.non_executor", "job_list.query_by_name", "dispatch_job.to_one" ]
+
+  - CaseID: test_dispatch_job_02
+    CasePath: test_dispatch_job
+    CaseName: 创建并分发测试任务-单人多任务
+    desc:
+    status: T
+    priority: 中
+    steps: [ "create_job.non_executor", "create_job.non_executor", "job_list.query_created", "dispatch_job.to_one" ]

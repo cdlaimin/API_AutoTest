@@ -1,9 +1,8 @@
 test_plat:
-  test:
-    id: 3023
-    username: laolitou
+  staff:
+    username: zhangjian
     password: Zj123456
+
   admin:
-    id: 200
-    username: xiuyingyi
+    username: admin
     password: Zj123456

@@ -1,5 +1,5 @@
 # jenkins 报告
-jenkins: http://121.4.47.229:3600/job/{}/{}/allure
+jenkins: http://101.43.61.175:3600/job/{}/{}/allure
 
 # 钉钉群消息机器人
 ding_robot: https://oapi.dingtalk.com/robot/send?access_token=
@@ -8,4 +8,6 @@ ding_robot: https://oapi.dingtalk.com/robot/send?access_token=
 wechat_robot: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=
 
 # 测试平台
-test_plat: http://121.4.47.229:8000
+test_plat:
+  dev: http://101.43.61.175:8090
+  pub: http://101.43.61.175:8090
