@@ -163,7 +163,9 @@ def pytest_sessionfinish(session, exitstatus):
             # send_dingtalk(*results)
 
         # 分布式执行时，收集从机上的日志到master上
-        gather_logs()
+        # 2022-01-01 收集日志逻辑有问题，暂不使用
+        # 报告中已经记录了日志
+        # gather_logs()
 
 
 def pytest_unconfigure(config):
