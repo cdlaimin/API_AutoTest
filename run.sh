@@ -1,6 +1,7 @@
 #!/bin/bash
 dir=$(cd `dirname $0`; pwd)
 project_name=${dir##*/}
+echo ${project_name}
 names=( `docker-compose ps | grep ${project_name} | awk '{print $1}'` )
 echo "=================开始进行测试,当前测试HUB分支: $2================="
 echo "${names[@]}"

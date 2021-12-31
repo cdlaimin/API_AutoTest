@@ -71,7 +71,7 @@ pipeline {
     post {
         always {
             echo "==================停止测试并删除容器==================="
-            sh label: '测试执行结束, 删除测试容器', script: 'docker-compose down'
+//             sh label: '测试执行结束, 删除测试容器', script: 'docker-compose down'
             echo "==================正在收集并生成报告=================="
             script {
                 allure([
