@@ -1,5 +1,5 @@
 FROM python:3.8.5-slim
-COPY requirement.txt /depends/rerequirements.txt
+COPY requirements.txt /depends/rerequirements.txt
 COPY ./nodeServer.py /depends/nodeServer.py
 # DEBIAN_FRONTEND这个环境变量，告知操作系统应该从哪儿获得用户输入。
 # 如果设置为”noninteractive”，你就可以直接运行命令，而无需向用户请求输入（所有操作都是非交互式的）。
