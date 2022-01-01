@@ -17,7 +17,7 @@ def send_wechat(*args):
     job_name, build_number, total, result, pass_rate, duration, passed, failed, skipped, error, token = args
 
     # 计算时分秒
-    m, s = divmod(duration, 60)
+    m, s = divmod(int(duration), 60)
     h, m = divmod(m, 60)
 
     # 报告路径
@@ -80,5 +80,5 @@ def send_upload_result_to_wechat(**kwargs):
 
 if __name__ == '__main__':
     a = time.time()
-    token = "73d36c76-5e62-43fd-b18d-eb710fcb4c0e"
-    send_wechat(1, 2, 2, 3, 4, a, 6, 7, 8, 9, token)
+    b = "73d36c76-5e62-43fd-b18d-eb710fcb4c0e"
+    send_wechat(1, 2, 2, 3, 4, a, 6, 7, 8, 9, b)

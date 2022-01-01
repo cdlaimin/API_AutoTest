@@ -120,7 +120,7 @@ def test_results(session, exitstatus):
     total = session.testscollected if session.testscollected else 1
 
     # 测试耗时
-    time = datetime.now() - session.config.getoption('start_time')
+    duration = datetime.now() - session.config.getoption('start_time')
 
     passed = len(reporter.stats.get('passed', []))
     failed = len(reporter.stats.get('failed', []))
@@ -141,4 +141,4 @@ def test_results(session, exitstatus):
         result = "无可用的用例"
     else:
         result = "未知"
-    return job_name, build_number, total, result, passrate, time, passed, failed, skipped, error
+    return job_name, build_number, total, result, passrate, duration, passed, failed, skipped, error
