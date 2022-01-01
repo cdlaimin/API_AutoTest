@@ -44,7 +44,7 @@ def run(func):
         code = compile(source=string, filename=func.__name__, mode="exec").co_consts[0]
         # 创建函数
         # globals 选项为函数提供全局变量。比如函数内部需要调用其他方法，如果不指定会ERROR
-        # locals()\globals() 内置函数分别返回局部(所在局部块，这里就是函数内部作用域)/全局(当前模块)的作用域字典
+        # locals()/globals() 内置函数分别返回局部(所在局部块，这里就是函数内部作用域)/全局(当前模块)的作用域字典
         function = types.FunctionType(code=code, globals=globals(), name=func.__name__)
 
     # 校验函数

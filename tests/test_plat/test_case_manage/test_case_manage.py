@@ -1,7 +1,8 @@
 from utils.test.execute import run
 
 
-# 用例的 __doc__ 将作为 story 添加到报告中。如果没有 __doc__ 信息则使用 类名。
+# 测试类的 __doc__ 将作为 story 添加到报告中。
+# 如果 __doc__ 是None将直接使用 类名。
 class TestCaseManage:
     """用例管理"""
 
