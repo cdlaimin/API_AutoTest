@@ -2,10 +2,10 @@ import json
 import time
 
 import requests
-from loguru import logger
 from urllib3.exceptions import InsecureRequestWarning
 
 from conf import HOSTS
+from utils.suport import logger
 from utils.suport.templates import REPORT
 
 
@@ -17,7 +17,7 @@ def send_wechat(*args):
     job_name, build_number, total, result, pass_rate, duration, passed, failed, skipped, error, token = args
 
     # 计算时分秒
-    m, s = divmod(int(duration), 60)
+    m, s = divmod(duration.seconds, 60)
     h, m = divmod(m, 60)
 
     # 报告路径
