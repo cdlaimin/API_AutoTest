@@ -174,7 +174,7 @@ def pytest_unconfigure(config):
     """
     # 清理测试数据
     # 1、导入数据清理模块
-    module = import_module('libs.clean')
+    module = import_module('libs.operate')
 
     # 2、获取到模块中所有的类名
     cls_members = []

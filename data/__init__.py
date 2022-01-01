@@ -5,4 +5,4 @@ import os
 
 from conf import BASE_DIR, load_yaml
 
-test_plat = load_yaml(os.path.join(BASE_DIR, 'libs', 'data', 'test_plat.yaml'))
+test_plat = load_yaml(os.path.join(BASE_DIR, 'data', 'test_plat.yaml'))

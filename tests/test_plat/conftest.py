@@ -12,7 +12,7 @@ def pytest_configure(config):
 
     # 加载测试数据到配置
     # 从 libs.data 中读取接口基础数据信息
-    data_module = import_module("libs.data")
+    data_module = import_module("data")
     config.test_plat = getattr(data_module, "test_plat")
 
 
