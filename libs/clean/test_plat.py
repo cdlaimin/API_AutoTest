@@ -1,6 +1,5 @@
 from conf import ACCOUNT
 from utils.factory import Clean
-from utils.suport.other import switch_name
 from utils.tools.db import DataBase
 from utils.suport.singleton import Singleton
 
@@ -9,11 +8,10 @@ class TestPlat(DataBase, metaclass=Singleton):
     """数据库相关操作"""
 
     def __init__(self, env):
-        self.server = switch_name(self.__class__.__name__)
-        super().__init__(self.server, env)
+        super().__init__('test_plat', env)
 
         # 获取当前服务的账号信息
-        users = ACCOUNT[self.server]
+        users = ACCOUNT['test_plat']
 
         # 根据账号查表，获得用户ID信息
         self.ids = []
