@@ -10,9 +10,8 @@ from importlib import import_module
 from utils.suport import logger
 from utils.test import assemble
 from utils.tools.file import get_case_id
-from utils.suport.gather import gather_logs, gather_results
-from utils.suport.notice import send_wechat, send_dingtalk
-from utils.suport.report import collect_item_info, write_report_information
+from utils.suport.notice import send_wechat
+from utils.suport.collect import write_case_info, write_report_info, test_results, collect_logs
 
 
 def pytest_addoption(parser):
@@ -134,7 +133,7 @@ def pytest_runtest_makereport(item, call):
         pytest.fail(msg=f"测试执行出现异常: {call.excinfo}", pytrace=False)
     if call.when == 'call':
         # 动态收集用例信息到allure
-        collect_item_info(item)
+        write_case_info(item)
 
         # 获取当前阶段执行结果的报告对象。三个属性：阶段属性when、阶段执行结果属性outcome、nodeid
         # when取值：setup、call、teardown
@@ -154,18 +153,17 @@ def pytest_sessionfinish(session, exitstatus):
     # 分布式执行时，收集测试执行结果，并发送到测试群
     if xdist.is_xdist_master(session):
         # 为allure报告添加结果分类和环境信息
-        write_report_information(session)
+        write_report_info(session)
 
         # 发送测试结果到测试群。钉钉或者企业微信
-        results = gather_results(session, exitstatus)
+        results = test_results(session, exitstatus)
         if session.config.getoption('send_wechat') == 'true':
             send_wechat(*results, session.config.getoption('wechat_token'))
-            # send_dingtalk(*results)
 
         # 分布式执行时，收集从机上的日志到master上
         # 2022-01-01 收集日志逻辑有问题，暂不使用
         # 报告中已经记录了日志
-        # gather_logs()
+        # collect_logs()
 
 
 def pytest_unconfigure(config):

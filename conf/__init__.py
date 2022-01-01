@@ -11,8 +11,5 @@ HOSTS = load_yaml(os.path.join(BASE_DIR, 'conf', 'hosts.yaml'))
 # 数据库配置
 DATABASE = load_yaml(os.path.join(BASE_DIR, 'conf', 'database.yaml'))
 
-# 测试结果通知模版
-NOTICE = load_ini(os.path.join(BASE_DIR, 'conf', 'notice.ini'))
-
 # 登陆账户信息
 ACCOUNT = load_yaml(os.path.join(BASE_DIR, 'conf', 'account.yaml'))
