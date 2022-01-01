@@ -17,7 +17,7 @@ def send_wechat(*args):
     job_name, build_number, total, result, pass_rate, duration, passed, failed, skipped, error, token = args
 
     # 计算时分秒
-    m, s = divmod(duration.seconds, 60)
+    m, s = divmod(duration, 60)
     h, m = divmod(m, 60)
 
     # 报告路径

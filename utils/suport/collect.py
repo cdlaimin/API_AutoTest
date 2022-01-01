@@ -141,4 +141,4 @@ def test_results(session, exitstatus):
         result = "无可用的用例"
     else:
         result = "未知"
-    return job_name, build_number, total, result, passrate, duration, passed, failed, skipped, error
+    return job_name, build_number, total, result, passrate, duration.seconds, passed, failed, skipped, error
