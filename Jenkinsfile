@@ -14,7 +14,7 @@ pipeline {
         stage("构建docker镜像") {
             steps {
                 echo "==================构建镜像=================="
-                sh label: "构建镜像", script: "docker build -t ${JOB_NAME}_${params.git_branch}:latest ."
+                sh label: "构建镜像", script: "docker build -t ${JOB_NAME}:latest ."
             }
         }
         stage("停止异常容器") {
@@ -55,7 +55,7 @@ pipeline {
             steps {
                 echo "==================初始化环境=================="
                 // 当前测试在mac上进行，unix和linux sed 命令有些区别，使用 -i 时，要在后面加上一个空字符。linux不能加
-                sh label: "指定启动镜像", script: "sed -i 's/demo/${JOB_NAME}_${params.git_branch}/g' docker-compose.yaml"
+                sh label: "指定启动镜像", script: "sed -i 's/demo/${JOB_NAME}/g' docker-compose.yaml"
                 sh label: "指定挂载目录", script: "sed -i 's/job_name/${JOB_NAME}/g' docker-compose.yaml"
                 sh label: "启动容器", script: "docker-compose up -d"
                 sh label: "修改shell操作权限", script: "chmod 777 run.sh"
