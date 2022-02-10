@@ -8,7 +8,6 @@ from allure import dynamic
 from conf import BASE_DIR, HOSTS
 from utils.suport import logger
 from utils.suport.exception import DirectoryNotExist
-from utils.tools.file import get_case_info, load_yaml
 
 
 def write_case_info(item):
@@ -17,22 +16,18 @@ def write_case_info(item):
     yaml_path = item.module.__file__.replace('.py', '.yaml')
 
     # 获取用例ID
-    case_full_name = item.name
-    case_id = re.findall("\\[(.+?)\\]", case_full_name)[0]
+    case_name, case_id, _ = re.split("\[|]", item.name)
 
     # 获取用例所属服务
-    server = re.findall("/tests/(.+?)/", yaml_path)[0]
-
-    # 获取作者信息
-    author = load_yaml(yaml_path).get('author')
+    env = re.findall("/tests/(.+?)/", yaml_path)[0]
 
     # 获取用例信息
-    case_info = get_case_info(yaml_path, case_id)
+    case_info = getattr(item.config, env + "_info")
 
     if case_info:
         # 开始写入用例信息
-        dynamic.feature(server)
-        dynamic.issue(author)
+        dynamic.feature(env)
+        dynamic.issue(case_info.get("author", "NA"))
         dynamic.title(case_info.get('CaseName'))
         dynamic.description(case_info.get('desc'))
         priority = case_info.get('priority')

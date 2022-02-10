@@ -1,1 +1,1 @@
-from .test_plat import CleanTestPlat
+from .tp import CleanTestPlat

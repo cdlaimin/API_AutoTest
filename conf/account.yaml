@@ -1,4 +1,5 @@
-test_plat:
+# 测试账号信息
+tp:
   staff:
     username: zhangjian
     password: Zj123456
@@ -6,3 +7,4 @@ test_plat:
   admin:
     username: admin
     password: Zj123456
+

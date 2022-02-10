@@ -7,8 +7,7 @@ pipeline {
     parameters {
         booleanParam(name: "send_wechat", defaultValue: true, description: "选择是否发送报告到企微群，默认 true")
         string(name: "wechat_token", defaultValue: "73d36c76-5e62-43fd-b18d-eb710fcb4c0e", description: "企微群token")
-        choice(name: "server", choices:["all", ], description: "测试对象选择，默认 all")
-        choice(name: "env", choices:["dev", "pub", ], description: "测试对象选择，默认 dev")
+        choice(name: "env", choices:["tp", ], description: "测试对象选择，默认 tp")
     }
     stages {
         stage("构建docker镜像") {

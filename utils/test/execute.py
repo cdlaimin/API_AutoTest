@@ -30,7 +30,7 @@ def run(func):
     """
     装饰器
     动态生成测试函数
-    负责用例的执行
+    作用在用例的执行阶段
     """
     args = inspect.getfullargspec(func).args
     function = None

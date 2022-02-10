@@ -1,17 +1,16 @@
-# 测试平台
-test_plat:
-  dev:
-    host: 101.43.61.175
-    port: 3300
-    user: root
-    password: zm_123456
-    charset: utf8
-    db: test_plat
+tp_mysql:
+  host: 101.43.61.175
+  port: 3300
+  user: root
+  password: zm_123456
+  charset: utf8
+  db: test_plat
 
-  pub:
-    host: 101.43.61.175
-    port: 3300
-    user: root
-    password: zm_123456
-    charset: utf8
-    db: test_plat
+tp_mongo:
+  host: 101.43.61.175
+  port: 27017
+  db: autotest
+  set: tp
+  data_id: 6204c01613a272b5ddd4b83e
+  info_id: 6204da807546f9ad601d565a
+

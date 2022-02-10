@@ -2,7 +2,8 @@
 框架使用到的模板
 """
 
-STANDARD_RUN = '''def run({self}, {role}, {api_list}):
+STANDARD_RUN = \
+    '''def run({self}, {role}, {api_list}):
         # 向报告中添加二级分类信息
         allure.dynamic.story({self}.__doc__ or {self}.__class__.__name__)
         

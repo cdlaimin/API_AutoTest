@@ -27,9 +27,7 @@ def pytest_addoption(parser):
     :param parser:
     :return:
     """
-    parser.addoption('--server', action='store', type=str, default='all',
-                     help='指定执行tests文件夹中那些服务，默认执行全部。如果需要指定多个服务，服务名之间用用英文逗号隔开。如:oms,wms')
-    parser.addoption('--env', action='store', type=str, default='dev', help='指定服务的测试环境，默认dev')
+    parser.addoption('--env', action='store', type=str, default='tp', help='指定服务的测试环境，默认dev')
     parser.addoption('--job_name', action='store', type=str, default=None, help='jenkins执行时，job任务名称')
     parser.addoption('--build_number', action='store', type=str, default=None, help='当前job的构建number')
     parser.addoption('--send_wechat', action='store', type=str, default='false', help='是否发送测试报告到企微群')
@@ -55,11 +53,16 @@ def pytest_generate_tests(metafunc):
     :param metafunc: 帮助实现参数化的钩子默认参数
     :return: None
     """
-    yaml_path = metafunc.module.__file__.replace('.py', '.yaml')
+    # yaml_path = metafunc.module.__file__.replace('.py', '.yaml')
+    # case_name = metafunc.function.__name__
+    # # fixtures = metafunc.fixturenames
+    # fixtures = metafunc.definition._fixtureinfo.argnames
+    # ids = get_case_id(yaml_path, case_name)
+    config = metafunc.config
+    env = config.getoption("env")
     case_name = metafunc.function.__name__
-    # fixtures = metafunc.fixturenames
     fixtures = metafunc.definition._fixtureinfo.argnames
-    ids = get_case_id(yaml_path, case_name)
+    ids = [key for key in getattr(config, env + '_info')[case_name].keys()]
 
     # 夹具参数化
     for fixture in fixtures:
@@ -75,21 +78,21 @@ def pytest_ignore_collect(path, config):
     :param config: pytest config 对象
     :return:
     """
-    server = config.getoption('server')
+    env = config.getoption('env')
 
     # 如是是all则收集所有用例
-    if server == 'all':
+    if env == 'all':
         pass
 
     # 如果没有当前收集路径不是测试server所在路径，则忽略收集
     # return True 表示忽略当前收集的path
     else:
         # 解析服务列表
-        server_list = server.split(',')
+        env_list = env.split(',')
         # 从 path 路径中截取当前收集路径所在服务
         cur = path.__str__().split('/tests/')[1].split('/')[0]
         # 如果服务不在指定的列表中，就忽略用例收集
-        if cur not in server_list:
+        if cur not in env_list:
             return True
 
 
@@ -130,7 +133,7 @@ def pytest_runtest_makereport(item, call):
     if call.excinfo:
         # 由框架层统一记录用例执行过程中的异常信息
         logger.error(f'ERROR: {call.excinfo}')
-        pytest.fail(msg=f"测试执行出现异常: {call.excinfo}", pytrace=False)
+        # pytest.fail(msg=f"测试执行出现异常: {call.excinfo}", pytrace=False)
     if call.when == 'call':
         # 动态收集用例信息到allure
         write_case_info(item)

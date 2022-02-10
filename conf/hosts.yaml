@@ -8,6 +8,4 @@ ding_robot: https://oapi.dingtalk.com/robot/send?access_token=
 wechat_robot: https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=
 
 # 测试平台
-test_plat:
-  dev: http://101.43.61.175:8090
-  pub: http://101.43.61.175:8090
+tp: http://101.43.61.175:8090

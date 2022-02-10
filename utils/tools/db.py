@@ -10,10 +10,10 @@ from utils.suport.exception import ConfNotExist
 class DataBase(metaclass=Singleton):
     """数据库相关操作封装"""
 
-    def __init__(self, server, env):
+    def __init__(self, env):
         """初始化数据库连接对象"""
 
-        config = DATABASE.get(server).get(env)
+        config = DATABASE.get(env + '_mysql')
         if config is None:
             raise ConfNotExist
         try:
@@ -25,7 +25,7 @@ class DataBase(metaclass=Singleton):
             raise
         else:
             self.cursor = self.conn.cursor()
-            logger.info(f'目标数据库 {server} 链接成功。')
+            logger.info(f'目标数据库 {env} 链接成功。')
 
     def __del__(self):
         if hasattr(self, "cursor"):

@@ -51,12 +51,11 @@ def assemble(request) -> list:
 
     # 获取测试相关信息
     case_id = request.param
-    yaml_path = request.module.__file__.replace('.py', '.yaml')
-    server = yaml_path.split("/tests/")[1].split("/")[0]
+    case_name = case_id.rsplit("_", 1)[0]
     env = request.config.getoption("env")
 
     # 用例测试步骤
-    steps = get_case_info(yaml_path, case_id).get("steps", None)
+    steps = getattr(request.config, env + "_info").get(case_name, {}).get(case_id, {}).get('steps')
     if steps is None:
         raise CaseStepsError(f"用例 {case_id} 信息详情中没有 steps 属性")
 
@@ -65,22 +64,22 @@ def assemble(request) -> list:
     api_list = []
 
     # 根据测试步骤从基础数据中获取需要的接口数据
-    source_data = getattr(request.config, server)
+    source_data = getattr(request.config, env + '_data')
     for stage in steps:
         api_data = jsonpath.jsonpath(source_data, "$." + stage)
         if not api_data:
-            raise SourceDataError(f"服务 {server} 的测试数据中未找到接口 {stage} 相关信息")
+            raise SourceDataError(f"服务 {env} 的测试数据中未找到接口 {stage} 相关信息")
         api_origin_list.append((stage.split(".", 1)[0], api_data[0]))
 
     # 导入API模块
-    api_module = import_module("libs.api." + server)
+    api_module = import_module("libs.api." + env)
 
     # 组装基础数据，将其组装成可执行数据
     for api_name, api_data in api_origin_list:
         # 获取 api 信息
         api_info = getattr(api_module, api_name)
         # 拼接 url，保存请求方式
-        api_data['url'] = HOSTS[server][env] + api_info.get('route')
+        api_data['url'] = HOSTS[env] + api_info.get('route')
         api_data['method'] = api_info.get('method')
         # 检查请求头，默认 "Content-Type": "application/json;charset=UTF-8"
         if 'headers' in api_info:

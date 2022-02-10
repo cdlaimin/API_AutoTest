@@ -9,8 +9,8 @@ from utils.suport.singleton import Singleton
 
 class TestPlatRole(metaclass=Singleton):
     def __init__(self, env):
-        self.host = HOSTS['test_plat'][env]
-        self.account = ACCOUNT['test_plat']
+        self.host = HOSTS[env]
+        self.account = ACCOUNT[env]
 
     def get_client(self, role):
         try:

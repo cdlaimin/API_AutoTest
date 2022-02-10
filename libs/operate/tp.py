@@ -8,10 +8,10 @@ class TestPlat(DataBase, metaclass=Singleton):
     """数据库相关操作"""
 
     def __init__(self, env):
-        super().__init__('test_plat', env)
+        super().__init__(env)
 
         # 获取当前服务的账号信息
-        users = ACCOUNT['test_plat']
+        users = ACCOUNT[env]
 
         # 根据账号查表，获得用户ID信息
         self.ids = []
