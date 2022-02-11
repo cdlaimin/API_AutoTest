@@ -195,7 +195,7 @@ def pytest_unconfigure(config):
 def api_list(request):
     """
     返回一个列表，由每个接口的测试数据组成
-    :param request: request 是 pytest 内置夹具，内置夹具可以直接作为自定义夹具的入参。目前常用的内置夹具: request、pytestconfig
+    :param request: request 是 pytest 内置夹具，内置夹具可以直接作为自定义夹具的入参。目前常用的内置夹具: request、config
     :return: list
     """
     # 构造测试数据并返回

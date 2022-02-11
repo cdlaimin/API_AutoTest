@@ -1,4 +1,4 @@
-import logging
+import logging as log
 import os
 import sys
 import warnings
@@ -28,26 +28,32 @@ def log_path():
 
 
 # 重写emit使日志信息可以输出到allure
-class PropagateHandler(logging.Handler):
+class PropagateHandler(log.Handler):
     def emit(self, record):
-        logging.getLogger(record.name).handle(record)
+        log.getLogger(record.name).handle(record)
 
 
-config = {
-    "handlers": [
-        # 配置info日志
-        {"sink": log_path(), "format": "{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}", "level": "INFO",
-         "colorize": False, "enqueue": True},
-        # loguru报告重定logging输出
-        {"sink": PropagateHandler(), "format": "| {time:YYYY-MM-DD HH:mm:ss} | {message}", "level": "INFO",
-         "colorize": False, "enqueue": True, "backtrace": True, "diagnose": True},
-        # 输出到控制台
-        {"sink": sys.stdout, "level": "INFO", "colorize": True, "enqueue": False}
-    ],
-    "extra": {"user": "someone"}
-}
+def get_logging():
+    config = {
+        "handlers": [
+            # 配置info日志
+            {"sink": log_path(), "format": "{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}", "level": "INFO",
+             "colorize": False, "enqueue": True},
+            # loguru报告重定logging输出
+            {"sink": PropagateHandler(), "format": "| {time:YYYY-MM-DD HH:mm:ss} | {message}", "level": "INFO",
+             "colorize": False, "enqueue": True, "backtrace": True, "diagnose": True},
+            # 输出到控制台
+            {"sink": sys.stdout, "level": "INFO", "colorize": True, "enqueue": False}
+        ],
+        "extra": {"user": "someone"}
+    }
 
-logger.configure(**config)
+    logger.configure(**config)
+
+    return logger
+
+
+logging = get_logging()
 
 
 def api_logger(func):
@@ -61,16 +67,16 @@ def api_logger(func):
         try:
             response = func(*args, **kwargs)
         except BaseHTTPError as e:
-            logger.error(f'接口调用异常: {str(e)}')
+            logging.error(f'接口调用异常: {str(e)}')
             raise RequestError
         else:
-            logger.info(f'请求地址:{response.request.url}')
-            logger.info(f'请求方式:{response.request.method}')
-            logger.info(f"请求体:{response.request.body if response.request.body else None}")
+            logging.info(f'请求地址:{response.request.url}')
+            logging.info(f'请求方式:{response.request.method}')
+            logging.info(f"请求体:{response.request.body if response.request.body else None}")
 
             # 根据响应状态码确实使用什么日志方法
-            log = getattr(logger, 'info' if response.status_code in (200, 201) else 'error')
-            log('状态码:{}'.format(response.status_code))
+            log_func = getattr(logging, 'info' if response.status_code in (200, 201) else 'error')
+            log_func('状态码:{}'.format(response.status_code))
             try:
                 # deprecated_call() 将被标记了 DeprecationWarning 或者 PendingDeprecationWarning 的函数能够正常被调用。
                 # 不会在执行时出现 相应的 warning 信息。
@@ -78,9 +84,9 @@ def api_logger(func):
                     # DeprecationWarning 告警不再建议此操作。此处和deprecated_call配合使用，使其无效。
                     # 如果实际需要提示时，去掉deprecated_call()上下文即可
                     warnings.warn('主动抛出警告', DeprecationWarning)
-                    log('响应体:{}'.format(response.text.encode('latin-1').decode('unicode_escape')))
+                    log_func('响应体:{}'.format(response.text.encode('latin-1').decode('unicode_escape')))
             except UnicodeError:
-                log('响应体:{}'.format(response.text))
+                log_func('响应体:{}'.format(response.text))
         return response
 
     return wrapper

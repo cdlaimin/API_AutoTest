@@ -22,7 +22,7 @@ def write_case_info(item):
     env = re.findall("/tests/(.+?)/", yaml_path)[0]
 
     # 获取用例信息
-    case_info = getattr(item.config, env + "_info")
+    case_info = getattr(item.config, env + "_info").get(case_name, {}).get(case_id, {})
 
     if case_info:
         # 开始写入用例信息
@@ -56,20 +56,9 @@ def write_report_info(session):
             shutil.copy(category_file_path, allure_report_path)
 
             # 写入测试环境信息
-            server = session.config.getoption('server')
             env = session.config.getoption('env')
             with open(os.path.join(allure_report_path, 'environment.properties'), 'w+', encoding='utf-8') as f:
-                if server == 'all':
-                    for server, hosts in HOSTS.items():
-                        if isinstance(hosts, dict) and hosts.get(env):
-                            f.write(f"{server}_{env}={hosts.get(env)}\n")
-                else:
-                    server_list = server.split(',')
-                    for server in server_list:
-                        hosts = HOSTS.get(server)
-                        if hosts:
-                            if hosts.get(env):
-                                f.write(f"{server}_{env}={hosts.get(env)}\n")
+                f.write(f"{env}={HOSTS.get(env)}\n")
         except Exception as e:
             logger.warning(f'导入用例分类信息失败！error: {e}')
     else:

@@ -26,7 +26,7 @@ def verify(expect: dict, response: Response):
         real_code = response.status_code
         response = response.json()
 
-        # 非正向流程时，状态码往往不是(200, 201)。如果要校验非默认状态码，在 expect 中田间 'status_code' 字段即可
+        # 非正向流程时，状态码往往不是(200, 201)。如果要校验非默认状态码，在 expect 中添加 'status_code' 字段即可
         if expect.get('status_code'):
             code = expect.pop('status_code')
             assert code == real_code, f'实际状态码 {real_code} 和 预期状态码 {code} 不一致'

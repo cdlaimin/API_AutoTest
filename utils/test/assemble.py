@@ -8,7 +8,6 @@ from conf import HOSTS
 from utils.suport.exception import CaseStepsError, SourceDataError
 from utils.suport.logger import logger
 from utils.suport.simulate import FakerData
-from utils.tools.file import get_case_info
 
 
 def __assemble_dynamic_data(data):
