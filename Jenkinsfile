@@ -64,7 +64,7 @@ pipeline {
             steps {
                 echo "==================执行测试=================="
                 // ./ 执行shell文件，需要文件本身具有可执行权限；sh 执行shell文件则不需要
-                sh label: "执行测试", script: "./run.sh $JOB_NAME ${params.git_branch} $BUILD_NUMBER ${params.server} ${params.env} ${params.send_wechat} ${params.wechat_token}"
+                sh label: "执行测试", script: "./run.sh $JOB_NAME ${params.git_branch} $BUILD_NUMBER ${params.env} ${params.send_wechat} ${params.wechat_token}"
             }
         }
     }
