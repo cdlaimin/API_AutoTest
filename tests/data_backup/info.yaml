@@ -1,0 +1,95 @@
+create_case:
+  non_auto:
+    data:
+      description: $$sentence
+      expectation: $$sentence
+      is_auto: false
+      module: 3
+      name: $$sentence
+      priority: $$case_priority
+      step: $$sentence
+    expect:
+      msg: 用例添加成功
+  auto:
+    data:
+      description: $$sentence
+      expectation: $$sentence
+      is_auto: true
+      path: $$file_path
+      module: 3
+      name: $$sentence
+      priority: $$case_priority
+      step: $$sentence
+    expect:
+      msg: 用例添加成功
+modify_case:
+  non_auto:
+    data:
+      is_auto: true
+      description: $$sentence
+      step: $$sentence
+      path: $$file_path
+      id: <create_case.id>
+    expect:
+      msg: 保存修改成功
+delete_case:
+  dynamic_id:
+    data:
+      id: <create_case.id>
+    expect:
+      msg: 用例已删除
+create_job:
+  non_executor:
+    data:
+      executor: []
+      task_name: $$sentence
+      task_detail: $$sentence
+      level: $$case_priority
+      type: $$job_type
+      product: $$nickname
+      frontend: $$nickname
+      backend: $$username
+      prd_no: $$msisdn
+      expect_end_time: $$format_time
+      case:
+        - 43
+        - 101
+    expect:
+      msg: 测试任务创建成功
+job_list:
+  query_by_name:
+    params:
+      page: 1
+      page_size: 15
+      conditions:
+        task_name: <create_job.task_name>
+    expect:
+      count: 1
+      next:
+      previous:
+      results:
+        - executor: []
+          status: 0
+          status_str: 已创建
+  query_created:
+    params:
+      page: 1
+      page_size: 15
+      conditions:
+        status: 0
+    expect:
+      next:
+      previous:
+      results:
+        - executor: []
+          status: 0
+          status_str: 已创建
+dispatch_job:
+  to_one:
+    data:
+      ids:
+        - 2
+      job_ids:
+        - <job_list.id>
+    expect:
+      msg: 任务指派完成

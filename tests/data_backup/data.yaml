@@ -1,0 +1,45 @@
+test_create_case:
+  test_create_case_01:
+    CaseName: 创建手工测试用例成功
+    desc:
+    status: T
+    priority: 高
+    steps: [ "create_case.non_auto" ]
+
+  test_create_case_02:
+    CaseName: 创建自动化测试用例成功
+    desc:
+    status: T
+    priority: 中
+    steps: [ "create_case.auto" ]
+
+test_modify_case:
+  test_modify_case_01:
+    CaseName: 修改用例信息
+    desc:
+    status: T
+    priority: 中
+    steps: [ "create_case.non_auto", "modify_case.non_auto" ]
+
+test_delete_case:
+  test_delete_case_01:
+    CaseName: 删除用例
+    desc:
+    status: T
+    priority: 中
+    steps: [ "create_case.auto", "delete_case.dynamic_id" ]
+
+test_dispatch_job:
+  test_dispatch_job_01:
+    CaseName: 创建并分发测试任务-单人单任务
+    desc:
+    status: T
+    priority: 中
+    steps: [ "create_job.non_executor", "job_list.query_by_name", "dispatch_job.to_one" ]
+
+  test_dispatch_job_02:
+    CaseName: 创建并分发测试任务-单人多任务
+    desc:
+    status: T
+    priority: 中
+    steps: [ "create_job.non_executor", "create_job.non_executor", "job_list.query_created", "dispatch_job.to_one" ]

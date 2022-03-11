@@ -8,9 +8,11 @@ tp_mysql:
 
 tp_mongo:
   host: 101.43.61.175
-  port: 27017
+  port: 39006
+  username: "xz_test"
+  password: "xz_test_pwd"
   db: autotest
   set: tp
-  data_id: 6204c01613a272b5ddd4b83e
-  info_id: 6204da807546f9ad601d565a
+  data_id: 622ac3b8e1d740a81de1d4f5
+  info_id: 622ac1739a7636583d3fe3c3
 

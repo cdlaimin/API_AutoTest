@@ -150,18 +150,3 @@ def get_case_info(filepath, case_id):
     """
     case_info = jsonpath.jsonpath(load_yaml(filepath), f"$.datas..[?(@.CaseID == '{case_id}')]")
     return case_info[0] if case_info else {}
-
-
-if __name__ == '__main__':
-    path = "/Users/zhangjian/PycharmProjects/AutoTest_MeiDuo/tests/tp/test_case_manage/test_case_manage.yaml"
-    data = load_yaml(path)
-    a = {}
-
-    for item in data['datas']:
-        name = item.pop('CasePath')
-        id = item.pop('CaseID')
-        a.setdefault(name, {})[id] = item
-
-    print(a)
-
-

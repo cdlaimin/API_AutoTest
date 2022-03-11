@@ -9,7 +9,6 @@ from importlib import import_module
 
 from utils.suport import logger
 from utils.test import assemble
-from utils.tools.file import get_case_id
 from utils.suport.notice import send_wechat
 from utils.suport.collect import write_case_info, write_report_info, test_results, collect_logs
 

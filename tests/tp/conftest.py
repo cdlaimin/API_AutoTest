@@ -15,7 +15,8 @@ def pytest_configure(config):
     # 从mongodb加载测试数据到配置
     configure = DATABASE.get(env + '_mongo')
 
-    con = MongoClient(configure.get("host"), configure.get("port"))
+    con = MongoClient(configure.get("host"), configure.get("port"), username=configure.get("username"),
+                      password=configure.get("password"))
     db = getattr(con, configure.get("db"))
     data_set = getattr(db, configure.get("set"))
     config.tp_data = data_set.find_one({'_id': ObjectId(configure.get("data_id"))})
